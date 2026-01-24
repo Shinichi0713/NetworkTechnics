@@ -1,0 +1,445 @@
+<!DOCTYPE html><html><head>
+      <title>ieee802_1_1</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///c:\Users\yoshinaga\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.8.20\crossnote\dependencies\katex\katex.min.css">
+      
+      
+      <script type="text/javascript" src="file:///c:\Users\yoshinaga\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.8.20\crossnote\dependencies\mermaid\mermaid.min.js" charset="UTF-8"></script>
+      
+      
+      <style>
+      code[class*=language-],pre[class*=language-]{color:#333;background:0 0;font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.4;-moz-tab-size:8;-o-tab-size:8;tab-size:8;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:.8em;overflow:auto;border-radius:3px;background:#f5f5f5}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal;background:#f5f5f5}.token.blockquote,.token.comment{color:#969896}.token.cdata{color:#183691}.token.doctype,.token.macro.property,.token.punctuation,.token.variable{color:#333}.token.builtin,.token.important,.token.keyword,.token.operator,.token.rule{color:#a71d5d}.token.attr-value,.token.regex,.token.string,.token.url{color:#183691}.token.atrule,.token.boolean,.token.code,.token.command,.token.constant,.token.entity,.token.number,.token.property,.token.symbol{color:#0086b3}.token.prolog,.token.selector,.token.tag{color:#63a35c}.token.attr-name,.token.class,.token.class-name,.token.function,.token.id,.token.namespace,.token.pseudo-class,.token.pseudo-element,.token.url-reference .token.variable{color:#795da3}.token.entity{cursor:help}.token.title,.token.title .token.punctuation{font-weight:700;color:#1d3e81}.token.list{color:#ed6a43}.token.inserted{background-color:#eaffea;color:#55a532}.token.deleted{background-color:#ffecec;color:#bd2c00}.token.bold{font-weight:700}.token.italic{font-style:italic}.language-json .token.property{color:#183691}.language-markup .token.tag .token.punctuation{color:#333}.language-css .token.function,code.language-css{color:#0086b3}.language-yaml .token.atrule{color:#63a35c}code.language-yaml{color:#183691}.language-ruby .token.function{color:#333}.language-markdown .token.url{color:#795da3}.language-makefile .token.symbol{color:#795da3}.language-makefile .token.variable{color:#183691}.language-makefile .token.builtin{color:#0086b3}.language-bash .token.keyword{color:#0086b3}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:'Helvetica Neue',Helvetica,'Segoe UI',Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:'\00a0'}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview ul{list-style:disc}.markdown-preview ul ul{list-style:circle}.markdown-preview ul ul ul{list-style:square}.markdown-preview ol{list-style:decimal}.markdown-preview ol ol,.markdown-preview ul ol{list-style-type:lower-roman}.markdown-preview ol ol ol,.markdown-preview ol ul ol,.markdown-preview ul ol ol,.markdown-preview ul ul ol{list-style-type:lower-alpha}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .code-chunk-btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px / 2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+
+      </style>
+      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script></head><body for="html-export">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+
+    
+      <div class="crossnote markdown-preview  ">
+      
+<p>今の組織の内部ネットワークはVLANという論理的に独立したLANで構成されています。<br>
+VLANの中でパケットと呼ばれるデータがやり取りされることになります。<br>
+このパケットにタグをつけてVLANを構成するフォーマットが<strong>IEEE 802.1Q</strong>（通称：ドット・イチ・キュー）と呼ばれるものです。</p>
+<h2 id="概要">概要 </h2>
+<p>一言でいうと <strong>「1本の物理的なLANケーブルの中に、複数の仮想的なネットワーク（VLAN）を混在させて運ぶための共通ルール」</strong> です。<br>
+一般的には <strong>「タグVLAN」</strong> という名前で親しまれています。</p>
+<h3 id="1仕組み">1.仕組み </h3>
+<p>1つの物理的なネットワーク（スイッチやケーブル）の中に、独立した複数の論理ネットワークを構築します。</p>
+<ul>
+<li>VLANタグの挿入: 通常のイーサネットフレームの中に「VLANタグ（4バイト）」を挿入します。</li>
+<li>VLAN ID: タグ内にある12ビットの領域で、最大4,094個（1〜4094）の識別番号を割り振ることができます。これにより、部署ごとや機能ごとに通信を分離します。</li>
+</ul>
+<p><strong>なぜ IEEE 802.1Q が必要なのか？</strong></p>
+<p>通常、ネットワーク（VLAN）を分けるには、それぞれのグループごとに専用のスイッチやケーブルを用意する必要があります。しかし、これでは配線が複雑になり、コストもかさみます。</p>
+<ul>
+<li><strong>課題:</strong> 1階と2階に「営業部」と「総務部」がある場合、それぞれの部署用に2本のケーブルを階間に引くのは非効率です。</li>
+<li><strong>解決:</strong> 1本のケーブルに両方のデータを流し、データの先頭に <strong>「これは営業部のデータ」「これは総務部のデータ」という「目印（タグ）」</strong> を付けることで、1本の線を共有できるようにします。</li>
+</ul>
+<h3 id="2-タグの中身">2. 「タグ」の中身 </h3>
+<p><strong>フレーム構造</strong></p>
+<p>元のフレームの「送信元MACアドレス」と「タイプ/長さ」の間に挿入されます。</p>
+<ul>
+<li>TPID (2バイト): 規格を識別する値で、常に 0x8100 です。</li>
+<li>PCP (3ビット): 優先度（QoS）を制御するための値です。</li>
+<li>DEI (1ビット): 輻輳時に破棄してもよいフレームかを示します。</li>
+<li>VID (12ビット): どのVLANに所属するかを示すIDです。</li>
+</ul>
+<p><strong>見分けるポイント</strong></p>
+<p>IEEE 802.1Qは、通常のイーサネットフレームの中に <strong>4バイトの「VLANタグ」</strong> を挿入します。このタグの中に含まれる最も重要な情報が <strong>VLAN ID</strong> です。</p>
+<ul>
+<li><strong>VLAN ID (VID):</strong> 12ビットの数値で、<strong>1から4094</strong>までの番号を指定できます。</li>
+<li><strong>プライオリティ (PCP):</strong> 3ビットの数値で、実はここで <strong>QoS（優先順位）</strong> を指定することも可能です（IEEE 802.1p）。</li>
+</ul>
+<h3 id="3-ネットワークの構成">3. ネットワークの構成 </h3>
+<p>タグVLANを活用した最も標準的で実用的な構成例として、 <strong>「1台のルーターと1台のスイッチで、社内ネットワークを3つに分離する」</strong> ケースを紹介します。</p>
+<p>この構成は、小規模オフィスから中規模ネットワークまで幅広く使われている <strong>「Router-on-a-Stick」</strong></p>
+<p><strong>1. ネットワーク全体の構成図</strong></p>
+<p>物理的には1本の線ですが、論理的には3つの独立したネットワーク（VLAN）が流れる構成です。</p>
+<div class="mermaid">graph TD
+    Router[ルーター / VLAN対応] --- |トランクポート: 1本でVLAN10,20,30を通す| Switch[L2マネージドスイッチ]
+    
+    Switch --- |アクセスポート: VLAN10| PC1[PC 営業部]
+    Switch --- |アクセスポート: VLAN20| PC2[PC 総務部]
+    Switch --- |アクセスポート: VLAN30| WiFi[ゲスト用Wi-Fi]
+
+    subgraph Logical_Networks [論理的な分離]
+        V1[VLAN 10: 営業部用]
+        V2[VLAN 20: 総務部用]
+        V3[VLAN 30: ゲスト用]
+    end
+
+</div><p><strong>2. 具体的な設定の役割</strong></p>
+<p>各機器で、以下のような役割分担と設定を行います。</p>
+<p><strong>① ルーターの設定（タグの読み書き）</strong></p>
+<p>ルーターの1つの物理ポートを仮想的に分割し、複数のIPアドレスを持たせます。</p>
+<ul>
+<li><strong>役割:</strong> 異なるVLAN同士（例：営業部から総務部）の通信が必要な場合に、その「橋渡し（ルーティング）」を行います。</li>
+<li><strong>設定例:</strong></li>
+<li>ポート1.10 (VLAN 10用): IP <code>192.168.10.1</code></li>
+<li>ポート1.20 (VLAN 20用): IP <code>192.168.20.1</code></li>
+<li>ポート1.30 (VLAN 30用): IP <code>192.168.30.1</code></li>
+</ul>
+<p><strong>② スイッチの設定（ポートの仕分け）</strong></p>
+<p>スイッチでは、各ポートに「どのVLANを通すか」を指示します。</p>
+<ul>
+<li>
+<p><strong>トランクポート（ルーターとの接続口）:</strong></p>
+</li>
+<li>
+<p>タグ（IEEE 802.1Q）を付与したまま通信します。「VLAN 10, 20, 30すべてを通してよし！」という設定です。</p>
+</li>
+<li>
+<p><strong>アクセスポート（PCとの接続口）:</strong></p>
+</li>
+<li>
+<p>接続されたPCがどのVLANに属するかを固定します。</p>
+</li>
+<li>
+<p>ポート1〜5は <strong>VLAN 10</strong>、ポート6〜10は <strong>VLAN 20</strong>...といった具合です。PC側はVLANを意識せず、普通に通信するだけでOKです。</p>
+</li>
+</ul>
+<p><strong>3. この構成で実現できること</strong></p>
+<ul>
+<li><strong>ゲストWi-Fiの隔離:</strong> ゲスト用Wi-Fi（VLAN 30）からは、営業部（VLAN 10）や総務部（VLAN 20）のサーバーへは一切アクセスできないよう、ルーター側でフィルタリング（ACL）を設定できます。</li>
+<li><strong>将来の拡張性:</strong> 新しく「開発部」が増えたとしても、配線工事をせずにルーターとスイッチの設定だけで <strong>VLAN 40</strong> を追加できます。</li>
+<li><strong>帯域制御（QoS）との連携:</strong> 「VLAN 10（営業部）のWeb会議データを最優先する」といったQoS設定が、VLAN単位で簡単に行えるようになります。</li>
+</ul>
+<p><strong>アクセスポートとトランクポート</strong></p>
+<p>このプロトコルを扱う上で、スイッチのポートには2つの役割が登場します。</p>
+<table>
+<thead>
+<tr>
+<th>ポートの種類</th>
+<th>役割</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>アクセスポート</strong></td>
+<td>特定のVLANに所属するPCを繋ぐ</td>
+<td>タグは付いていない（普通の通信）</td>
+</tr>
+<tr>
+<td><strong>トランクポート</strong></td>
+<td>スイッチ同士を繋ぐ「共用道路」</td>
+<td><strong>IEEE 802.1Qのタグを付けて</strong>複数のVLANを運ぶ</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-データの流れタグの付け外し">4. データの流れ（タグの付け外し） </h3>
+<ol>
+<li><strong>送信:</strong> PCから出た「タグなし」のデータがスイッチに入る。</li>
+<li><strong>タグ付与:</strong> スイッチが「これはVLAN 10だ」と判断し、<strong>IEEE 802.1Qタグを差し込む</strong>。</li>
+<li><strong>転送:</strong> タグが付いたまま、スイッチ間の「トランクリンク」を通り抜ける。</li>
+<li><strong>タグ除去:</strong> 宛先側のスイッチがタグを見て「VLAN 10のポートへ送ろう」と判断し、<strong>タグを外して</strong>PCへ届ける。</li>
+</ol>
+<div class="mermaid">graph LR
+    PC1[PC/VLAN10] -- タグなし --&gt; SW1[スイッチA]
+    SW1 -- "タグ付き (VLAN10)" --&gt; SW2[スイッチB]
+    SW2 -- タグなし --&gt; PC2[PC/VLAN10]
+    
+    subgraph Trunk [トランクリンク / 802.1Q]
+    SW1
+    SW2
+    end
+
+</div><h2 id="論理分割の用途">論理分割の用途 </h2>
+<p>タグVLANによってLANを分割することは、特に <strong>「物理的な配線に縛られず、論理的にネットワークを整理・強化したい」</strong> という場面で非常に有用です。</p>
+<p>具体的にどのような場面で役立つのか、主要な4つのメリットに整理して解説します。</p>
+<h3 id="1-物理的な配線を変えずに部署移動に対応したいとき">1. 物理的な配線を変えずに「部署移動」に対応したいとき </h3>
+<p>オフィスの席替えや部署の統廃合が頻繁にある職場では、タグVLANが最も力を発揮します。</p>
+<ul>
+<li><strong>有用なシーン:</strong> 営業部の人が総務部のエリアに移動した場合でも、LANケーブルを壁の裏までたどって繋ぎ直す必要はありません。</li>
+<li><strong>メリット:</strong> スイッチの設定を管理画面から変更するだけで、そのポートを瞬時に「営業部用VLAN」に切り替えられます。 <strong>「物理的な位置に関係なく、必要なネットワークに所属できる」</strong> 柔軟性が得られます。</li>
+</ul>
+<h3 id="2-セキュリティを役割ごとに隔離したいとき">2. セキュリティを「役割」ごとに隔離したいとき </h3>
+<p>一つのネットワークに全社員やゲストが混在していると、セキュリティ上のリスクが非常に高くなります。</p>
+<ul>
+<li><strong>有用なシーン:</strong> 「基幹システムを扱う財務部」「一般社員」「来客用のゲストWi-Fi」を分離したい場合。</li>
+<li><strong>メリット:</strong> タグVLANで分割すれば、たとえゲストWi-Fiに侵入者が現れても、そこから財務部のサーバーへはアクセスできません。 <strong>「感染や侵入の被害を特定のグループ内に封じ込める（爆発半径の限定）」</strong> ことができます。</li>
+</ul>
+<h3 id="3-ネットワークの渋滞混雑を解消したいとき">3. ネットワークの「渋滞（混雑）」を解消したいとき </h3>
+<p>PCが増えると、ネットワーク全体に送られる一斉放送のようなパケット（ブロードキャスト）が激増し、全体の速度が低下します。</p>
+<ul>
+<li><strong>有用なシーン:</strong> 100台以上のPCが同じLANに繋がっており、通信が不安定な場合。</li>
+<li><strong>メリット:</strong> タグVLANでネットワークを小分けに分割することで、一斉放送が届く範囲を限定できます。これにより、<strong>不要なトラフィックが削減され、ネットワークのレスポンスが向上</strong>します。</li>
+</ul>
+<h3 id="4-コストと機材スペースを最小限にしたいとき">4. コストと機材スペースを最小限にしたいとき </h3>
+<p>ネットワークを物理的に分けようとすると、各階ごとに「営業部用スイッチ」「総務部用スイッチ」と複数の機材を買わなければなりません。</p>
+<ul>
+<li><strong>有用なシーン:</strong> 予算やサーバーラックのスペースが限られている場合。</li>
+<li><strong>メリット:</strong> タグVLAN（トランクポート）を使えば、<strong>1本のLANケーブルと1台のスイッチで複数のネットワークを運べる</strong>ため、機材代・電気代・保守の手間を劇的に減らすことができます。</li>
+</ul>
+<h2 id="最新動向">最新動向 </h2>
+<p>VLANは長年ネットワークの基盤として利用されてきましたが、クラウドやDX、リモートワークの普及により、従来の技術だけでは限界が見え始めています。</p>
+<p>現在の最新動向と、現場が直面している課題を整理して解説します。</p>
+<h3 id="1-最新動向vlanからオーバーレイへ">1. 最新動向：VLANから「オーバーレイ」へ </h3>
+<p>物理的なスイッチ設定に依存する従来のVLANに代わり、ソフトウェアで柔軟にネットワークを構築する技術が主流になっています。</p>
+<ul>
+<li><strong>VXLAN (Virtual eXtensible LAN):</strong><br>
+VLANのID上限（4094個）を突破するために開発された技術です。IDを24ビット（約1,600万個）に拡張し、データセンターなどの巨大な環境で、物理的な距離を超えたネットワーク構築（L2延伸）を可能にします。</li>
+<li><strong>SD-LAN / SD-WAN:</strong><br>
+「ソフトウェア定義」のネットワークです。コントローラーから一括でVLAN設定を流し込んだり、ユーザーがログインした場所に合わせて動的にVLANを割り当てたりする（ダイナミックVLAN）運用が一般的になっています。</li>
+<li><strong>マイクロセグメンテーション:</strong><br>
+VLANよりもさらに細かい単位（アプリケーション単位、あるいはサーバー1台単位）で仮想的な壁を作る技術です。「VLAN内なら通信自由」という考えを捨て、よりセキュアな環境を構築します。</li>
+</ul>
+<h3 id="2-現在の大きな課題">2. 現在の大きな課題 </h3>
+<p>VLANが普及しすぎたがゆえに、現代のITインフラでは以下の点がボトルネックとなっています。</p>
+<h4 id="1-vlanスパゲッティによる管理の複雑化">① 「VLANスパゲッティ」による管理の複雑化 </h4>
+<p>長年運用していると、「何に使われているか不明なVLAN」が増殖し、ネットワーク構成が複雑になります。</p>
+<ul>
+<li><strong>課題:</strong> スイッチを1台入れ替えるだけで、何百ものVLANタグ設定をミスのないよう引き継がねばならず、運用の負担が限界に達しています。</li>
+</ul>
+<h4 id="2-クラウド仮想化との親和性">② クラウド/仮想化との親和性 </h4>
+<p>物理スイッチに基づくVLANは、クラウドのような「数秒でサーバーが立ち上がる」スピード感についていけません。</p>
+<ul>
+<li><strong>課題:</strong> 仮想サーバーは頻繁に移動（マイグレーション）しますが、物理スイッチのタグ設定が追いつかず、通信断が発生するリスクがあります。</li>
+</ul>
+<h4 id="3-境界防御の限界セキュリティ">③ 境界防御の限界（セキュリティ） </h4>
+<p>「VLANで分けているから安心」という考えは、標的型攻撃や内部犯行には無力です。</p>
+<ul>
+<li><strong>課題:</strong> 一度VLAN内に侵入を許すと、その中の通信は「信頼されている」としてスルーされてしまうため、被害が横に広がりやすい（ラテラル・ムーブメント）という弱点があります。</li>
+</ul>
+<h2 id="最後に">最後に </h2>
+<p>物理的に構成されたLANの制約から開放するために使われてきた手法がVLANです。<br>
+同じインフラを用途に応じて分割したいという要求は今後も続いていくと思います。</p>
+<p>また、大きなネットワークをソフト的に管理するクラウドの普及によって、ネットワーク自体の活用場所の絶対的な量は増加してきています。</p>
+<p>そんな背景でVLANの仕組み、ロジックを知っておくと知識の応用はできると思います。</p>
+<p>今回の記事の内容、是非ご参考下さい。</p>
+
+      </div>
+      
+      
+    
+    
+    <script type="module">
+// TODO: If ZenUML gets integrated into mermaid in the future,
+//      we can remove the following lines.
+
+
+var MERMAID_CONFIG = ({"startOnLoad":false});
+if (typeof MERMAID_CONFIG !== 'undefined') {
+  MERMAID_CONFIG.startOnLoad = false
+  MERMAID_CONFIG.cloneCssStyles = false
+  MERMAID_CONFIG.theme = "default"
+}
+
+mermaid.initialize(MERMAID_CONFIG || {})
+if (typeof(window['Reveal']) !== 'undefined') {
+  function mermaidRevealHelper(event) {
+    var currentSlide = event.currentSlide
+    var diagrams = currentSlide.querySelectorAll('.mermaid')
+    for (var i = 0; i < diagrams.length; i++) {
+      var diagram = diagrams[i]
+      if (!diagram.hasAttribute('data-processed')) {
+        mermaid.init(null, diagram, ()=> {
+          Reveal.slide(event.indexh, event.indexv)
+        })
+      }
+    }
+  }
+  Reveal.addEventListener('slidetransitionend', mermaidRevealHelper)
+  Reveal.addEventListener('ready', mermaidRevealHelper)
+  await mermaid.run({
+    nodes: document.querySelectorAll('.mermaid')
+  })
+} else {
+  await mermaid.run({
+    nodes: document.querySelectorAll('.mermaid')
+  })
+}
+</script>
+    
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+</script>
+
+    
+  
+    </body></html>

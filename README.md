@@ -98,3 +98,12 @@ Rustのスキルを付けて、Rustを使ったツールを作る。
 [Rust研究](https://github.com/Shinichi0713/NetworkTechnics/tree/main/rust_lesson)
 
 <img src="image/README/1767854562526.png" width=500 style="display: block; margin: 0 auto;">
+
+## ブログ
+
+ブログをしています。
+ネットワーク関係の記事も書いています。
+
+是非ご覧ください。
+
+https://yoshishinnze.hatenablog.com/

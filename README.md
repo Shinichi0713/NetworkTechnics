@@ -8,6 +8,7 @@
 
 ### コンテンツ
 
+[ネットワーク関係の解説集](https://github.com/Shinichi0713/NetworkTechnics/tree/main/network_specialist)
 
 <details markdown="1">
 <summary>
@@ -24,6 +25,7 @@ __学習コンテンツ__
 2. IPとTCP
 3. DNSの仕組み
 4. アプリケーションプロトコル
+5. ネットワーク機器
 
 
 

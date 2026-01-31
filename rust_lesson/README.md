@@ -2,7 +2,7 @@
 
 Welcome to my Rust learning log! I'll be compiling my insights and takeaways from my studies on this page.
 
-## Rust Learning Journey 
+## Rust Learning Journey
 
 A collection of learning records and sample code exploring Rust, from basic syntax to advanced concepts.
 
@@ -37,7 +37,7 @@ Progress tracker for my learning journey.
 * [X] **Ownership System** : Ownership, Borrowing, References
 * [X] **Structs** : Data aggregation and implementation (`impl`)
 * [X] **Enums** : State management and pattern matching (`match`)
-* [ ] **Error Handling** : `Option`, `Result`, and the `?` operator
+* [X] **Error Handling** : `Option`, `Result`, and the `?` operator
 * [ ] **Traits & Generics** : Shared behavior and polymorphic types
 * [ ] **Concurrency** : Threads and Message Passing
 

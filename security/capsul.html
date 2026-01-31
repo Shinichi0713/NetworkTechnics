@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x30ab;&#x30d7;&#x30bb;&#x30eb;&#x5316;&#x304c;&#x4f7f;&#x308f;&#x308c;&#x308b;&#x5834;&#x9762;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+
+            <p>通信は、通常ネットワークを通過することが出来ないように設定されることが多いです。
+そんな通信上の制約の中でも、サーバと会話したいというケースがあります。
+そんなときに使われる手法が <strong>「カプセル化」</strong> です。</p>
+<p>通信におけるカプセル化は、一言でいうと <strong>「本来のルールや物理的な制約を飛び越えて、データを目的地まで届けるため」</strong> に使われます。</p>
+<h2 id="カプセル化が使われる場面">カプセル化が使われる場面</h2>
+<p>具体的には、以下のような「困った状況」を解決したいときに登場します。</p>
+<h3 id="1-本来通れない場所を通したいときトンネリング">1. 本来通れない場所を通したいとき（トンネリング）</h3>
+<p>これが最も一般的なケースです。</p>
+<ul>
+<li><strong>例：プライベートIPをインターネットで運びたい</strong>
+社内LANで使う「192.168.x.x」というアドレスは、インターネット上では通信できません。そこで、このパケットを<strong>グローバルIPアドレスという「封筒」でカプセル化</strong>して包むことで、インターネットという公共の道を通れるようにします。</li>
+<li><strong>例：IPv6パケットをIPv4ネットワークで運びたい</strong>
+まだIPv6に対応していない古い経路を通る際、IPv6パケットをIPv4パケットの中に隠して（カプセル化して）運びます。</li>
+</ul>
+<h3 id="2-データを暗号化して守りたいときセキュリティ">2. データを暗号化して守りたいとき（セキュリティ）</h3>
+<p>データの中身が丸見えだと困る場合、カプセル化の過程で中身を「暗号化」します。</p>
+<ul>
+<li><strong>VPN（IPsecなど）:</strong>
+元のパケットを暗号化し、その上から新しいヘッダーを被せます。これにより、たとえ途中でパケットを盗み見られても、中身が何であるか、最終的な宛先が社内のどのPCなのかが分からなくなります。</li>
+</ul>
+<h3 id="3-離れた場所を同じlanに見せたいときl2延伸">3. 離れた場所を「同じLAN」に見せたいとき（L2延伸）</h3>
+<p>物理的には東京と大阪で離れていても、同じ部署のPC同士として（同じネットワークアドレスで）通信させたい場合です。</p>
+<ul>
+<li><strong>VXLANや広域イーサネット:</strong>
+本来はルーターを越えると消えてしまう「MACアドレス情報（L2）」を、IPパケット（L3）の中に丸ごとカプセル化して詰め込みます。こうすることで、物理的な距離を無視して <strong>「巨大な1つのスイッチにつながっている状態」</strong> を作り出せます。</li>
+</ul>
+<h3 id="4-ネットワークを論理的に分割したいとき仮想化">4. ネットワークを論理的に分割したいとき（仮想化）</h3>
+<p>1本の物理的な回線の中に、A社用、B社用、C社用と、互いに見えない独立したネットワークを作りたい場合です。</p>
+<ul>
+<li><strong>MPLS（ラベルスイッチング）:</strong>
+パケットの先頭に「ラベル」という短い目印をカプセル化して貼り付けます。ルーターはこのラベルを見て「これはA銀行のデータだから、この専用ルートへ」と高速に仕分けを行います。</li>
+</ul>
+<h2 id="カプセル化の手段">カプセル化の手段</h2>
+<p>カプセル化の手段は一つではありません。
+複数存在する手法の得意、不得意があります。</p>
+<h3 id="1-セキュリティ暗号化が必要な場合">1. セキュリティ（暗号化）が必要な場合</h3>
+<p><strong>→ 主役：IPsec (ESP)</strong></p>
+<p>暗号化が必要なインターネット経由で機密データを送る際は、GREではなく<strong>IPsec</strong>という方式でカプセル化します。</p>
+<ul>
+<li><strong>特徴:</strong> パケットを丸ごと暗号化し、新しいIPヘッダーを被せます。</li>
+<li><strong>使い分け:</strong> 「中身を保護したい」ならIPsec。前述の通り、GREと組み合わせて「GRE over IPsec」として使うことも多いです。</li>
+</ul>
+<h3 id="2-データセンターや仮想ネットワークを作る場合">2. データセンターや仮想ネットワークを作る場合</h3>
+<p><strong>→ 主役：VXLAN</strong></p>
+<p>クラウド環境や巨大なデータセンター内では、<strong>VXLAN</strong>が主流です。</p>
+<ul>
+<li><strong>特徴:</strong> L2（イーサネットフレーム）をUDPパケットで包みます。</li>
+<li><strong>なぜGREじゃないのか:</strong> GREは「1対1」のトンネルを作るのが得意ですが、VXLANは「数千〜数万の仮想ネットワーク」を効率よく管理し、多対多の通信を捌くのに特化しているからです。</li>
+</ul>
+<h3 id="3-通信キャリアの網内で高速転送する場合">3. 通信キャリアの網内で高速転送する場合</h3>
+<p><strong>→ 主役：MPLS</strong></p>
+<p>先ほどの「IP-VPN」などの内部では、IPヘッダーを被せるのではなく、　<strong>「ラベル」</strong>　という短い目印をパケットに貼り付けるカプセル化が行われます。</p>
+<ul>
+<li><strong>特徴:</strong> IPヘッダーよりも処理が軽く、ルーターが高速にパケットを転送できます。</li>
+</ul>
+<p>MPLSは、**「IPルーティング（住所を見て判断）」の柔軟性と、「レイヤ2スイッチング（目印を見て転送）」**の高速性をいいとこ取りした技術です。</p>
+<ul>
+<li>高速: ラベルだけ見て飛ばすので速い。</li>
+<li>隔離: ラベルでグループ分けできるので安全（VPN）。</li>
+<li>制御: 通る道を自由に決められる。</li>
+</ul>
+<h3 id="4-一般的なネット接続pppoe">4. 一般的なネット接続（PPPoE）</h3>
+<p><strong>→ 主役：PPP / PPPoE</strong></p>
+<p>自宅の光回線でネットに繋ぐ際、IDとパスワードで認証しますよね。あの時もカプセル化が起きています。</p>
+<ul>
+<li><strong>特徴:</strong> イーサネットの中に「PPP（認証用プロトコル）」をカプセル化して流しています。</li>
+</ul>
+<h3 id="まとめなぜgreだけじゃないのか">まとめ：なぜGRE「だけ」じゃないのか？</h3>
+<p>カプセル化にはそれぞれ「得意科目」があります。</p>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>代表的なカプセル化方式</th>
+<th>GREとの違い</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>汎用・ルーティング</strong></td>
+<td><strong>GRE</strong></td>
+<td>何でも運べるが、暗号化できない。</td>
+</tr>
+<tr>
+<td><strong>セキュリティ</strong></td>
+<td><strong>IPsec (ESP)</strong></td>
+<td>暗号化に特化。ただしマルチキャストが苦手。</td>
+</tr>
+<tr>
+<td><strong>仮想化・クラウド</strong></td>
+<td><strong>VXLAN</strong></td>
+<td>膨大な数の論理ネットワークを作れる。</td>
+</tr>
+<tr>
+<td><strong>高速転送</strong></td>
+<td><strong>MPLS</strong></td>
+<td>ラベルを使って処理を簡略化する。</td>
+</tr>
+</tbody>
+</table>
+<p>つまり、GREは「何でも入る便利な箱」ですが、 <strong>「中身を守りたい（IPsec）」</strong> とか <strong>「もっと大量の箱を整理したい（VXLAN）」</strong> といった専門的なニーズがあるときは、他のカプセル化技術が選ばれます。</p>
+<h2 id="技術進展">技術進展</h2>
+<p>通信のカプセル化は、今まさに <strong>「物理的なネットワークを、ソフトウェアで自由自在に操る」</strong> ための核となる技術として急速に発展しています。</p>
+<p>単に「包んで運ぶ」だけでなく、 <strong>「より細かく、より安全に、より自動的に」</strong> という方向へ進化しており、特に以下の4つの分野が注目されています。</p>
+<h3 id="1-srv6-segment-routing-ipv6">1. SRv6 (Segment Routing IPv6)</h3>
+<p>現在、カプセル化の技術で最も熱いのが<strong>SRv6</strong>です。これは先ほどお話しした「MPLS」の次世代版とも言える技術です。</p>
+<ul>
+<li><strong>進化のポイント:</strong> MPLSは専用の「ラベル」を使っていましたが、SRv6は<strong>IPv6のアドレスそのもの</strong>を命令（セグメント）として使います。</li>
+<li><strong>何がすごくなるか:</strong> 「Aルーターを通って、Bでセキュリティ検査をしてから、Cへ届け」という複雑な経路指定を、カプセル化するIPv6ヘッダーに書き込むだけで実現できます。ネットワークの構造がシンプルになり、プログラミングするように通信を制御できるようになります。</li>
+</ul>
+<h3 id="2-ネットワークスライシング">2. ネットワーク・スライシング</h3>
+<p>5G通信の普及に伴って発展している技術です。</p>
+<ul>
+<li><strong>進化のポイント:</strong> 1つの物理的なネットワークの中に、用途に合わせた <strong>「仮想的な専用レーン（スライス）」</strong> をカプセル化技術で作ります。</li>
+<li><strong>何がすごくなるか:</strong>  自動運転用には「超低遅延」なスライス</li>
+<li>動画配信用には「超大容量」なスライス</li>
+<li>IoTセンサー用には「大量接続」のスライス
+これらをカプセル化によって論理的に完全に分離し、互いに影響を与えないように提供できます。</li>
+</ul>
+<h3 id="3-sase-secure-access-service-edge-と-ztna">3. SASE (Secure Access Service Edge) と ZTNA</h3>
+<p>これまでお話しした「VPN」というカプセル化の考え方が、クラウド時代に合わせて変化しています。</p>
+<ul>
+<li><strong>進化のポイント:</strong> これまでは「拠点と拠点」を繋ぐためにカプセル化していましたが、今は <strong>「ユーザーとクラウド上のアプリケーション」</strong> を直接、安全に繋ぐためにカプセル化を使います。</li>
+<li><strong>何がすごくなるか:</strong> どこにいても「暗号化された安全なカプセル」で保護され、かつ「誰がどのアプリを使うか」をクラウド側で一括管理する <strong>ゼロトラスト（ZTNA）</strong> の基盤として活用されています。</li>
+</ul>
+<h3 id="4-高度なテレメトリ情報の可視化">4. 高度なテレメトリ（情報の可視化）</h3>
+<p>カプセル化を使って、ネットワークの状態をリアルタイムで把握する技術です。</p>
+<ul>
+<li><strong>進化のポイント:</strong> パケットをカプセル化する際、その中に「どのルーターを何ミリ秒で通過したか」という<strong>履歴データ</strong>をこっそり書き込みます（INT: In-band Network Telemetry）。</li>
+<li><strong>何がすごくなるか:</strong> ネットワークのどこで詰まっているかが一瞬でわかるようになります。これまでは「どこかが遅い」と調べるのが大変でしたが、カプセルが自分で「ここで遅延したよ」と教えてくれるようになります。</li>
+</ul>
+<h2 id="最後に">最後に</h2>
+<p>これまでは「東京と大阪を1本の線で繋ぐ」という物理的な発想が中心でした。
+しかし現在は、 <strong>「インターネット」「専用線」「クラウド」という複数の道を、カプセル化とソフトウェア（SD-WANやSRv6）で束ね、状況に応じて最適に使い分ける時代</strong> になっています。</p>
+<p>カプセル化は、単なる「パケットの包み紙」から、ネットワークをプログラミング可能にする「インテリジェントなタグ」へと役割を変えているのです。</p>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+</script>
+
+            
+        </body>
+        </html>

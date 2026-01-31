@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x80cc;&#x666f;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <p>Rustのエラー処理は他の言語と異なります。
+どんな点が異なるか、使い方について説明していきます。</p>
+<h2 id="背景">背景</h2>
+<p>Rustが「例外」を捨てて「Result型」を選んだ背景には、システムプログラミング言語としての <strong>「究極の安全性」</strong> と <strong>「予測可能なパフォーマンス」</strong> を両立させたいという強い意志があります。</p>
+<p>大きく分けて3つの理由があります。</p>
+<h3 id="1-どこで何が起きるかを透明にするため可読性">1. 「どこで何が起きるか」を透明にするため（可読性）</h3>
+<p>例外（Exception）がある言語では、関数を呼び出す際に「この関数はエラーを投げるかもしれないし、投げないかもしれない」という情報が、関数のシグネチャ（名前や引数）から見えません。</p>
+<ul>
+<li><strong>例外の問題</strong>: 呼び出し先の深いところで発生したエラーが、どこを通ってどこでキャッチされるのかを追うのが非常に困難です。</li>
+<li><strong>Rustの解</strong>: 戻り値が <code>Result</code> であれば、「この関数は失敗する可能性がある」ことが型として明記されます。コードを読むだけで、エラーの発生箇所と伝播ルートが<strong>100%可視化</strong>されます。</li>
+</ul>
+<h3 id="2-隠れたコストをゼロにするパフォーマンス">2. 「隠れたコスト」をゼロにする（パフォーマンス）</h3>
+<p>例外処理は、実はコンピュータにとって非常に重い処理です。</p>
+<ul>
+<li><strong>例外のコスト</strong>: 例外が発生すると、OSや実行環境は「スタック展開（Stack Unwinding）」という複雑な処理を行い、メモリの状態を巻き戻し、キャッチできる場所を探します。これには大きなオーバーヘッドがかかります。</li>
+<li><strong>Rustの解</strong>: <code>Result</code> は単なる <code>enum</code>（列挙型）です。成功か失敗かのフラグを1ビット確認するだけなので、通常の条件分岐と全く同じ速度で動きます。これは、ガベージコレクションを持たず、 <strong>「ゼロコスト抽象化」</strong> を掲げるRustにとって譲れないポイントでした。</li>
+</ul>
+<h3 id="3-不完全な状態での動作を阻止する安全性">3. 「不完全な状態」での動作を阻止する（安全性）</h3>
+<p>例外処理の最大の罠は、 <strong>「例外が投げられた瞬間に、メモリの書き換えが途中で止まってしまう」</strong> ことです。これにより、データが壊れたり（不整合）、ロックが解放されなかったりするバグが発生しやすくなります。</p>
+<ul>
+<li><strong>Rustの解</strong>: エラーを「値」として扱うことで、プログラマは「エラーが発生したときに、今いじっているデータをどう片付けるか」をその場で書かざるを得なくなります。</li>
+<li><strong>網羅性の強制</strong>: <code>match</code> で全てのケースを処理させることで、「エラーをうっかり無視して、壊れたデータのまま計算を続けてしまう」という事故を物理的に防いでいます。</li>
+</ul>
+<h2 id="rustのエラー処理">Rustのエラー処理</h2>
+<p>Rustのエラー処理が他の言語（Java, Python, C++など）と決定的に異なる点は、 <strong>「例外（Exception）を投げない」</strong> という設計思想にあります。</p>
+<p>多くの言語が「問題が起きたら実行を中断してどこかでキャッチする」というスタイルなのに対し、Rustは <strong>「エラーは単なる値として扱い、型システムで処理を強制する」</strong> というスタイルを徹底しています。</p>
+<p>具体的に異なる4つのポイントを解説します。</p>
+<h3 id="1-例外ではなく戻り値で扱う">1. 例外ではなく「戻り値」で扱う</h3>
+<p>他の言語では <code>try-catch</code> を使いますが、Rustにはこれがありません。代わりに、エラーが起こる可能性のある関数は <strong><code>Result&lt;T, E&gt;</code></strong> という型を返します。</p>
+<ul>
+<li><strong>他の言語:</strong> エラーが発生すると、呼び出しスタックを遡って例外が飛んでいく。どこで誰がキャッチするかは実行時まで不明確。</li>
+<li><strong>Rust:</strong> エラーは関数の戻り値の一部。呼び出し側は、成功した時の値 <code>T</code> か、失敗した時のエラー <code>E</code> かを必ず受け取ります。</li>
+</ul>
+<h3 id="2-コンパイル時の未処理エラー防止">2. コンパイル時の「未処理エラー」防止</h3>
+<p>これが最も強力な点です。Rustでは <code>Result</code> を受け取った際、<strong>そのエラーをどう扱うか（無視するのか、処理するのか）を決めないと、中身の値を取り出すことができません。</strong></p>
+<ul>
+<li><strong>他の言語:</strong> 例外処理を書き忘れてもコンパイルは通るが、実行時にクラッシュ（Runtime Error）する。</li>
+<li><strong>Rust:</strong> <code>match</code> や <code>if let</code> でエラーケースを処理しない限り、成功時のデータにアクセスできないため、「エラーを放置したまま進む」ことが物理的に不可能です。</li>
+</ul>
+<h3 id="3-回復不能なエラーと明確に区別">3. 回復不能なエラーと明確に区別</h3>
+<p>Rustはエラーを2種類に厳格に分けています。</p>
+<ol>
+<li><strong>回復可能 (<code>Result</code>)</strong>: ファイルが見つからない、ネットワークが一時的に切れたなど。「想定内」のトラブル。</li>
+<li><strong>回復不能 (<code>panic!</code>)</strong>: 配列の範囲外アクセスなど、プログラムをこれ以上安全に続けられない「致命的なバグ」。</li>
+</ol>
+<p>多くの言語ではこれらが「例外」として混ざり合いがちですが、Rustは <strong>「プログラムが修正されるべきバグ（panic）」</strong> と <strong>「ユーザーが対処すべきエラー（Result）」</strong> を明確に分けることで、設計の透明性を高めています。</p>
+<h3 id="4--演算子によるスマートな伝播">4. <code>?</code> 演算子によるスマートな伝播</h3>
+<p>「エラーを値として扱うと、コードが <code>if</code> 分岐だらけで読みづらくなるのでは？」という懸念を解消するのが <strong><code>?</code> 演算子</strong> です。</p>
+<pre><code class="language-rust"><span class="hljs-comment">// 他の言語の try-catch のようにスマートに書ける</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">read_username</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;<span class="hljs-type">String</span>, io::Error&gt; {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = String::<span class="hljs-title function_ invoke__">new</span>();
+    <span class="hljs-comment">// 失敗したら即座に関数を抜けてエラーを返す、成功したら値を取り出す</span>
+    fs::File::<span class="hljs-title function_ invoke__">open</span>(<span class="hljs-string">&quot;hello.txt&quot;</span>)?.<span class="hljs-title function_ invoke__">read_to_string</span>(&amp;<span class="hljs-keyword">mut</span> s)?;
+    <span class="hljs-title function_ invoke__">Ok</span>(s)
+}
+
+</code></pre>
+<p>この <code>?</code> は、エラーが発生した瞬間に現在の関数を終了し、呼び出し元にエラーを「丸投げ」する仕組みです。これにより、正常系のロジックをスッキリと記述できます。</p>
+<h2 id="文法">文法</h2>
+<p>Rustのエラー処理の文法は、 <strong>「型で包んで返す」</strong> ことと、 <strong>「それをどう開くか」</strong> という2つのステップで構成されています。</p>
+<p>主要な3つの構文を中心に解説します。</p>
+<h3 id="1-戻り値の型resultt-e">1. 戻り値の型：<code>Result&lt;T, E&gt;</code></h3>
+<p>エラーが発生する可能性のある関数は、必ず <code>Result</code> 型を返します。</p>
+<pre><code class="language-rust"><span class="hljs-comment">// 成功なら String (T), 失敗なら u32 のエラーコード (E) を返す</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">get_user_name</span>(id: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;<span class="hljs-type">String</span>, <span class="hljs-type">u32</span>&gt; {
+    <span class="hljs-keyword">if</span> id == <span class="hljs-number">1</span> {
+        <span class="hljs-title function_ invoke__">Ok</span>(<span class="hljs-string">&quot;Alice&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>()) <span class="hljs-comment">// 成功時は Ok で包む</span>
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-title function_ invoke__">Err</span>(<span class="hljs-number">404</span>)                <span class="hljs-comment">// 失敗時は Err で包む</span>
+    }
+}
+
+</code></pre>
+<h3 id="2-エラーを開く3つの方法">2. エラーを「開く」3つの方法</h3>
+<h4 id="-match-式最も基本で安全">① <code>match</code> 式（最も基本で安全）</h4>
+<p>すべてのケースを網羅的に処理します。</p>
+<pre><code class="language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-title function_ invoke__">get_user_name</span>(<span class="hljs-number">1</span>);
+
+<span class="hljs-keyword">match</span> result {
+    <span class="hljs-title function_ invoke__">Ok</span>(name) =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;こんにちは、{}さん&quot;</span>, name),
+    <span class="hljs-title function_ invoke__">Err</span>(code) =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;エラーが発生しました。コード: {}&quot;</span>, code),
+}
+
+</code></pre>
+<h4 id="--演算子エラーの委譲伝播">② <code>?</code> 演算子（エラーの委譲・伝播）</h4>
+<p>「エラーだったらこの関数自体を終了して、エラーを呼び出し元に投げる」という、実務で最も使われる構文です。</p>
+<pre><code class="language-rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">greet_user</span>(id: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;(), <span class="hljs-type">u32</span>&gt; {
+    <span class="hljs-comment">// 成功すれば name に中身が入り、失敗すればここでこの関数が終わる</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-title function_ invoke__">get_user_name</span>(id)?; 
+    
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Hello, {}&quot;</span>, name);
+    <span class="hljs-title function_ invoke__">Ok</span>(())
+}
+
+</code></pre>
+<h4 id="-unwrap-と-expect強制取り出し">③ <code>unwrap</code> と <code>expect</code>（強制取り出し）</h4>
+<p>「絶対に成功するはずだ」という時に使いますが、もし **<code>Err</code> だった場合はプログラムが強制終了（パニック）**します。</p>
+<pre><code class="language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-title function_ invoke__">get_user_name</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_ invoke__">unwrap</span>(); <span class="hljs-comment">// 失敗したらクラッシュ</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-title function_ invoke__">get_user_name</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;名前の取得に失敗しました&quot;</span>); <span class="hljs-comment">// エラーメッセージ付きでクラッシュ</span>
+
+</code></pre>
+<h3 id="3-便利メソッドによる変換">3. 便利メソッドによる変換</h3>
+<p><code>match</code> を書くのが面倒な場合、便利なメソッドが用意されています。</p>
+<table>
+<thead>
+<tr>
+<th>メソッド</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>.unwrap_or(default)</code></strong></td>
+<td><code>Err</code> ならデフォルト値を返す</td>
+</tr>
+<tr>
+<td>**`.map(</td>
+<td>val</td>
+</tr>
+<tr>
+<td>**`.and_then(</td>
+<td>val</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-rust"><span class="hljs-comment">// エラーだったら &quot;Guest&quot; にする</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-title function_ invoke__">get_user_name</span>(<span class="hljs-number">99</span>).<span class="hljs-title function_ invoke__">unwrap_or</span>(<span class="hljs-string">&quot;Guest&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>());
+
+</code></pre>
+<h3 id="4-回復不能なエラーpanic">4. 回復不能なエラー：<code>panic!</code></h3>
+<p>バグ（配列の範囲外アクセスなど）により、プログラムを続行できない場合は <code>panic!</code> マクロを使います。</p>
+<pre><code class="language-rust"><span class="hljs-keyword">if</span> <span class="hljs-literal">false</span> == <span class="hljs-literal">true</span> {
+    <span class="hljs-built_in">panic!</span>(<span class="hljs-string">&quot;宇宙の法則が乱れました&quot;</span>); <span class="hljs-comment">// 即座に終了</span>
+}
+
+</code></pre>
+<h2 id="最後に">最後に</h2>
+<p>Rustのエラー処理は、「不注意な人間」を「厳格なコンパイラ」が強力にバックアップする仕組みです。</p>
+<p>最初は記述量が増えて面倒に感じるかもしれませんが、その「面倒さ」こそが、本番環境での深夜の呼び出し（障害対応）を減らすための最も安上がりな投資である、というのがRustの根本の考え方です。</p>
+
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+</script>
+
+            
+        </body>
+        </html>

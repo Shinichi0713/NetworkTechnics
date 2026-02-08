@@ -15,8 +15,6 @@
 コンテンツ
 </summary>
 
-
-
 #### 内容
 
 __学習コンテンツ__
@@ -26,8 +24,6 @@ __学習コンテンツ__
 3. DNSの仕組み
 4. アプリケーションプロトコル
 5. ネットワーク機器
-
-
 
 </details>
 
@@ -108,4 +104,4 @@ Rustのスキルを付けて、Rustを使ったツールを作る。
 
 是非ご覧ください。
 
-https://yoshishinnze.hatenablog.com/
+[著者のブログ](https://yoshishinnze.hatenablog.com/)

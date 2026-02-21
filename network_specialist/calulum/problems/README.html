@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x554f;&#x984c;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+
+
+            <p>通信インフラの現場では、物理的な故障から、ここまでお話ししてきた「カプセル化」や「設定」に起因する論理的なミスまで、多種多様なトラブルが発生します。</p>
+<p>本日はそんな通信インフラの問題について解説していきます。</p>
+<h2 id="問題">問題</h2>
+<p>よく起きる問題を、レイヤーや原因別に分類してまとめました。</p>
+<h3 id="1-物理レイヤーの問題フィジカル">1. 物理レイヤーの問題（フィジカル）</h3>
+<p>最も単純ですが、特定に時間がかかることもある問題です。</p>
+<ul>
+<li><strong>ケーブルの断線・接触不良:</strong> LANケーブルの爪が折れて半抜けになったり、光ファイバーを急角度で曲げて通信が不安定になったりします。</li>
+<li><strong>ループ（L2ループ）:</strong> L2スイッチ同士を誤って二重に繋いでしまい、データが無限に回り続けてネットワークがダウンする「ブロードキャストストーム」は、現場のエンジニアにとって最も恐ろしいトラブルの一つです。</li>
+</ul>
+<h3 id="2-設定ミス不整合論理構成">2. 設定ミス・不整合（論理構成）</h3>
+<p>カプセル化やルーティングが複雑になるほど発生しやすくなります。</p>
+<ul>
+<li><strong>MTU / MSSの不整合:</strong> カプセル化（PPPoEやVPN）を行うと、ヘッダーの分だけ「中身」に使えるサイズが小さくなります。この調整（MTU値の設定）をミスすると、「Webサイトの一部は開くのに、画像だけ表示されない」といった奇妙な現象が起きます。</li>
+<li><strong>VLANの不一致 (VLAN Mismatch):</strong> トランクポートの両端で、許可しているVLAN IDが異なると、特定のグループだけが通信不能になります。</li>
+</ul>
+<h3 id="3-アドレス認証の問題">3. アドレス・認証の問題</h3>
+<ul>
+<li><strong>IPアドレスの重複:</strong> 静的に設定したIPアドレスが、DHCPで割り当てられたアドレスと重なってしまい、どちらの端末も通信が不安定になります。</li>
+<li><strong>デフォルトゲートウェイの誤設定:</strong> 宛先を知らないパケットを「とりあえず外へ送り出す」出口（ルーター）のIPアドレスを間違えると、外の世界と一切通信できなくなります。</li>
+<li><strong>SSL証明書の期限切れ:</strong> SSL-VPNやHTTPS通信で、サーバー側の証明書が更新されていないと、ブラウザで警告が出たり、VPN接続が拒否されたりします。</li>
+</ul>
+<h3 id="4-混雑とリソース枯渇">4. 混雑とリソース枯渇</h3>
+<ul>
+<li><strong>NATセッションの枯渇:</strong> BBルーターなどが一度に変換できる「通信の数（セッション数）」には限界があります。多くの端末が同時に大量の接続を作ると、新規の通信ができなくなります。</li>
+<li><strong>帯域の圧迫:</strong> 特定のユーザーによる大容量ダウンロードや、Windows Updateなどの集中により、回線がパンクして遅延（レイテンシ）が増大します。</li>
+</ul>
+<h3 id="まとめ問題の切り分けトラブルシューティング">まとめ：問題の切り分け（トラブルシューティング）</h3>
+<p>これらの問題が起きたとき、プロは**「OSI参照モデル」の下から順番に**確認していきます。</p>
+<table>
+<thead>
+<tr>
+<th>順序</th>
+<th>確認内容</th>
+<th>ツール例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Step 1: 物理</strong></td>
+<td>リンクランプは付いているか？ ケーブルは刺さっているか？</td>
+<td>目視</td>
+</tr>
+<tr>
+<td><strong>Step 2: L2</strong></td>
+<td>VLANは正しいか？ MACアドレスは学習されているか？</td>
+<td><code>show mac address-table</code></td>
+</tr>
+<tr>
+<td><strong>Step 3: L3</strong></td>
+<td>IPアドレスはあるか？ 相手にPingは届くか？</td>
+<td><code>ping</code>, <code>traceroute</code></td>
+</tr>
+<tr>
+<td><strong>Step 4: L4以上</strong></td>
+<td>ポート（443番など）は開いているか？ 認証は通るか？</td>
+<td><code>telnet</code>, <code>curl</code>, <code>nslookup</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="具体的な問題">具体的な問題</h2>
+<p>通信インフラの現場で「実際にありそうな、かつ原因究明に少しコツがいる」シチュエーションを3つ用意しました。</p>
+<p>これまでの知識（カプセル化、MTU、L3SW/BBルータ、VLAN）を総動員して、どこに原因があるか想像しながら読んでみてください。</p>
+<h3 id="シチュエーション1">シチュエーション1：</h3>
+<p><strong>「特定のサイトだけ表示が崩れる、または重い」</strong></p>
+<ul>
+<li><strong>状況:</strong> ある拠点のオフィスで、インターネット接続を「PPPoE接続」から「IPsec VPN経由」に変更した。</li>
+<li><strong>症状:</strong> Google検索などはサクサク動くが、社内のグループウェアの特定のページや、画像が多いWebサイトだけ「読み込み中のまま」になったり、レイアウトが崩れたりする。</li>
+<li><strong>ヒント:</strong> パケットのサイズと、カプセル化による「ヘッダーの厚み」を思い出してください。</li>
+</ul>
+<blockquote>
+<p><strong>正解の方向性:</strong> <strong>MTU/MSSの不整合（Path MTU Discoveryの失敗）</strong>
+IPsecでカプセル化したことで、パケットの最大サイズが小さくなったのに、PCが以前と同じサイズで送ろうとして「大きすぎて通れないパケット」が捨てられている状態です。</p>
+</blockquote>
+<h3 id="シチュエーション2">シチュエーション2：</h3>
+<p><strong>「新しく設置したPCだけが、他部署のプリンタを使えない」</strong></p>
+<ul>
+<li><strong>状況:</strong> フロアの模様替えに伴い、L2SWの空いているポートに新しいPCを接続した。</li>
+<li><strong>症状:</strong> そのPCからインターネットは見れるし、同じ島（グループ）の共有フォルダも見れる。しかし、隣の部署（別のVLAN）にあるネットワークプリンタにだけ、どうしても印刷データが飛ばない。</li>
+<li><strong>ヒント:</strong> L2SWのポート設定とVLANの役割を思い出してください。</li>
+</ul>
+<blockquote>
+<p><strong>正解の方向性:</strong> <strong>VLAN設定のミス（アクセスポートの割り当てミス）</strong>
+L2SWの接続したポートが、本来のVLANではなく「ゲスト用VLAN」や「デフォルトVLAN」に設定されたままになっており、ルーティングの対象外になっている可能性があります。</p>
+</blockquote>
+<h3 id="シチュエーション3">シチュエーション3：</h3>
+<p><strong>「夜の21時になると、VPNが突然切断される」</strong></p>
+<ul>
+<li><strong>状況:</strong> テレワークを導入している中小企業で、SSL-VPNを利用している。</li>
+<li><strong>症状:</strong> 日中は非常に快適だが、夜21時〜22時頃になると、接続していた社員のVPNが一斉に切れ、再接続しようとしても「サーバーが見つかりません」といったエラーが出る。</li>
+<li><strong>ヒント:</strong> BBルーターの役割と、ネット回線の混雑ポイントを思い出してください。</li>
+</ul>
+<blockquote>
+<p><strong>正解の方向性:</strong> <strong>PPPoEの輻輳（ふくそう）またはNATセッションの枯渇</strong>
+プロバイダーのPPPoE終端装置が夜間のトラフィック増大でパンクしているか、あるいは安価なBBルーターが、社員の多くの通信（セッション）を捌ききれずにハングアップしている可能性があります。</p>
+</blockquote>
+<h3 id="シチュエーション4">シチュエーション4：</h3>
+<p><strong>「L3SWを導入したら、全社の通信が非常に遅くなった」</strong></p>
+<ul>
+<li><strong>状況:</strong> 社内LANの高速化のために、古いルーターを廃止して高機能なL3SWを導入した。</li>
+<li><strong>症状:</strong> 導入直後から、数秒ごとに通信がパタッと止まる現象が全社で発生。L3SWのCPU負荷を確認すると、常に100%に近い状態になっている。</li>
+<li><strong>ヒント:</strong> L2SW/L3SWで最も恐ろしい「物理的なループ」を思い出してください。</li>
+</ul>
+<blockquote>
+<p><strong>正解の方向性:</strong> <strong>L2ループ（ブロードキャストストーム）</strong>
+冗長化のためにケーブルを2本繋いだが、L3SW側で「スパニングツリー（STP）」の設定を忘れていたため、パケットが無限ループして帯域とCPUを使い果たしている状態です。</p>
+</blockquote>
+<h2 id="総括">総括</h2>
+<p>現在情報を調べたり、業務で使っているシステムを支えるネットワーキングや通信は不可欠だといえると思います。</p>
+<p>そんなネットワークはいつも健康な状態ではありません。</p>
+<p>何か起こった際に、解決するには、関係部署に、正しく情報を伝えること、です。
+そして正しく情報を伝えるためには日ごろより、ネットワークの問題となる原因をある程度理解しておくことが近道だと思います。</p>
+<p>今日は、そんな問題解決につなげるための話でした。</p>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+</script>
+
+
+            
+        </body>
+        </html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x554f;&#x984c;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+
+
+            <p>ネットワークのスピードが遅い。
+動画やウェブサイトの画面更新が遅いということがあれば、それは通信の速度が遅くなっているからかもしれません。</p>
+<p>本日はそんなネットワークの通信速度に関するお話です。</p>
+<h2 id="問題">問題</h2>
+<p>ネットワーク速度が「遅い」と感じる現象は、単にデータが届くのが遅いだけでなく、裏側では複数の要因が複雑に絡み合っています。</p>
+<p>ユーザーが直面する現象を、技術的な背景とともに詳しく紐解いていきましょう。</p>
+<h3 id="1-スループット実効速度の低下">1. スループット（実効速度）の低下</h3>
+<p>「1Gbpsの光回線なのに、測ってみると30Mbpsしか出ない」という、最も分かりやすい現象です。</p>
+<ul>
+<li><strong>現象:</strong> データの「土管」が細くなっている状態です。ファイルのダウンロードに時間がかかり、高画質動画が途中で止まってしまいます。</li>
+<li><strong>原因の裏側:</strong>  <strong>回線の輻輳（ふくそう）:</strong> プロバイダーの設備（PPPoEの終端装置など）で、近隣住民や社員全員の通信が集中し、交通渋滞が起きている。</li>
+<li><strong>規格の不一致:</strong> ルーターやハブが古く、物理的に100Mbpsまでしか対応していない（いわゆる「ボトルネック」）。</li>
+</ul>
+<h3 id="2-レイテンシ遅延の増大">2. レイテンシ（遅延）の増大</h3>
+<p>「速度測定の結果は悪くないのに、操作の反応がワンテンポ遅れる」という現象です。</p>
+<ul>
+<li><strong>現象:</strong> データの往復時間（Ping値）が長くなっている状態です。Webサイトをクリックしてから表示が始まるまでが長く、オンライン会議では声が遅れて聞こえます。</li>
+<li><strong>原因の裏側:</strong></li>
+<li><strong>経路の遠回り:</strong> VPNサーバーを経由して遠隔地へ通信している場合や、海外のサーバーにアクセスしている。</li>
+<li><strong>バッファブロート:</strong> ルーターの処理能力を超えたパケットが溜まりすぎて、順番待ちが発生している。</li>
+</ul>
+<h3 id="3-ジッタゆらぎとパケットロス">3. ジッタ（ゆらぎ）とパケットロス</h3>
+<p>「声がロボットのようになる」「急に画面が固まって、数秒後に倍速で動き出す」という、リアルタイム通信で顕著な現象です。</p>
+<ul>
+<li><strong>現象:</strong> データが届く間隔がバラバラになったり（ジッタ）、一部のパケットが目的地に届かずに消えてしまったり（ロス）します。</li>
+<li><strong>原因の裏側:</strong></li>
+<li><strong>Wi-Fiの電波干渉:</strong> 電子レンジや近隣のWi-Fiルーターと同じ周波数（2.4GHz帯）を使ってしまい、ノイズでデータが壊れている。</li>
+<li><strong>機器の過負荷:</strong> ルーターのメモリやCPUが限界で、処理しきれないパケットを捨てている。</li>
+</ul>
+<h3 id="4-特定のプロトコルサイトのみの遅延">4. 特定のプロトコル・サイトのみの遅延</h3>
+<p>「YouTubeは平気なのに、社内システムだけ異様に重い」といった現象です。</p>
+<ul>
+<li><strong>現象:</strong> 全体ではなく、特定の通信経路や特定の種類のデータだけが遅くなります。</li>
+<li><strong>原因の裏側:</strong></li>
+<li><strong>MTUの問題:</strong> 先ほどお話しした「カプセル化によるヘッダーの肥大化」で、大きなパケットが分割（フラグメンテーション）され、効率が極端に落ちている。</li>
+<li><strong>DNSの応答遅延:</strong> 「名前解決（URLをIPアドレスに変える作業）」に時間がかかっており、通信が始まる前の「住所検索」で足止めを食らっている。</li>
+</ul>
+<h3 id="5-まとめ速度低下の正体">5. まとめ：速度低下の正体</h3>
+<p>これらをまとめると、ユーザーが感じる「遅さ」は以下の3つのどれかに集約されます。</p>
+<table>
+<thead>
+<tr>
+<th>ユーザーの感じ方</th>
+<th>専門的な現象</th>
+<th>主な原因箇所</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>「進まない」</strong></td>
+<td>低スループット</td>
+<td>プロバイダー、LAN規格</td>
+</tr>
+<tr>
+<td><strong>「反応が鈍い」</strong></td>
+<td>高レイテンシ</td>
+<td>ルーター、サーバー距離</td>
+</tr>
+<tr>
+<td><strong>「ガタガタする」</strong></td>
+<td>ジッタ・ロス</td>
+<td>無線環境、機器の故障</td>
+</tr>
+</tbody>
+</table>
+<h2 id="原因の切り分け">原因の切り分け</h2>
+<p>通信速度のトラブル解決は、闇雲に設定をいじるのではなく、 <strong>「OSI参照モデルの下（物理層）から順番に」</strong> 切り分けていくのが最も効率的です。</p>
+<p>プロのネットワークエンジニアが現場で行う、5つのステップによる切り分け手順を解説します。</p>
+<h3 id="ステップ1物理的な接続と範囲の特定">ステップ1：物理的な接続と「範囲」の特定</h3>
+<p>まずは、問題が「どこで」起きているかを絞り込みます。</p>
+<ul>
+<li>
+<p><strong>1台だけか、全員か？</strong></p>
+</li>
+<li>
+<p>1台だけなら、その端末（PC/スマホ）か、その端末が繋がっているポート・ケーブルの疑い。</p>
+</li>
+<li>
+<p>全員なら、ルーター、スイッチ、あるいはプロバイダー（回線）の疑い。</p>
+</li>
+<li>
+<p><strong>有線にしても遅いか？</strong></p>
+</li>
+<li>
+<p>Wi-Fiをやめて有線LANケーブルでルーターに直結してみてください。</p>
+</li>
+<li>
+<p><strong>改善した場合：</strong> 原因はWi-Fiの電波干渉や規格（TKIPを使っている等）です。</p>
+</li>
+<li>
+<p><strong>改善しない場合：</strong> 原因はルーター、またはそれより外側の回線にあります。</p>
+</li>
+</ul>
+<h3 id="ステップ2測定値から現象を分類する">ステップ2：測定値から「現象」を分類する</h3>
+<p>スピードテストサイト（Fast.comやGoogle速度テストなど）を使い、数値を確認します。</p>
+<ul>
+<li><strong>スループット（下り速度）を見る:</strong> 10Mbps以下なら「帯域不足」。回線の混雑やLAN規格のボトルネックです。</li>
+<li><strong>レイテンシ（Ping/レイテンシ）を見る:</strong> 100msを超えるなら「反応遅延」。VPNの経由や、ルーターの処理過負荷が疑われます。</li>
+<li><strong>ジッタ（Jitter）を見る:</strong> 数値が激しく変動するなら、パケットロスが発生しており、Web会議が途切れる原因になります。</li>
+</ul>
+<h3 id="ステップ3ルーターと外の世界の切り分け">ステップ3：ルーターと「外の世界」の切り分け</h3>
+<p>自分の管理下（LAN）の問題か、プロバイダー側の問題かを切り分けます。</p>
+<ul>
+<li><strong>ルーターを再起動する:</strong> 溜まったNATセッションやメモリの断片化が解消され、これだけで直ることも多いです。</li>
+<li><strong>「traceroute (tracert)」コマンドを実行する:</strong></li>
+<li>Windowsのコマンドプロンプトで <code>tracert 8.8.8.8</code> と入力します。</li>
+<li>1番目のホップ（自分のルーター）で時間がかかっていれば、社内LANの問題。</li>
+<li>2番目以降のプロバイダー内のIPで時間がかかっていれば、回線網の混雑です。</li>
+</ul>
+<h3 id="ステップ4プロトコルと特定のサービスを疑う">ステップ4：プロトコルと特定のサービスを疑う</h3>
+<p>「特定のサイトだけ遅い」場合の切り分けです。</p>
+<ul>
+<li><strong>DNSの切り分け:</strong> ブラウザで開けない時、IPアドレス（例：<code>http://1.1.1.1</code>）で直接開けるか試します。開けるならDNSサーバーの設定不備です。</li>
+<li><strong>MTUの切り分け（VPN利用時など）:</strong></li>
+<li><code>ping -f -l 1460 google.com</code> を実行。</li>
+<li>「パケットの断片化が必要ですが、DFが設定されています」と出る場合、カプセル化によるMTUサイズオーバーが原因でパケットが捨てられています。</li>
+</ul>
+<h2 id="対応策">対応策</h2>
+<p>通信トラブルの原因が特定できたら、次はその原因に応じた「処方箋」を実行します。切り分けのステップに対応した、具体的なアクションプランを整理しました。</p>
+<h3 id="1-wi-fi無線が原因だった場合の対応">1. Wi-Fi（無線）が原因だった場合の対応</h3>
+<p>有線では速いのに無線で遅い場合、電波の「通り道」を整理する必要があります。</p>
+<ul>
+<li><strong>周波数帯の変更:</strong> 2.4GHz（電子レンジ等の干渉に弱い）から <strong>5GHz（干渉に強く高速）</strong> へ切り替えます。</li>
+<li><strong>チャンネルの固定:</strong> 近隣のルーターと電波が重なっている場合、ルーター設定画面から空いているチャンネルへ手動で固定します。</li>
+<li><strong>暗号化方式の確認:</strong> 前述の通り、<strong>TKIP</strong>が設定されていると速度が54Mbpsに制限されます。必ず <strong>AES (CCMP)</strong> を選択してください。</li>
+<li><strong>設置場所の改善:</strong> ルーターを床に置かず、高さ1m以上の見通しの良い場所へ移動させます。</li>
+</ul>
+<h3 id="2-回線の混雑夜だけ遅い等が原因の場合の対応">2. 回線の混雑（夜だけ遅い等）が原因の場合の対応</h3>
+<p>プロバイダー側の「関所（終端装置）」が混んでいる場合、通信の「通り道」自体を変えるのが最も効果的です。</p>
+<ul>
+<li><strong>IPv6 IPoE (IPv4 over IPv6) への切り替え:</strong> 「v6プラス」や「OCNバーチャルコネクト」などの名称で提供されているサービスです。従来のID/PW認証（PPPoE）をスキップして、混雑の少ない次世代の網を通るようにします。</li>
+</ul>
+<blockquote>
+<p><strong>注意:</strong> 契約の変更と、対応ルーターへの買い替えが必要です。</p>
+</blockquote>
+<ul>
+<li><strong>プロバイダーの変更:</strong> IPoEを導入しても遅い場合は、バックボーン（網の太さ）がより強力なプロバイダーへの乗り換えを検討します。</li>
+</ul>
+<h3 id="3-ルーターの負荷や性能不足が原因の場合の対応">3. ルーターの負荷や性能不足が原因の場合の対応</h3>
+<p>ルーターが「いっぱいいっぱい」になっている場合、負荷を減らすか、処理能力を上げます。</p>
+<ul>
+<li><strong>定期的な再起動:</strong> 多くの家庭用ルーターは、再起動によってメモリがリフレッシュされ、一時的に速度が回復します。</li>
+<li><strong>NATセッションの管理:</strong> P2Pソフトや過度な多台数接続を控え、ルーターのセッション管理負荷を下げます。</li>
+<li><strong>上位モデルへの買い替え:</strong> 接続台数が増えている場合（スマート家電等）、CPU性能が高い「戸建て用/オフィス用」の高機能ルーターに変更します。</li>
+</ul>
+<h3 id="4-ネットワーク構成mtul2ループが原因の場合の対応">4. ネットワーク構成（MTU・L2ループ）が原因の場合の対応</h3>
+<p>技術的な設定不備による不具合への対応です。</p>
+<ul>
+<li><strong>MTU/MSS値の調整:</strong> VPN環境などで特定のサイトが見られない場合、ルーター側のMTU設定を少し小さく（例：1454や1400）設定します。これにより、パケットの「サイズオーバーによる破棄」を防ぎます。</li>
+<li><strong>STP（スパニングツリー）の有効化:</strong> L3SW/L2SWでループが発生している場合、物理的な配線のミスを直すとともに、ループを自動検知して遮断するSTP設定を有効にします。</li>
+</ul>
+<h3 id="5-端末側pcスマホが原因の場合の対応">5. 端末側（PC/スマホ）が原因の場合の対応</h3>
+<p>インフラではなく、手元のデバイスに問題がある場合の対応です。</p>
+<ul>
+<li><strong>DNSサーバーの手動設定:</strong> プロバイダーのDNSが遅い場合、Googleが提供するパブリックDNS（<code>8.8.8.8</code>）などに変更すると、Webの読み込み開始が速くなることがあります。</li>
+<li><strong>バックグラウンド更新の停止:</strong> Windows Updateやクラウドストレージ（OneDrive/iCloud）の同期が帯域を使い切っていないか確認し、作業中は一時停止します。</li>
+</ul>
+<h3 id="対応マニュアルまとめ">対応マニュアルまとめ</h3>
+<table>
+<thead>
+<tr>
+<th>切り分け結果</th>
+<th>最優先アクション</th>
+<th>期待される効果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wi-Fiが遅い</strong></td>
+<td>5GHz帯への変更 + AES設定</td>
+<td>安定性と最高速度の向上</td>
+</tr>
+<tr>
+<td><strong>夜間だけ遅い</strong></td>
+<td>IPv6 IPoE サービスへの加入</td>
+<td>渋滞の回避、速度の劇的改善</td>
+</tr>
+<tr>
+<td><strong>時々固まる</strong></td>
+<td>ルーターの再起動 or 買い替え</td>
+<td>処理落ちの解消</td>
+</tr>
+<tr>
+<td><strong>VPN経由が遅い</strong></td>
+<td>MTU値の最適化</td>
+<td>データの欠落防止、表示速度の安定</td>
+</tr>
+</tbody>
+</table>
+<h2 id="総括">総括</h2>
+<p>通信速度が遅いという問題は、単に「回線が悪い」という一言では片付けられない、複数のレイヤーが絡み合った複雑なパ現象です。</p>
+<p>原因は物理的な要因、論理的な原因、インフラの要因などが関係しています。</p>
+<p>そして通信の問題は複雑であるからこそ、原因の切り分けが重要となります。</p>
+<pre><code class="language-mermaid">graph TD
+    A[速度が遅い/不安定] --&gt; B{有線でも遅いか?}
+    B -- No --&gt; C[Wi-Fi環境の改善: 5GHz/AES/配置変更]
+    B -- Yes --&gt; D{時間帯で変わるか?}
+    D -- Yes --&gt; E[IPoE方式への変更/プロバイダ検討]
+    D -- No --&gt; F[ルーター再起動/MTU調整/DNS変更]
+    F --&gt; G[機器の性能不足なら買い替え]
+
+</code></pre>
+<p>これらの原因に対する対応方法について今回はまとめてみました。
+通信の環境を改善したい、原因と対策を知りたいということがあれば、ご参考下さい。</p>
+
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+</script>
+
+            
+        </body>
+        </html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x6982;&#x8981;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>Web上で自分の作ったアプリケーションを公開する場合、ネットは色んな攻撃通信がされ、常に脅威にさらされています。</p>
+<p>社内などのネットワークであれば入口にあたるポイントにファイアウォールを導入します。
+ただ、ここですべての攻撃を防げるわけではありません。
+アプリケーション固有の脆弱性に対する攻撃が行われれる可能性があり、そんなアプリケーション固有の脅威から防御する手段となりえるのがWAF（Web Application Firewall）と呼ばれるものです。</p>
+<p>本日テーマ：</p>
+<blockquote>
+<p>WAFについて説明し、どんな種類で選定すべきかまとめてみる</p>
+</blockquote>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="概要">概要</h2>
+<p>WAFは、Webアプリケーションに対する攻撃を検知・遮断するためのセキュリティサービス／製品です。</p>
+<h3 id="wafの基本的な役割">WAFの基本的な役割</h3>
+<ul>
+<li>WebサーバやWebアプリケーション（ECサイト、会員サイト、社内システムなど）の前段に配置し、HTTP/HTTPSの通信を監視します。</li>
+<li>SQLインジェクション、クロスサイトスクリプティング（XSS）、OSコマンドインジェクション、ディレクトリトラバーサルなど、アプリケーション層の攻撃を検知・ブロックします。</li>
+<li>一般的なファイアウォール（ネットワーク層）やIPS（侵入防止システム）では防ぎきれない、アプリケーション特有の脆弱性を狙った攻撃を防ぐことを目的としています。</li>
+</ul>
+<h3 id="主な機能">主な機能</h3>
+<ol>
+<li>
+<p><strong>シグネチャ型防御</strong><br>
+既知の攻撃パターン（シグネチャ）と通信内容を照合し、一致した場合にブロックします。</p>
+</li>
+<li>
+<p><strong>異常検知・挙動ベース防御</strong><br>
+通常の利用パターン（ベースライン）から外れたリクエストを「異常」とみなし、ブロックや警告を行います。</p>
+</li>
+<li>
+<p><strong>ホワイトリスト／ブラックリスト制御</strong></p>
+<ul>
+<li>ホワイトリスト：許可するIPアドレス・URL・パラメータなどを指定</li>
+<li>ブラックリスト：拒否するIP・URL・パラメータなどを指定</li>
+</ul>
+</li>
+<li>
+<p><strong>ボット対策</strong><br>
+悪意のあるボット（スクレイピング、アカウント乗っ取り試行など）を検知・制限します。</p>
+</li>
+<li>
+<p><strong>DDoS対策</strong><br>
+アプリケーション層への大量リクエスト（レイヤー7 DDoS）を検知し、レート制限やブロックを行います。</p>
+</li>
+<li>
+<p><strong>ログ管理・レポート</strong><br>
+攻撃の種類、頻度、送信元IPなどをログとして記録し、レポートやダッシュボードで可視化します。</p>
+</li>
+</ol>
+<h2 id="ファイアウォールとの違い">ファイアウォールとの違い</h2>
+<p>WAFとファイアウォール（FW）は、どちらも「通信を制御してセキュリティを高める」という点では共通していますが、<strong>守る対象・レイヤー・判断基準</strong>が大きく異なります。</p>
+<h3 id="1-守る対象の違い">1. 守る対象の違い</h3>
+<ul>
+<li>
+<p><strong>ファイアウォール（FW）</strong><br>
+主に<strong>ネットワーク全体</strong>を守るための装置・ソフトウェアです。<br>
+例：社内ネットワークとインターネットの境界、部門間のセグメント分離など。</p>
+</li>
+<li>
+<p><strong>WAF（Web Application Firewall）</strong><br>
+<strong>Webアプリケーションそのもの</strong>を守るための装置・サービスです。<br>
+例：ECサイト、会員サイト、社内Webシステムなど、特定のWebアプリの前段に配置されます。</p>
+</li>
+</ul>
+<h3 id="2-動作するレイヤーの違いosi参照モデル">2. 動作するレイヤーの違い（OSI参照モデル）</h3>
+<ul>
+<li>
+<p><strong>ファイアウォール</strong><br>
+主に<strong>ネットワーク層（レイヤ3）</strong> や<strong>トランスポート層（レイヤ4）</strong> で動作します。</p>
+<ul>
+<li>IPアドレス、ポート番号、プロトコル（TCP/UDP）などを見て、通信を許可・拒否します。</li>
+<li>「どのIPから、どのポート宛ての通信か」を基準にします。</li>
+</ul>
+</li>
+<li>
+<p><strong>WAF</strong><br>
+<strong>アプリケーション層（レイヤ7）</strong> で動作します。</p>
+<ul>
+<li>HTTP/HTTPSの<strong>中身（リクエスト・レスポンス）</strong> を解析します。</li>
+<li>URL、パラメータ、Cookie、HTTPヘッダ、フォーム入力値などを見て、攻撃パターンかどうかを判断します。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-判断基準の違い">3. 判断基準の違い</h3>
+<ul>
+<li>
+<p><strong>ファイアウォール</strong></p>
+<ul>
+<li>「IPアドレス 192.168.1.100 からの 80番ポートへの通信は許可する」</li>
+<li>「外部からの 22番ポート（SSH）への通信は拒否する」<br>
+といった、<strong>通信の“宛先”と“送信元”</strong> を基準にします。</li>
+</ul>
+</li>
+<li>
+<p><strong>WAF</strong></p>
+<ul>
+<li>「<code>/login</code> へのPOSTリクエストに <code>' OR 1=1 --</code> のような文字列が含まれていたらブロックする」</li>
+<li>「<code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code> のようなスクリプトタグがパラメータに含まれていたらブロックする」<br>
+といった、<strong>通信の“内容”</strong> を基準にします。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-防げる攻撃の違い">4. 防げる攻撃の違い</h3>
+<ul>
+<li>
+<p><strong>ファイアウォールで防げるものの例</strong></p>
+<ul>
+<li>不要なポートへの外部からのアクセス</li>
+<li>特定IPからの一方的なスキャン攻撃</li>
+<li>ネットワークレベルのDoS攻撃（レイヤ3〜4）</li>
+</ul>
+</li>
+<li>
+<p><strong>WAFで防げるものの例</strong></p>
+<ul>
+<li>SQLインジェクション</li>
+<li>クロスサイトスクリプティング（XSS）</li>
+<li>クロスサイトリクエストフォージェリ（CSRF）</li>
+<li>ディレクトリトラバーサル</li>
+<li>アプリケーション層DDoS（レイヤ7 DDoS）</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-配置位置のイメージ">5. 配置位置のイメージ</h3>
+<ul>
+<li>
+<p><strong>ファイアウォール</strong><br>
+<code>[インターネット] ←→ [ファイアウォール] ←→ [社内ネットワーク全体]</code></p>
+</li>
+<li>
+<p><strong>WAF</strong><br>
+<code>[インターネット] ←→ [WAF] ←→ [Webサーバ / Webアプリケーション]</code></p>
+</li>
+</ul>
+<p>WAFは、ファイアウォールで守られたネットワークのさらに内側、<strong>Webアプリケーションの直前</strong>に配置されることが多いです。</p>
+<h3 id="比較一覧">比較一覧</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>ファイアウォール（FW）</th>
+<th>WAF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>守る対象</td>
+<td>ネットワーク全体</td>
+<td>Webアプリケーション</td>
+</tr>
+<tr>
+<td>動作レイヤ</td>
+<td>主にレイヤ3・4（IP・ポート）</td>
+<td>レイヤ7（HTTP/HTTPSの中身）</td>
+</tr>
+<tr>
+<td>判断基準</td>
+<td>IPアドレス、ポート番号、プロトコル</td>
+<td>URL、パラメータ、Cookie、HTTPヘッダなど</td>
+</tr>
+<tr>
+<td>防ぐ攻撃</td>
+<td>ポートスキャン、不正アクセス（ネットワーク層）</td>
+<td>SQLインジェクション、XSS、アプリ層DDoSなど</td>
+</tr>
+</tbody>
+</table>
+<p><strong>両者は「どちらか一方で十分」というものではなく、ネットワーク全体を守るFWと、アプリケーションの中身を守るWAFを組み合わせることで、より強固な防御が可能になります。</strong></p>
+<h2 id="提供形態">提供形態</h2>
+<h3 id="提供形態の種類">提供形態の種類</h3>
+<p>WAFの形態は3種類あります。</p>
+<ul>
+<li>
+<p><strong>クラウド型WAF（SaaS型）</strong><br>
+DNSの向き先をWAF提供元に変更するだけで導入できる形態です。自社でサーバを用意せず、初期費用を抑えやすいのが特徴です。</p>
+</li>
+<li>
+<p><strong>オンプレミス型WAF（アプライアンス／ソフトウェア）</strong><br>
+自社のデータセンターに専用機器やソフトウェアを導入する形態です。ネットワーク構成の自由度が高く、既存のロードバランサやプロキシと連携しやすい場合があります。</p>
+</li>
+<li>
+<p><strong>ホスティング型／CDN連携型</strong><br>
+CDN（コンテンツデリバリネットワーク）事業者が提供するWAF機能を利用する形態です。Webサイトの高速化とセキュリティ強化を同時に実現できます。</p>
+</li>
+</ul>
+<h3 id="選定">選定</h3>
+<p>上記の3種類の中からコスト、導入しやすさ、カスタマイズ性、性能・スケーラビリティ、セキュリティ機能の5基準で比較します。</p>
+<p>以下に、3種類のWAF提供形態を5つの基準で比較した表を示します。</p>
+<table>
+<thead>
+<tr>
+<th>評価基準</th>
+<th>クラウド型WAF</th>
+<th>オンプレミス型WAF</th>
+<th>CDN連携型WAF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. コスト</strong>（初期費用・運用コスト）</td>
+<td><strong>〇</strong>初期費用が低く、月額課金中心。運用負荷も比較的軽い。</td>
+<td><strong>△〜×</strong> 機器・ライセンス購入で初期費用が高く、運用・保守も自社負担になりがち。</td>
+<td><strong>〇</strong> 初期費用は低め。CDN利用料とセットで、スケールに応じた課金が多い。</td>
+</tr>
+<tr>
+<td><strong>2. 導入しやすさ</strong>（導入工数・期間）</td>
+<td><strong>〇</strong> DNS変更や簡単な設定で数日〜数週間で開始可能。</td>
+<td><strong>×</strong> 機器調達・ネットワーク設計・設定が必要で、数ヶ月かかることも多い。</td>
+<td><strong>〇</strong> CDN利用と同時にWAFを有効化でき、導入は比較的容易。</td>
+</tr>
+<tr>
+<td><strong>3. カスタマイズ性</strong>（ルール・ネットワーク制御の自由度）</td>
+<td><strong>△</strong> ベンダー提供の機能範囲内でのカスタマイズが中心。ネットワーク制御は限定的。</td>
+<td><strong>〇</strong> 自社ネットワーク内に設置するため、ロードバランサ・FWなどとの連携や細かい制御が可能。</td>
+<td><strong>△</strong> CDNプラットフォーム上での制御が中心。独自ルールはある程度可能だが、自由度は中程度。</td>
+</tr>
+<tr>
+<td><strong>4. 性能・スケーラビリティ</strong>（処理性能・拡張性・DDoS耐性）</td>
+<td><strong>〇</strong> ベンダーの大規模インフラ上で動作し、トラフィック増加に自動対応。DDoS耐性も高いことが多い。</td>
+<td><strong>△</strong> 自社機器の性能上限があり、トラフィック増加時は機器増強が必要。DDoS対策は別途検討が必要な場合も。</td>
+<td><strong>〇</strong> グローバルCDN上で動作し、キャッシュと組み合わせて高スループット・高DDoS耐性を実現。</td>
+</tr>
+<tr>
+<td><strong>5. セキュリティ機能</strong>（防御機能の充実度・最新性）</td>
+<td><strong>〇</strong> シグネチャ・挙動ベース・ボット対策など機能が充実。脅威情報の反映も比較的早い。</td>
+<td><strong>〇〜△</strong> 機能は充実しているが、シグネチャ更新や運用チューニングを自社で行う必要がある。</td>
+<td><strong>〇</strong> CDN事業者の大規模な脅威インテリジェンスを活用し、最新の攻撃にも対応しやすい。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>選定の目安</strong></p>
+<ul>
+<li>
+<p><strong>コスト重視・導入スピード重視</strong><br>
+→ クラウド型WAF or CDN連携型WAFが有利です。</p>
+</li>
+<li>
+<p><strong>ネットワーク制御の自由度・特殊要件対応重視</strong><br>
+→ オンプレミス型WAFが有利です。</p>
+</li>
+<li>
+<p><strong>大規模トラフィック・DDoS対策重視</strong><br>
+→ クラウド型WAF or CDN連携型WAFが有利です。</p>
+</li>
+<li>
+<p><strong>セキュリティ機能の最新性・運用負荷軽減重視</strong><br>
+→ クラウド型WAF or CDN連携型WAFが有利です。</p>
+</li>
+</ul>
+<p>このように、用途（どう使うか）と価格（いくらかかるか）のバランスを見ながら、上記5つの基準で比較すると、自社に合ったWAFの提供形態を選びやすくなります。</p>
+<h2 id="wafを導入するメリット">WAFを導入するメリット</h2>
+<p>WAFを導入する主なメリットは、以下のように整理できます。</p>
+<p><img src="file:///d:\PycharmProjects\security_specialist\network_tech\network_specialist\calulum\application\image\waf_service\1786415139608.png" alt="1786415139608"></p>
+<h3 id="1-webアプリケーション層の攻撃を直接防げる">1. Webアプリケーション層の攻撃を直接防げる</h3>
+<ul>
+<li>ファイアウォールやIPSでは防ぎきれない、<strong>アプリケーション層の攻撃</strong>（SQLインジェクション、XSS、OSコマンドインジェクションなど）を検知・遮断できます。</li>
+<li>Webサーバやアプリケーションの<strong>入口で防御</strong>するため、脆弱性が残っていても攻撃をブロックできます。</li>
+</ul>
+<h3 id="2-脆弱性修正までの仮の防御として有効">2. 脆弱性修正までの「仮の防御」として有効</h3>
+<ul>
+<li>Webアプリケーションの脆弱性修正には、開発・テスト・リリースに時間がかかることが多いです。</li>
+<li>WAFは、<strong>修正が完了するまでの間、攻撃を一時的に防ぐ「仮の防御」</strong> として機能します。</li>
+<li>特に、外部委託開発やレガシーシステムで修正が難しい場合に効果的です。</li>
+</ul>
+<h3 id="3-ゼロデイ攻撃や未知の攻撃にも一定の効果">3. ゼロデイ攻撃や未知の攻撃にも一定の効果</h3>
+<ul>
+<li>シグネチャ型だけでなく、<strong>挙動ベースの防御</strong>（通常と異なるリクエストを検知）や<strong>機械学習ベースの異常検知</strong>を行うWAFも多く、未知の攻撃パターンにも対応しやすくなります。</li>
+<li>ベンダー側で最新の脅威情報が反映されるクラウド型WAFでは、<strong>ゼロデイ攻撃への対応スピードが速い</strong>傾向があります。</li>
+</ul>
+<h3 id="4-ddos攻撃特にレイヤ7への耐性向上">4. DDoS攻撃（特にレイヤ7）への耐性向上</h3>
+<ul>
+<li>アプリケーション層への大量リクエスト（レイヤ7 DDoS）を検知し、<strong>レート制限やブロック</strong>を行うことで、Webサーバの負荷を軽減できます。</li>
+<li>CDN連携型やクラウド型WAFでは、グローバルな分散インフラを活用して<strong>大規模DDoSにも強い</strong>構成が取りやすいです。</li>
+</ul>
+<h3 id="5-ボット対策不正アクセス防止">5. ボット対策・不正アクセス防止</h3>
+<ul>
+<li>スクレイピング、アカウント乗っ取り試行、クレデンシャルスタッフィングなど、<strong>悪意のあるボット</strong>を検知・制限できます。</li>
+<li>正常なボット（検索エンジンなど）との識別や、<strong>CAPTCHA導入</strong>などの機能も備えたWAFもあります。</li>
+</ul>
+<h3 id="6-コンプライアンス要件の達成に役立つ">6. コンプライアンス要件の達成に役立つ</h3>
+<ul>
+<li>PCI DSS（クレジットカード情報のセキュリティ基準）など、<strong>WAF導入が推奨または事実上必須</strong>とされる規制・ガイドラインがあります。</li>
+<li>監査対応やレポート作成の際に、<strong>防御策の一つとして明確に説明できる</strong>メリットがあります。</li>
+</ul>
+<h3 id="7-ログ可視化によるセキュリティ状況の把握">7. ログ・可視化によるセキュリティ状況の把握</h3>
+<ul>
+<li>攻撃の種類、頻度、送信元IP、対象URLなどを<strong>ログとして記録・可視化</strong>できます。</li>
+<li>ダッシュボードやレポート機能により、<strong>自社のWebアプリケーションがどのような攻撃を受けているか</strong>を把握しやすくなります。</li>
+<li>インシデント発生時の<strong>原因調査・再発防止策の検討</strong>にも役立ちます。</li>
+</ul>
+<h3 id="8-運用負荷の軽減特にクラウド型">8. 運用負荷の軽減（特にクラウド型）</h3>
+<ul>
+<li>クラウド型WAFでは、ベンダー側で<strong>シグネチャ更新・インフラ管理・監視</strong>を担うため、自社の運用負荷を軽減できます。</li>
+<li>セキュリティ専門チームが薄い組織でも、<strong>比較的少ない工数で高度な防御</strong>を実現しやすくなります。</li>
+</ul>
+<h2 id="総括">総括</h2>
+<p><strong>WAFの用途の本質</strong></p>
+<ul>
+<li><strong>Webアプリケーションの「入口」で、HTTP/HTTPS通信を検査し、攻撃を検知・遮断する防御層</strong>です。</li>
+<li>アプリケーションの脆弱性が残っていても、<strong>攻撃が到達する前にブロックする「仮の防御」</strong> として機能します。</li>
+<li>ネットワーク層の防御（FW/IPS）では防げない、<strong>アプリケーション層特有の攻撃（SQLインジェクション、XSSなど）</strong> を対象とします。</li>
+</ul>
+<p><strong>アプリケーションに求められるセキュリティ</strong></p>
+<ul>
+<li>WAFは<strong>追加の防御層</strong>であり、<strong>アプリケーション自体のセキュアコーディングや脆弱性対策の代替にはなりません</strong>。</li>
+<li>入力値検証、出力エスケープ、権限管理、セッション管理、ログ出力など、<strong>基本的なセキュリティ対策をアプリケーション側で実装することが前提</strong>です。</li>
+<li>WAF導入後も、<strong>定期的な脆弱性診断・修正・パッチ適用</strong>を継続する必要があります。</li>
+</ul>
+<p>作成した成果物をインターネットを経由して提供するという場面において提供者には情報資産の安全を確保することが求められます。
+本日説明したWAFは「<strong>入口での防御＋可視化</strong>」、実際に作成するアプリケーションには「<strong>本体の堅牢化</strong>」を行うという役割分担が存在します。<br>
+両方を組み合わせることで、<strong>多層防御（Defense in Depth）</strong> を実現し、リスクを低減して、情報資産の安全を確保し、機能提供が実現できることになります。</p>
+
+            
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/QyzK21nx70o?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+        </body>
+        </html>

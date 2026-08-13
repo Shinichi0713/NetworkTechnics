@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x4ee3;&#x8868;&#x7684;&#x306a;&#x30c7;&#x30d0;&#x30a4;&#x30b9;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>以前<a href="https://yoshishinnze.hatenablog.com/entry/2026/01/14/000000">パケットがネットワークで伝達される仕組み</a>について説明しました。
+ではこのパケットを組織や、インターネットを経由して伝達する実際のデバイスは何でしょうか？</p>
+<p>本日テーマ：</p>
+<blockquote>
+<p>パケットを組織間、インターネットを経由して伝達するデバイスについて説明します。</p>
+</blockquote>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="代表的なデバイス">代表的なデバイス</h2>
+<p>ブリッジとルータなどが相当しますが、実際のデバイスは以下のようなものです。</p>
+<h3 id="l2スイッチ">L2スイッチ</h3>
+<p>実際にブリッジを購入するとなるとL2スイッチと呼ばれる機器を購入することになります。
+<strong>L2スイッチ（レイヤ2スイッチ）は、機能的には「マルチポートブリッジ(複数のポートを持つブリッジ)」と同じもの</strong>とみなせます。</p>
+<p><strong>1. ブリッジの基本</strong></p>
+<ul>
+<li><strong>ブリッジ</strong>は、データリンク層（レイヤ2）で動作し、MACアドレスを見てフレームを転送する機器です。</li>
+<li>主に2つのポートを持ち、<strong>2つのネットワークセグメントをつなぐ</strong>役割を担います。</li>
+<li>同じ種類のネットワーク（例：イーサネット同士）をつなぎ、<strong>コリジョンドメイン（衝突の範囲）を分割</strong>します。</li>
+</ul>
+<p><strong>2. L2スイッチの基本</strong></p>
+<ul>
+<li><strong>L2スイッチ</strong>も、データリンク層（レイヤ2）で動作し、MACアドレスを見てフレームを転送する機器です。</li>
+<li>ブリッジとの大きな違いは、<strong>ポート数が多い（マルチポート）</strong> ことです。</li>
+<li>各ポートごとに独立したセグメントとして扱い、<strong>MACアドレステーブル</strong>を基に、必要なポートにのみフレームを転送します。</li>
+</ul>
+<p><strong>3. 「L2スイッチ ＝ マルチポートブリッジ」という考え方</strong></p>
+<ul>
+<li>機能的には、<strong>L2スイッチは「複数のブリッジを1つの筐体にまとめたもの」</strong> と考えることができます。</li>
+<li>歴史的には、<strong>ブリッジ → スイッチ</strong>と進化し、現在では「ブリッジ」という単体機器はほとんど使われず、<strong>L2スイッチがその役割を担っています</strong>。</li>
+</ul>
+<p><strong>4. 実務上の扱い</strong></p>
+<ul>
+<li>現在のネットワーク設計では、「ブリッジ」という言葉は主に<strong>概念的な用語</strong>として使われ、実際の機器としては<strong>L2スイッチ</strong>が使われます。</li>
+<li>そのため、<strong>「L2スイッチとブリッジは同じもの」と理解して差し支えありません</strong>。</li>
+</ul>
+<h3 id="ルータl3スイッチ">ルータ/L3スイッチ</h3>
+<p>L3レベルのIPパケットを転送するデバイスはルータがよく聞くと思いますが、組織のネットワークを扱う方であればL3スイッチを使うことが多いかもしれません。同じものでないのでしょうか？
+結論から言うと、<strong>L3スイッチは「ルーティング機能を持つスイッチ」であり、機能的にはルータとほぼ同等ですが、ルータとは用途や設計思想に違いがあり別物とみるのが適当です</strong>。</p>
+<p><strong>1. L3スイッチとは</strong></p>
+<ul>
+<li><strong>レイヤ3（ネットワーク層）で動作するスイッチ</strong>です。</li>
+<li>IPアドレスを見てパケットを転送する<strong>ルーティング機能</strong>を持ちます。</li>
+<li>同時に、レイヤ2（データリンク層）の<strong>スイッチング機能（MACアドレスベースの転送）</strong> も持っています。</li>
+<li>主に<strong>社内LANやデータセンター内</strong>で、高速なルーティングとスイッチングを実現するために使われます。</li>
+</ul>
+<p><strong>2. ルータとは</strong></p>
+<ul>
+<li><strong>レイヤ3（ネットワーク層）で動作し、異なるネットワーク間の接続と経路制御を行う機器</strong>です。</li>
+<li>IPアドレスとルーティングテーブルを基に、<strong>最適な経路を選択してパケットを転送</strong>します。</li>
+<li>WAN接続（インターネット、拠点間接続など）や、<strong>異なるプロトコル・メディア間の接続</strong>（例：イーサネットとPPP、光回線など）も担当します。</li>
+</ul>
+<p><strong>3. L3スイッチとルータの共通点</strong></p>
+<ul>
+<li>どちらも<strong>IPパケットをルーティングする</strong>という点では同じです。</li>
+<li>ルーティングプロトコル（OSPF、BGPなど）をサポートし、<strong>経路情報を交換・学習</strong>できます。</li>
+<li>VLAN間ルーティングなど、<strong>サブネット間の通信</strong>を可能にします。</li>
+</ul>
+<p><strong>4. L3スイッチとルータの違い</strong></p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>L3スイッチ</th>
+<th>ルータ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主な用途</td>
+<td>社内LAN、データセンター内の高速ルーティング</td>
+<td>WAN接続、異種ネットワーク間接続</td>
+</tr>
+<tr>
+<td>ハードウェア</td>
+<td>ASICや専用チップによる<strong>高速転送</strong>が中心</td>
+<td>ソフトウェア処理が多く、<strong>多機能・高柔軟性</strong></td>
+</tr>
+<tr>
+<td>対応インターフェース</td>
+<td>主にイーサネット（銅線・光）</td>
+<td>イーサネットに加え、シリアル、光回線、ADSLなど多様</td>
+</tr>
+<tr>
+<td>機能の重点</td>
+<td>高速なルーティング＋スイッチング</td>
+<td>ルーティング＋WAN機能（暗号化、NAT、VPNなど）</td>
+</tr>
+<tr>
+<td>価格・性能</td>
+<td>同一価格帯で<strong>より高速なパケット転送</strong>が可能なことが多い</td>
+<td>多機能だが、純粋な転送速度ではL3スイッチに劣る場合も</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ゲートウェイになりえるデバイス"><a href="https://yoshishinnze.hatenablog.com/entry/2025/12/11/000000">ゲートウェイになりえるデバイス</a></h2>
+<p>以前異なるネットワーク同士を接続するデバイスを<strong>ゲートウェイ</strong>と説明しました。
+具体的に異なるネットワーク同士を接続するデバイスにはどんなものが存在するでしょうか？
+実は相当数が該当します。
+但し、<strong>ゲートウェイとして機能する各デバイスには、処理の内容に明確なレベルの違いがあります</strong>。</p>
+<p>ここでいう「レベル」は、主に<strong>OSIモデルのどのレイヤで処理を行うか</strong>という違いです。</p>
+<h3 id="1-レイヤ3ネットワーク層のゲートウェイ">1. レイヤ3（ネットワーク層）のゲートウェイ</h3>
+<ul>
+<li><strong>ルータ、L3スイッチ、ファイアウォール（一部）</strong></li>
+<li><strong>処理内容</strong>：IPアドレスを見て、<strong>パケットの転送先（経路）を決定</strong>します。</li>
+<li><strong>特徴</strong>：
+<ul>
+<li>異なるネットワーク（サブネット、LAN/WAN）間をつなぎます。</li>
+<li>プロトコルは基本的にIP（IPv4/IPv6）に限定されます。</li>
+<li>アプリケーションの中身（HTTPの内容など）は見ません。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-レイヤ4トランスポート層のゲートウェイ">2. レイヤ4（トランスポート層）のゲートウェイ</h3>
+<ul>
+<li><strong>ロードバランサ（L4）、ファイアウォール（ステートフルFW）</strong></li>
+<li><strong>処理内容</strong>：IPアドレスに加え、**ポート番号（TCP/UDP）**を見て、セッション単位で制御します。</li>
+<li><strong>特徴</strong>：
+<ul>
+<li>セッションの状態（コネクション確立・維持・終了）を管理します。</li>
+<li>例：特定ポート（80番＝HTTP）へのアクセスを許可／拒否、負荷分散など。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-レイヤ7アプリケーション層のゲートウェイ">3. レイヤ7（アプリケーション層）のゲートウェイ</h3>
+<ul>
+<li><strong>プロキシサーバ、アプリケーションゲートウェイ（ALG）、WAF、メールゲートウェイなど</strong></li>
+<li><strong>処理内容</strong>：HTTP、SMTP、FTP、SIPなど、<strong>アプリケーションプロトコルの内容そのものを解析・変換・中継</strong>します。</li>
+<li><strong>特徴</strong>：
+<ul>
+<li>例：
+<ul>
+<li>Webプロキシ：HTTPリクエスト／レスポンスの中身をキャッシュ・フィルタリング</li>
+<li>メールゲートウェイ：メール本文のスキャン、ウイルスチェック、スパムフィルタ</li>
+<li>WAF：HTTPリクエスト内の攻撃パターン（SQLインジェクションなど）を検知・遮断</li>
+</ul>
+</li>
+<li><strong>アプリケーションの意味を理解して処理</strong>するため、最も「高レベル」なゲートウェイと言えます。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-プロトコル変換型のゲートウェイ">4. プロトコル変換型のゲートウェイ</h3>
+<ul>
+<li><strong>VoIPゲートウェイ、メディアゲートウェイ、IoTゲートウェイ</strong></li>
+<li><strong>処理内容</strong>：異なるプロトコル間（例：IP電話 ↔ PSTN、BLE ↔ IP）で<strong>データフォーマットやシグナリングを変換</strong>します。</li>
+<li><strong>特徴</strong>：
+<ul>
+<li>レイヤ7に近いが、<strong>特定アプリケーションやデバイス専用</strong>の変換を行います。</li>
+<li>例：SIP ↔ ISDN、MQTT ↔ HTTP など。</li>
+</ul>
+</li>
+</ul>
+<h3 id="レベルの違いのまとめ">レベルの違いのまとめ</h3>
+<table>
+<thead>
+<tr>
+<th>レベル（おおまか）</th>
+<th>代表的なゲートウェイ</th>
+<th>主な処理内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>レイヤ3（ネットワーク）</td>
+<td>ルータ、L3スイッチ</td>
+<td>IPアドレスベースのルーティング</td>
+</tr>
+<tr>
+<td>レイヤ4（トランスポート）</td>
+<td>L4ロードバランサ、ステートフルFW</td>
+<td>ポート番号・セッション単位の制御</td>
+</tr>
+<tr>
+<td>レイヤ7（アプリケーション）</td>
+<td>プロキシ、WAF、メールゲートウェイ</td>
+<td>HTTP/SMTPなどの中身解析・変換・防御</td>
+</tr>
+<tr>
+<td>プロトコル変換</td>
+<td>VoIPゲートウェイ、IoTゲートウェイ</td>
+<td>異なるプロトコル間の変換・中継</td>
+</tr>
+</tbody>
+</table>
+<h2 id="内部処理">内部処理</h2>
+<p>各機器がパケットを処理する方法は、<strong>どのレイヤ（OSIモデル）の情報を見て、何を判断するか</strong>によって大きく異なります。</p>
+<h3 id="1-l2スイッチ">1. L2スイッチ</h3>
+<p>L2スイッチ（レイヤ2スイッチ）のパケット処理は、以下のように簡潔に表現できます。</p>
+<p><strong>処理の流れ（おおまか）</strong></p>
+<ol>
+<li><strong>受信</strong>：あるポートでイーサネットフレームを受信。</li>
+<li><strong>送信元MACの学習</strong>：フレームの「送信元MACアドレス」と受信ポートを<strong>MACアドレステーブル</strong>に記録。</li>
+<li><strong>宛先MACの確認</strong>：フレームの「宛先MACアドレス」を確認。</li>
+<li><strong>転送先の決定</strong>：
+<ul>
+<li>宛先MACがテーブルに存在する → 対応するポートからのみ送出。</li>
+<li>宛先MACが不明 or ブロードキャスト → 受信ポート以外の全ポートにフラッド（一斉送信）。</li>
+</ul>
+</li>
+<li><strong>転送</strong>：決定したポートからフレームを送出。</li>
+</ol>
+<p><strong>特徴</strong></p>
+<ul>
+<li><strong>見ている情報</strong>：MACアドレス（レイヤ2）のみ。</li>
+<li><strong>何をしているか</strong>：
+<ul>
+<li>同じセグメント内でのフレーム転送（スイッチング）。</li>
+<li>コリジョンドメイン（衝突の範囲）を分割し、不要なトラフィックを他ポートに流さない。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-ルータレイヤ3ゲートウェイ">2. ルータ（レイヤ3ゲートウェイ）</h3>
+<p><strong>処理の流れ（おおまか）</strong></p>
+<ol>
+<li><strong>受信</strong>：あるインターフェースでIPパケットを受信。</li>
+<li><strong>宛先IPの確認</strong>：IPヘッダの「宛先IPアドレス」を確認。</li>
+<li><strong>ルーティングテーブル参照</strong>：
+<ul>
+<li>宛先IPがどのネットワークに属するかを調べる。</li>
+<li>最適な「次ホップ（ネクストホップ）」のIPアドレスと出力インターフェースを決定。</li>
+</ul>
+</li>
+<li><strong>転送</strong>：決定したインターフェースからパケットを送出。</li>
+<li><strong>TTL（Time to Live）の減算</strong>：TTLを1減らし、0なら破棄。</li>
+</ol>
+<p><strong>特徴</strong></p>
+<ul>
+<li><strong>IPアドレスだけを見て「どこに送るか」を決める</strong>。</li>
+<li>アプリケーションの中身（HTTPの内容など）は見ない。</li>
+</ul>
+<h3 id="3-l3スイッチレイヤ3レイヤ2">3. L3スイッチ（レイヤ3＋レイヤ2）</h3>
+<p><strong>処理の流れ</strong></p>
+<ol>
+<li><strong>受信</strong>：あるポートでイーサネットフレームを受信。</li>
+<li><strong>IPヘッダの確認</strong>：IPパケットの「宛先IPアドレス」を確認。</li>
+<li><strong>ルーティングテーブル参照</strong>：宛先IPに応じて出力VLAN・出力ポートを決定。</li>
+<li><strong>MACアドレステーブル参照</strong>：出力VLAN内で、宛先MACアドレスに対応するポートを決定。</li>
+<li><strong>転送</strong>：該当ポートからフレームを送出。</li>
+</ol>
+<p><strong>特徴</strong></p>
+<ul>
+<li><strong>IPアドレス（レイヤ3）とMACアドレス（レイヤ2）の両方を見て転送</strong>。</li>
+<li>ハードウェア（ASIC）による高速処理が中心。</li>
+</ul>
+<h3 id="4-ファイアウォールレイヤ34ステートフル">4. ファイアウォール（レイヤ3〜4、ステートフル）</h3>
+<p><strong>処理の流れ</strong></p>
+<ol>
+<li><strong>受信</strong>：パケットを受信。</li>
+<li><strong>ヘッダ解析</strong>：
+<ul>
+<li>送信元IP・宛先IP（レイヤ3）</li>
+<li>プロトコル（TCP/UDP）、送信元ポート・宛先ポート（レイヤ4）</li>
+</ul>
+</li>
+<li><strong>ステートフル検査</strong>：
+<ul>
+<li>既存のセッション（コネクション）があるか確認。</li>
+<li>新規セッションの場合はポリシー（許可／拒否）をチェック。</li>
+</ul>
+</li>
+<li><strong>ポリシー適用</strong>：
+<ul>
+<li>許可：通過させる。</li>
+<li>拒否：破棄またはログを取って破棄。</li>
+</ul>
+</li>
+<li><strong>セッションテーブル更新</strong>：許可されたセッションを記録。</li>
+</ol>
+<p><strong>特徴</strong></p>
+<ul>
+<li><strong>IP＋ポート番号＋セッション状態</strong>を見て、通信を許可・拒否する。</li>
+<li>アプリケーションの中身までは通常見ない（レイヤ7FWを除く）。</li>
+</ul>
+<h3 id="5-l4ロードバランサレイヤ4">5. L4ロードバランサ（レイヤ4）</h3>
+<p><strong>処理の流れ</strong></p>
+<ol>
+<li><strong>受信</strong>：クライアントからのTCP/UDPパケットを受信。</li>
+<li><strong>宛先IP・ポートの確認</strong>：仮想IP（VIP）とポート番号を確認。</li>
+<li><strong>負荷分散アルゴリズム適用</strong>：
+<ul>
+<li>ラウンドロビン、リーストコネクション、ソースIPハッシュなどで、<strong>どの実サーバ（バックエンド）に転送するか</strong>を決定。</li>
+</ul>
+</li>
+<li><strong>宛先書き換え</strong>：
+<ul>
+<li>宛先IPを実サーバのIPに書き換え（DNAT）。</li>
+<li>必要に応じてポート番号も書き換え。</li>
+</ul>
+</li>
+<li><strong>転送</strong>：書き換えたパケットを実サーバへ送信。</li>
+<li><strong>戻りパケットの処理</strong>：実サーバからの応答パケットの送信元をVIPに書き換え（SNAT）してクライアントへ返す。</li>
+</ol>
+<p><strong>特徴</strong></p>
+<ul>
+<li><strong>ポート番号とセッション単位で負荷分散</strong>。</li>
+<li>アプリケーションの中身は見ず、<strong>「どのサーバに振り分けるか」だけを決める</strong>。</li>
+</ul>
+<h3 id="6-プロキシサーバwafレイヤ7">6. プロキシサーバ／WAF（レイヤ7）</h3>
+<p><strong>処理の流れ（プロキシの例）</strong></p>
+<ol>
+<li><strong>受信</strong>：クライアントからのHTTPリクエストを受信。</li>
+<li><strong>アプリケーションレイヤの解析</strong>：
+<ul>
+<li>HTTPメソッド（GET/POST）、URL、ヘッダ、ボディなどを解析。</li>
+</ul>
+</li>
+<li><strong>ポリシー適用</strong>：
+<ul>
+<li>キャッシュ可能かどうか（キャッシュプロキシ）</li>
+<li>アクセス許可／拒否（コンテンツフィルタ）</li>
+<li>攻撃パターンの有無（WAF）</li>
+</ul>
+</li>
+<li><strong>宛先サーバへの接続</strong>：
+<ul>
+<li>必要に応じて、プロキシ自身がクライアントとして宛先サーバに接続し直す。</li>
+</ul>
+</li>
+<li><strong>応答の処理</strong>：
+<ul>
+<li>サーバからの応答を受け取り、クライアントへ返す。</li>
+</ul>
+</li>
+</ol>
+<p><strong>特徴（WAFを含む）</strong></p>
+<ul>
+<li><strong>HTTP/HTTPSの中身（URL、パラメータ、Cookieなど）を詳細に解析</strong>。</li>
+<li>SQLインジェクション、XSSなどの攻撃パターンを検知・遮断。</li>
+<li>レイヤ7まで <strong>「何を送っているか」を理解して処理</strong> する。</li>
+</ul>
+<h2 id="総括">総括</h2>
+<p><strong>各デバイスのパケット処理のまとめ</strong></p>
+<ul>
+<li><strong>L2スイッチ</strong>：MACアドレスだけを見て、「どのポートからフレームを出すか」を決める（レイヤ2）。</li>
+<li><strong>ルータ</strong>：IPアドレスだけを見て、「どのネットワークに送るか（経路）」を決める（レイヤ3）。</li>
+<li><strong>L3スイッチ</strong>：IP＋MACを見て、「VLAN間のルーティングとスイッチング」を高速に行う（レイヤ2＋3）。</li>
+<li><strong>ファイアウォール</strong>：IP＋ポート＋セッション状態を見て、「通信を許可するか拒否するか」を決める（レイヤ3〜4）。</li>
+<li><strong>L4ロードバランサ</strong>：IP＋ポートを見て、「どのサーバに振り分けるか」を決める（レイヤ4）。</li>
+<li><strong>プロキシ／WAF</strong>：HTTPなどの中身を見て、「何を送っているか・どう扱うか」を決める（レイヤ7）。</li>
+</ul>
+<p>各デバイスは、<strong>OSIモデルのどのレイヤの情報を見るか</strong>によって、パケット処理の内容が決まります。
+低レイヤ（2〜4）は「どこに・どう送るか／通すか」を決め、高レイヤ（7）は「何を・どう扱うか」まで扱います。
+これらを組み合わせることで、ネットワーク全体の<strong>経路制御・セキュリティ・負荷分散・アプリケーション制御</strong>が実現されます。</p>
+
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/QyzK21nx70o?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+
+            
+        </body>
+        </html>

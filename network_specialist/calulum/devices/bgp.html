@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>BGP&#x3068;&#x306f;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>組織の間にはインターネットでつながっていますが、IPパケットを送達させるためのプロトコルがどうしても必要となります。
+そして、現時点での組織を接続する経路を決定するプロトコルはBGP-4（Border Gateway Protocol version 4）というもの1択です。</p>
+<p>本日は組織間の接続に使われているBGP-4について説明していきます。</p>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="bgpとは">BGPとは</h2>
+<p>BGP-4は、<strong>インターネット上の「大きな組織同士」が「どの経路でパケットを送れば届くか」を交換するプロトコル</strong>です。
+一言で言えば、<strong>国と国の間で郵便の配送ルートを決める外交会議</strong>のようなものです。</p>
+<h3 id="前提as自律システムとは">前提：AS（自律システム）とは</h3>
+<p>BGPを理解するにはまず「<strong>AS（Autonomous System：自律システム）</strong>」を知る必要があります。</p>
+<ul>
+<li>ASとは、<strong>一つの管理主体（ISP、企業、大学など）が運営するネットワークのまとまり</strong></li>
+<li>それぞれのASには<strong>AS番号</strong>（例：AS 7517）という固有の番号が割り当てられている</li>
+<li>例：NTTコミュニケーションズ、KDDI、Google、Amazonなどがそれぞれ独自のASを持っている</li>
+</ul>
+<blockquote>
+<p><strong>例え：</strong> ASは「日本」「アメリカ」「ドイツ」のような<strong>国</strong>のようなもの。それぞれの国の中では独自の法律（ルーティングプロトコル）で交通を管理している。</p>
+</blockquote>
+<h3 id="bgp-4がやっていること">BGP-4がやっていること</h3>
+<p>BGP-4は、これらの<strong>AS同士の境界（Border/Gateway）</strong> で、「<strong>どのASを経由すれば、どのIPアドレスの集まり（プレフィックス）に届くか</strong>」という情報を交換します。</p>
+<ul>
+<li><strong>話す相手</strong>：隣接するASのルータ（BGPピア）</li>
+<li><strong>交換する情報</strong>：「192.0.2.0/24に行くには、私のAS（例：AS 100）を経由して、さらにAS 200→AS 300と進めば届く」という経路情報</li>
+<li><strong>使うポート</strong>：TCPの<strong>179番</strong></li>
+</ul>
+<h3 id="bgp-4の主な特徴">BGP-4の主な特徴</h3>
+<p><strong>1. パスベクトル型ルーティング</strong></p>
+<p>BGPは「距離（ホップ数）」ではなく、「<strong>どのAS番号の列（パス）を通るか</strong>」で経路を選びます。これを<strong>AS-Path</strong>と呼びます。</p>
+<blockquote>
+<p><strong>例え：</strong> 「東京→大阪→福岡」ではなく、「JR東海→JR西日本→JR九州」という<strong>通過する会社の列</strong>でルートを表現するイメージです。</p>
+</blockquote>
+<p><strong>2. ポリシー（方針）ベースの選路</strong></p>
+<p>BGPは「一番近い経路」よりも「<strong>経営上・契約上の都合</strong>」を優先して経路を選べます。</p>
+<ul>
+<li>「あのASは信用できないから、遠回りでも別の経路を使う」</li>
+<li>「お金を払っている回線（トランジット）より、無料で交換する回線（ピアリング）を優先する」</li>
+<li>「特定の国のASを経由しないようにする」</li>
+</ul>
+<blockquote>
+<p><strong>例え：</strong> 航空会社が「燃料費の安いルート」よりも「航空同盟のパートナー会社を経由するルート」を優先するのと同じです。</p>
+</blockquote>
+<p><strong>3. 大規模なルーティングテーブルを扱う</strong></p>
+<p>インターネット全体の経路情報（現在約<strong>90万〜100万ルート</strong>前後）を交換・保持します。そのため、通常の企業内ルータより<strong>高機能なルータ</strong>が必要です。</p>
+<h3 id="igpospfなどとの違い">IGP（OSPFなど）との違い</h3>
+<p>企業内でよく使われるOSPFやRIPとBGPは、まったく別の役割です。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>IGP（OSPFなど）</th>
+<th>EGP（BGP-4）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>対象範囲</strong></td>
+<td>企業内・AS内</td>
+<td>AS間（インターネット）</td>
+</tr>
+<tr>
+<td><strong>目的</strong></td>
+<td>中のネットワークを最適に繋ぐ</td>
+<td>組織同士の経路を交換する</td>
+</tr>
+<tr>
+<td><strong>選路基準</strong></td>
+<td>距離・速度（最短路径）</td>
+<td>ポリシー・契約・信頼性</td>
+</tr>
+<tr>
+<td><strong>収束速度</strong></td>
+<td>比較的速い（秒〜分）</td>
+<td>比較的遅い（分〜時間）</td>
+</tr>
+<tr>
+<td><strong>規模</strong></td>
+<td>数百〜数千ルート</td>
+<td>数十万〜100万ルート超</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>例え：</strong> IGPは「社内の案内図」、BGPは「国際郵便の配送協定書」です。</p>
+</blockquote>
+<h3 id="bgp-4の具体例">BGP-4の具体例</h3>
+<p>あなたが自宅から「<a href="http://google.com">google.com</a>」にアクセスすると、パケットは以下のような経路を辿ります。</p>
+<ol>
+<li><strong>自宅</strong> → プロバイダA（例：AS 4713 オープンインターネット）</li>
+<li><strong>プロバイダA</strong> と <strong>Google</strong>（AS 15169）がBGPで経路交換</li>
+<li>「GoogleのIPは、AS 15169に直結している」とBGPで知っているため、そちらへ送る</li>
+<li>Google側も「お客さんのIPは、プロバイダA経由で届く」とBGPで学習している</li>
+</ol>
+<p>この「<strong>AS 4713 → AS 15169</strong>」という関係をBGPが管理しています。</p>
+<h2 id="経路交換">経路交換</h2>
+<p>BGPの経路交換は、<strong>隣の国の外交官と、まず信頼関係を作り、次に持っている地図（経路表）を全部見せ合い、その後は変化があった部分だけを随時連絡し合う</strong>という流れで行われます。</p>
+<h3 id="1-まず話し相手ピアを決める">1. まず「話し相手（ピア）」を決める</h3>
+<p>BGPは<strong>TCP 179番</strong>で接続を張ります。相手は主に2種類あります。</p>
+<table>
+<thead>
+<tr>
+<th>ピアの種類</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>eBGPピア</strong></td>
+<td><strong>外部AS</strong>のルータ（別のISP・別の組織）と接続。通常は物理的に隣接したルータ同士</td>
+</tr>
+<tr>
+<td><strong>iBGPピア</strong></td>
+<td><strong>同じAS内</strong>のルータ同士で接続。AS内の全ルータが同じ経路情報を持つため</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>例え：</strong> eBGPは「隣の国の大使館」との外交、iBGPは「国内の各省庁間」の情報共有です。</p>
+</blockquote>
+<h3 id="2-接続確立の6ステップ状態遷移">2. 接続確立の6ステップ（状態遷移）</h3>
+<p>BGPは以下の順番で「会話の準備」を整えます。</p>
+<pre><code>Idle（何もしない）
+  ↓
+Connect（TCP接続を試みる）
+  ↓
+Active（接続待ち・再試行）
+  ↓
+OpenSent（Openメッセージを送った）
+  ↓
+OpenConfirm（相手のOpenメッセージを確認）
+  ↓
+Established（本格的な経路交換開始！）
+</code></pre>
+<ul>
+<li><strong>Openメッセージ</strong>：「AS番号は〇〇、BGPのバージョンは4、Hold Timeは△△秒です」という自己紹介</li>
+<li><strong>Established</strong>になって初めて、経路情報の交換が始まります</li>
+</ul>
+<h3 id="3-経路情報の交換方法">3. 経路情報の交換方法</h3>
+<p>Establishedになったら、以下のメッセージタイプで経路をやり取りします。</p>
+<table>
+<thead>
+<tr>
+<th>メッセージ</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Update</strong></td>
+<td>「新しい経路を教える」または「古い経路を撤回する」</td>
+</tr>
+<tr>
+<td><strong>Notification</strong></td>
+<td>エラーが起きたら接続を切る</td>
+</tr>
+<tr>
+<td><strong>Keepalive</strong></td>
+<td>「生きていますよ」の定期連絡（デフォルト60秒間隔など）</td>
+</tr>
+<tr>
+<td><strong>Route-Refresh</strong></td>
+<td>経路情報を再送してもらうよう依頼</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最初の交換（フルルート交換）</strong></p>
+<p>接続直後、<strong>相手が知っている経路を全部送り合います</strong>。インターネットの場合、これは約<strong>90万〜100万ルート</strong>にもなります。かなり重い作業です。</p>
+<p><strong>その後の交換（インクリメンタル）</strong></p>
+<p>最初の全送り以降は、<strong>変化があった経路だけ</strong>をUpdateメッセージで送り合います。</p>
+<ul>
+<li><strong>経路の追加</strong>：「192.0.2.0/24が、AS-Path [100 200] で届くようになりました」</li>
+<li><strong>経路の撤回（Withdraw）</strong>：「以前教えた10.0.0.0/8の経路は、もう無効です」</li>
+</ul>
+<h3 id="4-経路情報の中身path-attributes">4. 経路情報の「中身」（Path Attributes）</h3>
+<p>BGPが交換するのは「IPアドレスのリスト」だけではありません。各経路には<strong>属性（Path Attributes）</strong> という付加情報が付いています。これがBGPの強みです。</p>
+<p>主な属性は以下の通りです。</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>内容</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AS-Path</strong></td>
+<td>どのAS番号の列を通るか</td>
+<td>ループ検出・経路選択の材料</td>
+</tr>
+<tr>
+<td><strong>Next-Hop</strong></td>
+<td>次に送るべきルータのIP</td>
+<td>実際にパケットを送る宛先</td>
+</tr>
+<tr>
+<td><strong>Local Preference</strong></td>
+<td>社内（AS内）での優先度</td>
+<td>同じ経路が複数あるとき、どちらを優先するか</td>
+</tr>
+<tr>
+<td><strong>MED</strong></td>
+<td>相手ASに対する「推奨入口」</td>
+<td>「うちから来るならこの回線がいいですよ」という提案</td>
+</tr>
+<tr>
+<td><strong>Community</strong></td>
+<td>経路の「色分けラベル**</td>
+<td>「この経路は北米向け」「広告しない」などの方針を付与</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>例え：</strong> AS-Pathは「通過する国のスタンプの列」、Communityは「この手紙は急便扱い」「この手紙は書留」のようなラベルです。</p>
+</blockquote>
+<h3 id="5-経路選択のルールbest-path-selection">5. 経路選択のルール（Best Path Selection）</h3>
+<p>同じ目的地への経路が複数届いた場合、BGPは<strong>決まった順番で比較</strong>して「一番良い経路」を選びます。主な順番は以下の通りです。</p>
+<ol>
+<li><strong>Next-Hopが到達可能か</strong>（その経路の入口に実際に行けるか）</li>
+<li><strong>Local Preferenceが高い方</strong>（自社の方針で優先したい方）</li>
+<li><strong>AS-Pathが短い方</strong>（通過するASが少ない方）</li>
+<li><strong>MEDが小さい方</strong>（相手からの推奨）</li>
+<li><strong>eBGP経由よりiBGP経由</strong>（外部経路を優先）</li>
+<li><strong>ルータへの到達コスト（IGPコスト）が低い方</strong></li>
+<li><strong>古い経路を維持</strong>（flappingを防ぐため）</li>
+</ol>
+<p>このように、BGPは「単純な最短」ではなく、<strong>ポリシー・契約・安定性</strong>を総合的に判断して経路を選びます。</p>
+<h3 id="6-経路のフィルタリング方針の適用">6. 経路のフィルタリング（方針の適用）</h3>
+<p>BGPでは「<strong>届いた経路をそのまま信じて全部採用する</strong>」わけではありません。組織の方針に従って経路を<strong>フィルタリング</strong>します。</p>
+<ul>
+<li><strong>受信フィルタ</strong>：相手から届いた経路のうち、「これは採用しない」「これはCommunityタグを付け直す」</li>
+<li><strong>送信フィルタ</strong>：自分が持っている経路を相手に広告する際、「この経路だけ広告する」「AS-Pathを書き換える」</li>
+</ul>
+<p>これを<strong>Route Map</strong>や<strong>Prefix List</strong>などで設定します。</p>
+<blockquote>
+<p><strong>例え：</strong> 「隣の国から届いた地図のうち、自分の国に関係ない部分は捨てて、自国の住民にだけ必要な部分を翻訳して配る」ような作業です。</p>
+</blockquote>
+<h2 id="パス属性">パス属性</h2>
+<p><strong>パス属性（Path Attributes）</strong> とは、BGPで交換される<strong>経路（プレフィックス）に「付箋」として貼り付けられた付加情報</strong>です。</p>
+<p>BGPは「192.0.2.0/24に行くにはAS100→AS200を通ります」という経路を教えるだけでなく、<strong>その経路に関する「どんな経路か」「どう扱うべきか」という情報（属性）を一緒に送ります</strong>。これがパス属性です。</p>
+<h3 id="なぜパス属性が必要なのか">なぜパス属性が必要なのか</h3>
+<p>インターネットには同じ目的地への経路が複数あります。例えば「Googleへ行く道」も、NTT経由でもKDDI経由でも届きます。
+その時、「単純に一番近い道」ではなく、以下のような判断が必要です。</p>
+<ul>
+<li>「この経路は信頼できる相手から教えてもらったものか？」</li>
+<li>「自社としてはこの回線を優先すべきか？」</li>
+<li>「相手側にはどの入口から入ってほしいか？」</li>
+</ul>
+<p>これらの「<strong>経路の性質・方針・制御情報</strong>」を運ぶのがパス属性です。</p>
+<h3 id="パス属性の4つの分類">パス属性の4つの分類</h3>
+<p>BGPのパス属性は、<strong>「全ルータが知っていなければならないか」「必須か」「隣に転送するか」</strong> で4種類に分類されます。</p>
+<table>
+<thead>
+<tr>
+<th>分類</th>
+<th>意味</th>
+<th>具体例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Well-known Mandatory</strong><br>（ well-known 必須）</td>
+<td>全BGP実装が必ず理解し、必ず含めなければならない属性</td>
+<td>AS_PATH, NEXT_HOP, ORIGIN</td>
+</tr>
+<tr>
+<td><strong>Well-known Discretionary</strong><br>（ well-known 任意）</td>
+<td>全BGP実装が理解するが、必ずしも含める必要はない属性</td>
+<td>LOCAL_PREF, ATOMIC_AGGREGATE</td>
+</tr>
+<tr>
+<td><strong>Optional Transitive</strong><br>（ 任意・転送可）</td>
+<td>理解できなくても無視していいが、<strong>他のASにもそのまま送る</strong>属性</td>
+<td>COMMUNITY, AGGREGATOR</td>
+</tr>
+<tr>
+<td><strong>Optional Non-transitive</strong><br>（ 任意・転送不可）</td>
+<td>理解できなくても無視していいし、<strong>他のASには送らない</strong>属性</td>
+<td>MED</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>例え：</strong> Well-knownは「全員が読める公用語の書類」、Optionalは「専門家だけが読む注記」。Transitiveは「次の部署にも回覧する」、Non-transitiveは「この部署内だけのメモ」です。</p>
+</blockquote>
+<h3 id="代表的なパス属性とその役割">代表的なパス属性とその役割</h3>
+<p><strong>1. AS_PATH（Well-known Mandatory）</strong></p>
+<p><strong>「どのAS番号の列を通ってここに来たか」</strong> を記録したリストです。</p>
+<pre><code>例：AS 300 が AS 200 から AS 100 由来の経路を受け取った場合
+AS_PATH = [200, 100]
+</code></pre>
+<ul>
+<li><strong>ループ検出</strong>：自分のAS番号がAS_PATHに入っていたら「自分から出た経路が回ってきた」と判断し破棄</li>
+<li><strong>経路選択</strong>：AS_PATHが短い方（通過ASが少ない方）を優先</li>
+</ul>
+<p><strong>2. NEXT_HOP（Well-known Mandatory）</strong></p>
+<p><strong>「次にパケットを送るべきルータのIPアドレス」</strong> です。</p>
+<ul>
+<li>eBGPでは通常、隣接する相手ルータのIP</li>
+<li>iBGPでは、eBGPで教わったときのNext-Hopをそのまま維持することが多い（再配送しない）</li>
+</ul>
+<p><strong>3. ORIGIN（Well-known Mandatory）</strong></p>
+<p><strong>「この経路情報がどこから生まれたか」</strong> を示す属性。</p>
+<table>
+<thead>
+<tr>
+<th>値</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IGP</td>
+<td>内部ルーティング（OSPFなど）から学習。最も信頼度高い</td>
+</tr>
+<tr>
+<td>EGP</td>
+<td>古いEGPから学習（現在ほぼ使われない）</td>
+</tr>
+<tr>
+<td>INCOMPLETE</td>
+<td>再配送（redistribute）などで不明瞭な経路。信頼度低い</td>
+</tr>
+</tbody>
+</table>
+<p><strong>4. LOCAL_PREF（Well-known Discretionary）</strong></p>
+<p><strong>「自AS内での優先度」</strong>。同じ目的地への経路が複数の出口（BGPピア）から届いた時、どちらを選ぶかを決める。</p>
+<ul>
+<li>値が<strong>大きいほど優先</strong></li>
+<li><strong>iBGPピア間だけで交換</strong>され、eBGPの外には出ない（自社内の方針だから）</li>
+</ul>
+<blockquote>
+<p><strong>例え：</strong> 「出口Aは帯域が広いから優先度100、出口Bは予備だから優先度50」という社内ルール。</p>
+</blockquote>
+<p><strong>5. MED（MULTI_EXIT_DISC）（Optional Non-transitive）</strong></p>
+<p><strong>「相手ASへ入るとき、うちのどの入口を使ってほしいか」</strong> という提案。</p>
+<ul>
+<li>値が<strong>小さいほど優先</strong></li>
+<li>基本的に<strong>隣接AS間だけ</strong>で有効で、それ以降のASには転送されない</li>
+</ul>
+<blockquote>
+<p><strong>例え：</strong> 「うちの東京都の入口より、大阪府の入口の方が近いですよ」という隣の国への案内。</p>
+</blockquote>
+<p><strong>6. COMMUNITY（Optional Transitive）</strong></p>
+<p><strong>「経路に貼る色分けラベル」</strong>。経路のグループ管理や方針適用に使います。</p>
+<ul>
+<li>ただの「タグ」ですが、<strong>意味は運用者間で合意</strong>して使う</li>
+<li>よく使われる例：
+<ul>
+<li><code>no-export</code>：この経路を外部ASに広告しない</li>
+<li><code>no-advertise</code>：隣のピアにも広告しない</li>
+<li><code>local-AS</code>： confederation内だけで有効</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>例え：</strong> 「この手紙は社内回覧のみ」「この手紙は北米支社向け」という色分けシール。</p>
+</blockquote>
+<p><strong>7. ATOMIC_AGGREGATE / AGGREGATOR</strong></p>
+<p>複数の細かい経路を<strong>1つにまとめた（集約した）</strong> ことを示す属性。</p>
+<ul>
+<li>詳細な経路情報が失われていることを警告</li>
+<li>AGGREGATORは「誰が・いつ集約したか」を記録</li>
+</ul>
+<h3 id="パス属性の使い方の具体例">パス属性の使い方の具体例</h3>
+<p>ある企業（AS 100）が、ISPのA（AS 200）とISPのB（AS 300）から「8.8.8.0/24（Google DNS）」への経路を教わったとします。</p>
+<ul>
+<li><strong>ISP-Aからの経路</strong>：AS_PATH=[200, 15169], MED=10, Community=<code>premium</code></li>
+<li><strong>ISP-Bからの経路</strong>：AS_PATH=[300, 15169], MED=50, Community=通常</li>
+</ul>
+<p>企業（AS 100）のBGPルータは以下のように判断します。</p>
+<ol>
+<li>LOCAL_PREFで社内方針を適用（Community <code>premium</code>ならLOCAL_PREFを上げる）</li>
+<li>AS_PATHの長さを比較（どちらも2ホップなら同じ）</li>
+<li>MEDを比較（ISP-AのMED=10の方が小さいので優先）</li>
+<li>→ <strong>ISP-A経由を採用</strong></li>
+</ol>
+<p>このように、パス属性が<strong>経路選択の「材料」</strong> となります。</p>
+<h2 id="総括">総括</h2>
+<p>BGPとは、インターネット上の「国と国（AS）」が「どの道でパケットを届けるか」を交渉・合意する、唯一の外交プロトコルです。
+BGPの本質は、「最短・最速ではなく、信頼と契約に基づいて経路を選ぶ」ことにあります。</p>
+<p><strong>BGPについて3文で</strong></p>
+<ul>
+<li><strong>役割</strong>：企業やISPなどの管理境界（AS）を越えて、経路地図を交換する</li>
+<li><strong>選び方</strong>：距離ではなく、<strong>パス属性（AS-Pathや契約タグなど）</strong> を読み解き、「誰と取引しているか」「どの回線を優先すべきか」という**ポリシー（方針）**で道を選ぶ</li>
+<li><strong>価値</strong>：全世界のネットワークが共通言語で繋がることで、インターネットという「ネットのネットワーク」が成り立つ</li>
+</ul>
+<p><strong>一言で言えば</strong></p>
+<p>BGPは、インターネット全体を繋ぎ止める「国境間の外交書簡と地図帳」です。
+技術的な経路情報そのものではなく、<strong>「組織間の信頼関係とビジネスルール」をネットワーク上で実現する仕組み</strong>がBGPの本質です。</p>
+
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/FhSBK8VaLss?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+
+            
+        </body>
+        </html>

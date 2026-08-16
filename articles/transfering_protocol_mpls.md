@@ -68,5 +68,4 @@ __3. LSP（Label Switched Path）__
 
 一言で言えば、MPLSは **「IPの賢さと、ATMの速さを合わせた、中継ネットワークの高速レーン」** です。
 
-![1786706709430](image/mpls/1786706709430.png)
-
+![MPLSイメージ](../images/mpls/1786706709430.png)

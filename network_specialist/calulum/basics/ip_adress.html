@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>IP&#x30a2;&#x30c9;&#x30ec;&#x30b9;&#x306e;&#x7a2e;&#x985e;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>離れた相手と通信する相手を見分けるために利用されるものがIPアドレスです。
+何気にたたく <code>ipconfig</code> で出てくるIPアドレスや、PCが接続しなくなって問合せするIT担当者が真っ先にしらべるものの一つです。
+このIPアドレス、一筋縄ではいかないものです。</p>
+<p>本日はそんなIPアドレスについて説明していきます。</p>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="ipアドレスの種類">IPアドレスの種類</h2>
+<p>IPアドレスの「種類」は、通信先の範囲や配信方式によって大きく分けられます。代表的なものは以下の通りです。</p>
+<h3 id="1-ユニキャストunicast">1. ユニキャスト（Unicast）</h3>
+<ul>
+<li><strong>特徴</strong>：1対1の通信。送信元が特定の1つの宛先IPアドレスにパケットを送ります。</li>
+<li><strong>例</strong>：WebブラウザがWebサーバにアクセスするとき、メールクライアントがメールサーバに接続するときなど。</li>
+<li><strong>IPアドレスの範囲</strong>：通常のグローバルIPアドレスやプライベートIPアドレス（例：192.168.1.10）は基本的にユニキャストとして使われます。</li>
+</ul>
+<h3 id="2-ブロードキャストbroadcast">2. ブロードキャスト（Broadcast）</h3>
+<ul>
+<li><strong>特徴</strong>：同じネットワーク（サブネット）内の<strong>すべてのホスト</strong>に対して一斉送信する方式。</li>
+<li><strong>用途</strong>：ARP（IPアドレスからMACアドレスを問い合わせる）やDHCP（IPアドレスを自動取得する）など、ネットワーク内の全機器に知らせる必要がある場合に使われます。</li>
+<li><strong>IPv4の例</strong>：
+<ul>
+<li>ローカルブロードキャスト：<code>255.255.255.255</code></li>
+<li>ネットワークブロードキャスト：<code>192.168.1.255</code>（サブネット<code>192.168.1.0/24</code>の場合）</li>
+</ul>
+</li>
+<li><strong>IPv6</strong>：ブロードキャストは存在せず、マルチキャストで代替されます。</li>
+</ul>
+<h3 id="3-マルチキャストmulticast">3. マルチキャスト（Multicast）</h3>
+<ul>
+<li><strong>特徴</strong>：特定のグループに属する<strong>複数のホスト</strong>だけにパケットを送る方式。送信元は1つ、受信者は複数（1対多）。</li>
+<li><strong>用途</strong>：動画配信、IPテレビ、オンライン会議、ルーティングプロトコル（OSPF、EIGRPなど）でよく使われます。</li>
+<li><strong>IPv4のマルチキャストアドレス範囲</strong>：
+<ul>
+<li><code>224.0.0.0</code> ～ <code>239.255.255.255</code></li>
+<li>例：
+<ul>
+<li><code>224.0.0.1</code>：同一ネットワーク上の全ホスト（全システム）</li>
+<li><code>224.0.0.2</code>：同一ネットワーク上の全ルータ</li>
+<li><code>224.0.0.5</code>：OSPF All SPF Routers</li>
+<li><code>224.0.0.9</code>：RIP v2</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>IPv6のマルチキャストアドレス範囲</strong>：
+<ul>
+<li><code>ff00::/8</code>（プレフィックス <code>ff</code>）</li>
+<li>例：
+<ul>
+<li><code>ff02::1</code>：リンクローカルスコープの全ノード</li>
+<li><code>ff02::2</code>：リンクローカルスコープの全ルータ</li>
+<li><code>ff02::5</code>：OSPFv3 All SPF Routers</li>
+<li><code>ff02::1:2</code>：DHCPv6サーバ/リレーエージェント</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-エニーキャストanycast">4. エニーキャスト（Anycast）</h3>
+<ul>
+<li><strong>特徴</strong>：同じIPアドレスを複数のサーバ（地理的に離れた場所）に割り当て、<strong>最も近い1台</strong>にパケットが届くようにする方式。実質的には「1対1」ですが、どのサーバに届くかは経路によって変わります。</li>
+<li><strong>用途</strong>：DNSルートサーバ、CDN（コンテンツ配信ネットワーク）、ロードバランサなどで利用されます。</li>
+<li><strong>アドレス範囲</strong>：特別なアドレス範囲はなく、通常のユニキャストアドレスを複数箇所に割り当てることで実現します。</li>
+</ul>
+<h3 id="5-その他の関連概念">5. その他の関連概念</h3>
+<p><strong>ループバックアドレス（Loopback）</strong></p>
+<ul>
+<li>自分自身を指すアドレス。</li>
+<li>IPv4：<code>127.0.0.1</code>（<code>127.0.0.0/8</code>）</li>
+<li>IPv6：<code>::1</code></li>
+</ul>
+<p><strong>リンクローカルアドレス（Link-Local）</strong></p>
+<ul>
+<li>同一リンク（同じLANセグメント）内でのみ有効なアドレス。</li>
+<li>IPv4：<code>169.254.0.0/16</code>（APIPA）</li>
+<li>IPv6：<code>fe80::/10</code></li>
+</ul>
+<p><strong>予約アドレス（Reserved / Special-Use）</strong></p>
+<ul>
+<li>実験用、ドキュメント用、プライベートネットワーク用など、特別な用途に予約されたアドレス。</li>
+<li>例：
+<ul>
+<li>IPv4プライベートアドレス：<code>10.0.0.0/8</code>、<code>172.16.0.0/12</code>、<code>192.168.0.0/16</code></li>
+<li>IPv6ユニークローカルアドレス：<code>fc00::/7</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="まとめ">まとめ</h3>
+<table>
+<thead>
+<tr>
+<th>種類</th>
+<th>通信方式</th>
+<th>主な用途例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ユニキャスト</td>
+<td>1対1</td>
+<td>Web閲覧、メール、SSH</td>
+</tr>
+<tr>
+<td>ブロードキャスト</td>
+<td>1対（ネットワーク全員）</td>
+<td>ARP、DHCP（IPv4のみ）</td>
+</tr>
+<tr>
+<td>マルチキャスト</td>
+<td>1対（グループ）</td>
+<td>動画配信、ルーティングプロトコル</td>
+</tr>
+<tr>
+<td>エニーキャスト</td>
+<td>1対（最も近い1台）</td>
+<td>DNSルートサーバ、CDN</td>
+</tr>
+</tbody>
+</table>
+<p>「IPアドレスの種類」というと、上記のような<strong>通信方式による分類</strong>と、<strong>IPv4/IPv6・グローバル/プライベート・予約アドレスなどの範囲による分類</strong>の両方がありますが、ご質問の「マルチキャストなどの種類」という文脈では、ユニキャスト・ブロードキャスト・マルチキャスト・エニーキャストの4つが中心になります。</p>
+<h2 id="ipアドレスの種類が派生した経緯">IPアドレスの種類が派生した経緯</h2>
+<p>IPアドレスの種類が分かれるようになったのは、<strong>「通信の目的や効率性の違い」</strong> に対応するためです。それぞれの方式が生まれた背景を順に整理します。</p>
+<h3 id="1-ユニキャストunicastの起源基本の1対1通信">1. ユニキャスト（Unicast）の起源：基本の「1対1」通信</h3>
+<ul>
+<li><strong>きっかけ</strong>：もともとIP（Internet Protocol）は、<strong>「ある端末から別の特定の端末へパケットを届ける」</strong> という1対1通信を前提に設計されました。</li>
+<li><strong>背景</strong>：
+<ul>
+<li>1970〜80年代のARPANETでは、リモートログイン（Telnet）、ファイル転送（FTP）、メール（SMTP）など、<strong>特定の相手と通信する用途</strong>が中心でした。</li>
+<li>そのため、IPアドレスは「<strong>1つのインターフェースを一意に識別する番号</strong>」として設計され、これがユニキャストの基本になりました。</li>
+</ul>
+</li>
+<li><strong>特徴</strong>：送信元と宛先が1対1で対応するシンプルなモデルです。</li>
+</ul>
+<h3 id="2-ブロードキャストbroadcastの導入同一ネットワーク内の一斉通知">2. ブロードキャスト（Broadcast）の導入：同一ネットワーク内の「一斉通知」</h3>
+<ul>
+<li><strong>きっかけ</strong>：<strong>「同じネットワーク内の全員に一度に知らせたい」</strong> という要求が生まれたためです。</li>
+<li><strong>背景</strong>：
+<ul>
+<li>たとえば「このIPアドレスに対応するMACアドレスを持っている人は誰？」と聞く<strong>ARP</strong>や、「誰かIPアドレスを配ってくれるサーバはいませんか？」という<strong>DHCP</strong>の探索などでは、<strong>宛先を特定できない段階で全員に問い合わせる</strong>必要がありました。</li>
+<li>これをユニキャストで1台ずつ送ると、非常に非効率です。</li>
+</ul>
+</li>
+<li><strong>対応</strong>：
+<ul>
+<li>IPv4では「<strong>ブロードキャストアドレス</strong>」（例：<code>255.255.255.255</code> や <code>192.168.1.255</code>）を定義し、<strong>同一サブネット内の全ホスト</strong>にパケットを届ける仕組みを追加しました。</li>
+</ul>
+</li>
+<li><strong>注意</strong>：IPv6ではブロードキャストは廃止され、マルチキャストで代替されています。</li>
+</ul>
+<h3 id="3-マルチキャストmulticastの導入効率的な1対グループ通信">3. マルチキャスト（Multicast）の導入：効率的な「1対グループ」通信</h3>
+<ul>
+<li><strong>きっかけ</strong>：<strong>「特定のグループだけに効率よく配信したい」</strong> という要求から生まれました。</li>
+<li><strong>背景</strong>：
+<ul>
+<li>1980年代後半〜1990年代にかけて、<strong>音声・動画の配信</strong>や<strong>ルーティングプロトコル（OSPF、RIPなど）</strong> で、「同じ情報を複数の相手に送りたいが、全員に送るのは無駄が多い」という課題が出てきました。</li>
+<li>ブロードキャストだと「関係ないホストにも届いてしまう」ため、ネットワーク負荷が大きくなります。</li>
+</ul>
+</li>
+<li><strong>対応</strong>：
+<ul>
+<li>1989年の <strong>RFC 1112 “Host Extensions for IP Multicasting”</strong> でIPv4マルチキャストが標準化されました<a href="https://ja.wikipedia.org/wiki/Internet_Protocol">Wikipedia</a>。</li>
+<li>IPv4では <code>224.0.0.0/4</code>（<code>224.0.0.0</code>〜<code>239.255.255.255</code>）をマルチキャスト用に割り当て、<strong>特定のグループだけが参加する通信</strong>を実現しました。</li>
+<li>IPv6では設計段階からマルチキャストが組み込まれ、<code>ff00::/8</code> がマルチキャスト用として定義されています。</li>
+</ul>
+</li>
+<li><strong>用途例</strong>：動画配信、Web会議、OSPF/RIP/EIGRPなどのルーティングプロトコル。</li>
+</ul>
+<h3 id="4-エニーキャストanycastの登場最も近い1台へのルーティング">4. エニーキャスト（Anycast）の登場：「最も近い1台」へのルーティング</h3>
+<ul>
+<li><strong>きっかけ</strong>：<strong>「地理的に分散した同じサービスに、自動的に近い方へ誘導したい」</strong> という要求から生まれました。</li>
+<li><strong>背景</strong>：
+<ul>
+<li>DNSルートサーバやCDN（コンテンツ配信ネットワーク）などで、<strong>同じドメイン名やIPアドレスを世界中の複数拠点で運用</strong>し、ユーザーには「最も近いサーバ」にアクセスさせたい、というニーズが高まりました。</li>
+<li>ユニキャストでは「1つのIPアドレスは1箇所」という前提のため、この用途には不向きでした。</li>
+</ul>
+</li>
+<li><strong>対応</strong>：
+<ul>
+<li>特別なアドレス範囲は設けず、<strong>同じユニキャストIPアドレスを複数箇所に割り当て、BGPなどのルーティングプロトコルで「最も近い経路」にパケットを誘導する</strong>方式としてエニーキャストが実現されました。</li>
+</ul>
+</li>
+<li><strong>用途例</strong>：DNSルートサーバ（例：<code>198.41.0.4</code> など）、CDNエッジサーバ、一部のDNSキャッシュサーバ。</li>
+</ul>
+<h3 id="5-その他のアドレス種別ループバックリンクローカルなどの背景">5. その他のアドレス種別（ループバック、リンクローカルなど）の背景</h3>
+<ul>
+<li>
+<p><strong>ループバックアドレス</strong>（<code>127.0.0.1</code>、<code>::1</code>）<br>
+→ 自分自身に対する通信テストやローカルサービス用。ネットワークカードがなくても動作確認できるようにするため。</p>
+</li>
+<li>
+<p><strong>リンクローカルアドレス</strong>（IPv4：<code>169.254.0.0/16</code>、IPv6：<code>fe80::/10</code>）<br>
+→ DHCPサーバがない環境でも、同一リンク内だけで通信できるようにする「自動設定用」のアドレス。
+この同一リンクとうのは、ルートから先にデータが送られないということを意味します。このリンクローカルのネットワークのことをネットワークセグメントといいます。
+ネットワークセグメントを越えないということは近接するデバイスのみで使われるIPアドレスということです。</p>
+</li>
+<li>
+<p><strong>プライベートアドレス</strong>（IPv4：<code>10.0.0.0/8</code>、<code>172.16.0.0/12</code>、<code>192.168.0.0/16</code>、IPv6：<code>fc00::/7</code>）<br>
+→ インターネット上で一意でなくてよい社内・家庭内ネットワーク用に、アドレス空間を節約するために導入。</p>
+</li>
+</ul>
+<h2 id="ipアドレスの構成">IPアドレスの構成</h2>
+<p>IPアドレスの「構成」は、IPv4とIPv6で大きく異なります。それぞれ「何ビットで」「どのように区切って」「どんな意味を持つか」を順に説明します。</p>
+<h3 id="ipv4アドレスの構成">IPv4アドレスの構成</h3>
+<p><strong>1. 基本構造：32ビットの2進数</strong></p>
+<ul>
+<li>IPv4アドレスは<strong>32ビット</strong>の2進数です。</li>
+<li>人間が読みやすいように、8ビットずつ4つに区切り、10進数で表記します。</li>
+<li>例：<code>11000000.10101000.00000001.00000001</code> → <code>192.168.1.1</code></li>
+</ul>
+<p><strong>2. ネットワーク部とホスト部</strong>
+IPv4アドレスは、大きく分けて次の2つの部分から成ります。</p>
+<ul>
+<li><strong>ネットワーク部</strong>：どのネットワークに属するかを示す部分。</li>
+<li><strong>ホスト部</strong>：そのネットワーク内のどの端末かを示す部分。</li>
+</ul>
+<p>この区切りは<strong>サブネットマスク</strong>（またはプレフィックス長）で指定します。</p>
+<p><strong>例：<code>192.168.1.10/24</code></strong></p>
+<ul>
+<li><code>/24</code> は「先頭24ビットがネットワーク部」を意味します。</li>
+<li>2進数にすると：
+<ul>
+<li>アドレス：<code>11000000.10101000.00000001.00001010</code></li>
+<li>マスク：<code>11111111.11111111.11111111.00000000</code></li>
+</ul>
+</li>
+<li>ネットワーク部：<code>192.168.1</code>（先頭24ビット）</li>
+<li>ホスト部：<code>.10</code>（残り8ビット）</li>
+</ul>
+<p><strong>3. アドレスクラス（クラスフル）とCIDR（クラスレス）</strong></p>
+<ul>
+<li>昔は「クラスA/B/C」という固定の区切りがありましたが、現在は<strong>CIDR（Classless Inter-Domain Routing）</strong> が主流です。</li>
+<li>CIDRでは、任意のビット長でネットワーク部とホスト部を区切れます（例：<code>/16</code>、<code>/24</code>、<code>/28</code>など）。</li>
+</ul>
+<p><strong>4. 特殊なアドレス構成</strong></p>
+<ul>
+<li><strong>ネットワークアドレス</strong>：ホスト部がすべて0（例：<code>192.168.1.0/24</code>）</li>
+<li><strong>ブロードキャストアドレス</strong>：ホスト部がすべて1（例：<code>192.168.1.255/24</code>）</li>
+<li><strong>ループバックアドレス</strong>：<code>127.0.0.0/8</code>（主に<code>127.0.0.1</code>）</li>
+<li><strong>プライベートアドレス</strong>：<code>10.0.0.0/8</code>、<code>172.16.0.0/12</code>、<code>192.168.0.0/16</code></li>
+</ul>
+<h3 id="ipv6アドレスの構成">IPv6アドレスの構成</h3>
+<p><strong>1. 基本構造：128ビットの16進数</strong></p>
+<ul>
+<li>IPv6アドレスは<strong>128ビット</strong>の2進数です。</li>
+<li>16ビット（4桁の16進数）ごとに8つに区切り、<code>:</code>で区切って表記します。</li>
+<li>例：<code>2001:0db8:0000:0000:0000:0000:0000:0001</code></li>
+<li>省略表記：
+<ul>
+<li>先頭の0は省略可能：<code>2001:db8:0:0:0:0:0:1</code></li>
+<li>連続する0のブロックは<code>::</code>でまとめられる（1回だけ）：<code>2001:db8::1</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>2. プレフィックス（ネットワーク部）とインタフェースID（ホスト部）</strong>
+IPv6アドレスも、大きく分けて次の2つで構成されます。</p>
+<ul>
+<li><strong>プレフィックス（Prefix）</strong>：ネットワークを表す部分。</li>
+<li><strong>インタフェースID（Interface Identifier）</strong>：そのネットワーク内の端末を表す部分。</li>
+</ul>
+<p><strong>例：<code>2001:db8:1234:5678::/64</code></strong></p>
+<ul>
+<li><code>/64</code> は「先頭64ビットがプレフィックス」を意味します。</li>
+<li>プレフィックス：<code>2001:db8:1234:5678</code></li>
+<li>インタフェースID：残り64ビット（例：MACアドレスから生成したEUI-64など）</li>
+</ul>
+<p><strong>3. IPv6アドレスの種類ごとの構成</strong>
+IPv6では、用途に応じてアドレスの構成が異なります。</p>
+<p><strong>グローバルユニキャストアドレス（通常のインターネット用）</strong></p>
+<ul>
+<li>例：<code>2001:db8::/32</code> など</li>
+<li>構成イメージ：
+<ul>
+<li>グローバルルーティングプレフィックス（例：<code>2001:db8</code>）</li>
+<li>サブネットID</li>
+<li>インタフェースID</li>
+</ul>
+</li>
+</ul>
+<p><strong>リンクローカルアドレス（同一リンク内のみ）</strong></p>
+<ul>
+<li>プレフィックス：<code>fe80::/10</code></li>
+<li>例：<code>fe80::1</code>、<code>fe80::abcd:1234:5678:9abc</code></li>
+<li>同一LAN内での通信や近隣探索（Neighbor Discovery）に使われます。</li>
+</ul>
+<p><strong>ユニークローカルアドレス（プライベートネットワーク用）</strong></p>
+<ul>
+<li>プレフィックス：<code>fc00::/7</code>（実質的には<code>fd00::/8</code>）</li>
+<li>例：<code>fd12:3456:789a::1</code></li>
+<li>インターネットにはルーティングされない社内・組織内ネットワーク用です。</li>
+</ul>
+<p><strong>マルチキャストアドレス</strong></p>
+<ul>
+<li>プレフィックス：<code>ff00::/8</code></li>
+<li>例：
+<ul>
+<li><code>ff02::1</code>：リンクローカルスコープの全ノード</li>
+<li><code>ff02::2</code>：リンクローカルスコープの全ルータ</li>
+</ul>
+</li>
+<li>先頭8ビットが<code>ff</code>で始まり、その後にフラグ・スコープ・グループIDが続く構成です。</li>
+</ul>
+<h3 id="まとめipアドレスの構成のポイント">まとめ：IPアドレスの「構成」のポイント</h3>
+<ul>
+<li>
+<p><strong>IPv4</strong>：</p>
+<ul>
+<li>32ビット、10進数4つで表記。</li>
+<li>ネットワーク部＋ホスト部（サブネットマスクで区切り）。</li>
+<li>クラスレス（CIDR）が主流。</li>
+</ul>
+</li>
+<li>
+<p><strong>IPv6</strong>：</p>
+<ul>
+<li>128ビット、16進数8ブロックで表記。</li>
+<li>プレフィックス＋インタフェースID（通常は<code>/64</code>などで区切り）。</li>
+<li>グローバル、リンクローカル、ユニークローカル、マルチキャストなど、用途ごとにプレフィックスが決まっている。</li>
+</ul>
+</li>
+</ul>
+<p>「IPアドレスの構成」というと、上記のような<strong>ビット構造・表記法・ネットワーク/ホストの区切り方</strong>が中心になります。</p>
+<p><img src="file:///d:\PycharmProjects\security_specialist\image\ip_adress\1785054807259.png" alt="1785054807259"></p>
+<h2 id="総括">総括</h2>
+<p>IPアドレスは、<strong>インターネットやネットワーク上で「どの機器か」を一意に識別するための住所</strong>です。<br>
+理解のポイントをざっくりまとめると、次の3つに集約できます。</p>
+<h3 id="1-ipアドレスは住所であり通信の送り先の指定方法">1. IPアドレスは「住所」であり「通信の送り先の指定方法」</h3>
+<ul>
+<li>IPアドレスは、**「どのネットワークの、どの端末か」**を表す番号です。</li>
+<li>IPv4は32ビット（例：<code>192.168.1.1</code>）、IPv6は128ビット（例：<code>2001:db8::1</code>）で、それぞれ<strong>ネットワーク部＋ホスト部</strong>（IPv6ではプレフィックス＋インタフェースID）に分かれています。</li>
+<li>サブネットマスクやプレフィックス長（例：<code>/24</code>、<code>/64</code>）で、どこまでが「ネットワーク」で、どこからが「端末」かを決めます。</li>
+</ul>
+<p><strong>押さえると良いポイント</strong></p>
+<ul>
+<li>IPアドレスは「ネットワーク＋ホスト」の2段階構造になっている</li>
+<li>ネットワーク部が同じ＝同じLANや同じサブネットに属する</li>
+</ul>
+<h3 id="2-通信の目的に応じて種類送り方が分かれている">2. 通信の目的に応じて「種類（送り方）」が分かれている</h3>
+<p>IPアドレスは、<strong>「誰に届けるか」</strong> によって送り方が変わります。</p>
+<ul>
+<li><strong>ユニキャスト</strong>：特定の1台に送る（Web、メール、SSHなど）</li>
+<li><strong>ブロードキャスト</strong>：同じネットワーク内の全員に送る（IPv4のARP、DHCPなど）</li>
+<li><strong>マルチキャスト</strong>：特定のグループだけに送る（動画配信、ルーティングプロトコル）</li>
+<li><strong>エニーキャスト</strong>：同じIPを複数拠点に置き、最も近い1台に届く（DNSルートサーバ、CDN）</li>
+</ul>
+<p><strong>押さえると良いポイント</strong></p>
+<ul>
+<li>用途に応じて「1対1」「1対全員」「1対グループ」「1対（最も近い1台）」を使い分けている</li>
+<li>IPv6ではブロードキャストがなく、マルチキャストで代替されている</li>
+</ul>
+<h3 id="3-用途や範囲ごとに特別なアドレスが決まっている">3. 用途や範囲ごとに「特別なアドレス」が決まっている</h3>
+<ul>
+<li><strong>ループバック</strong>：自分自身（<code>127.0.0.1</code>、<code>::1</code>）</li>
+<li><strong>リンクローカル</strong>：同一LAN内だけで有効（IPv4：<code>169.254.0.0/16</code>、IPv6：<code>fe80::/10</code>）</li>
+<li><strong>プライベート</strong>：社内・家庭内など、インターネットに出ない範囲（IPv4：<code>10.0.0.0/8</code>、<code>172.16.0.0/12</code>、<code>192.168.0.0/16</code>、IPv6：<code>fc00::/7</code>）</li>
+<li><strong>マルチキャスト用</strong>：IPv4は<code>224.0.0.0/4</code>、IPv6は<code>ff00::/8</code></li>
+</ul>
+<p><strong>押さえると良いポイント</strong></p>
+<ul>
+<li>「インターネットに出るアドレス」と「社内だけで使うアドレス」が分かれている</li>
+<li>自分自身・同一LAN内・グループ通信など、用途ごとにアドレス範囲が決まっている</li>
+</ul>
+<h3 id="ざっくり一言でまとめると">ざっくり一言でまとめると</h3>
+<blockquote>
+<p>IPアドレスは、<strong>「どのネットワークのどの端末か」を表す住所であり、用途に応じて「誰にどう届けるか」を変えるための仕組み</strong>です。</p>
+</blockquote>
+<p>理解のコツとしては、</p>
+<ol>
+<li><strong>IPアドレス＝ネットワーク部＋ホスト部</strong>という構造を押さえる</li>
+<li><strong>ユニキャスト／ブロードキャスト／マルチキャスト／エニーキャスト</strong>の違いを「誰に届けるか」で覚える</li>
+<li><strong>ループバック・リンクローカル・プライベート・マルチキャスト</strong>など、用途ごとのアドレス範囲をざっくり把握する</li>
+</ol>
+<p>この3点を押さえておくと、IPアドレスの全体像がかなり整理しやすくなります。</p>
+
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/_u42eRv3Yxg?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+        </body>
+        </html>

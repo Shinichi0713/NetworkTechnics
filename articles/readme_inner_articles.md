@@ -1,6 +1,6 @@
 ---
 title: "readme"
-emoji: "🧚‍♂️"
+emoji: "🥹"
 type: "tech" # tech: 技術記事 / idea: アイデア記事
 topics: ["networking"]
 published: false

@@ -110,7 +110,99 @@ GREとIPsecはよく比較されますが、役割が異なります。
 | ** multicast対応** | 可能 | トンネルモードで可能 |
 | **用途** | トポロジー隠蔽・プロトコル変換 | セキュア通信 |
 
-実務では**「GRE over IPsec」**という形で両者を組み合わせることが多く、GREで柔軟なトンネリングを行い、IPsecで暗号化・認証を行います。
+実務では　**「GRE over IPsec」** という形で両者を組み合わせることが多く、GREで柔軟なトンネリングを行い、IPsecで暗号化・認証を行います。
+
+## GREの主な用途（PPTP以外）
+
+GREは**PPTP以外でも広く使われています**。むしろ、PPTPはGREの多くの用途の中の一つです。
+GREは「汎用トンネリングプロトコル」として、インターネットインフラの様々な場面で活用されています。
+
+### 1. サイト間VPN（Site-to-Site VPN）のトンネル基盤
+
+企業の拠点間をインターネット経由で接続する際、GREトンネルを使って**仮想的な専用線（point-to-pointリンク）** を作ります。
+
+- 拠点Aのルーターと拠点Bのルーターの間にGREトンネルを張る
+- その上でOSPFやEIGRPなどの**ルーティングプロトコルを動作させる**
+- セキュリティが必要な場合は「GRE over IPsec」として暗号化を追加
+
+> GRE is the tunnel protocol you reach for when a VPN alone will not do the job. It carries routing protocols across the internet, connects two private networks over a public link. <source-chip title="Tech@Layer-x.com" url="https://tech.layer-x.com/mikrotik-gre-tunnels-configuration-and-use-cases/" />
+
+### 2. ルーティングプロトコルの運搬（BGP/OSPF over GRE）
+
+IPsec VPNだけでは**マルチキャストやブロードキャストが通らない**ため、動的ルーティングプロトコル（OSPF、BGPなど）が使えません。GREトンネルはマルチキャストをサポートするので、以下が可能になります。
+
+- **BGP over GRE**: クラウドプロバイダー（AWS、Azureなど）とオンプレミス間でBGPピアを確立
+- **OSPF over GRE**: 分散拠点間で同一OSPFドメインを維持
+- **EIGRP over GRE**: Cisco環境での動的ルーティング
+
+> I still reach for GRE when I need a simple, explicit overlay that makes two routed domains behave like they share a point-to-point link, even when the underlay between them is messy, shared, or owned by someone else. <source-chip title="TheLinuxCode" url="https://thelinuxcode.com/generic-routing-encapsulation-gre-tunnel-practical-design-sizing-security-and-operations/" />
+
+### 3. クラウド接続・マルチクラウド接続
+
+AWS、Azure、Google Cloudなどのクラウド環境とオンプレミスを接続する際、GREトンネルが使われます。
+
+- **AWS Direct Connect / Azure ExpressRoute**の裏側でもGRE類似のカプセル化が使われることがある
+- **Equinix Fabric**などのインターコネクションサービスでGREを提供
+- 複数クラウド間のルーティングを統合する「マルチクラウドネットワーク」でGRE over IPsecが一般的
+
+### 4. MPLS VPNでのPE-PEトンネリング
+
+ISPや大規模企業ネットワークで使われるMPLS VPNにおいて、プロバイダーエッジ（PE）ルーター間のトンネルとしてGREが使われることがあります。
+
+- RFC 4797で標準化された「PE-PE GRE in BGP/MPLS VPN」
+- MPLSが使えない経路や、特定のVPNサイト間でGREをフォールバックとして使用
+
+> RFC 4797 - Use of Provider Edge to Provider Edge (PE-PE) Generic Routing Encapsulation (GRE) or IP in BGP/MPLS IP Virtual Private Networks <source-chip title="RFC 4797" url="https://datatracker.ietf.org/doc/html/rfc4797" />
+
+### 5. IPv6トンネリング（6to4、ISATAPなど）
+
+IPv4ネットワーク上にIPv6を運搬するトンネリング技術でGREが使われます。
+
+- **6to4**: IPv4インターネット上でIPv6サイトを接続
+- **ISATAP (Intra-Site Automatic Tunnel Addressing Protocol)**: サイト内でIPv6をIPv4上に運搬
+- **Teredo**: UDP上のIPv6トンネリング（GREとは異なるが、同じ「カプセル化」の発想）
+
+### 6. モバイルIP（Mobile IP）
+
+モバイル端末がネットワーク間を移動してもIPアドレスを維持する技術です。GREはモバイルノードとホームエージェント間のトンネルに使われます。
+
+- 端末が外出先ネットワークにいても、ホームネットワークのIPを維持
+- RFC 2003（IP in IP）やGREがトンネリング手段として使用
+
+### 7. ネットワーク機器・セキュリティ製品間の通信
+
+Palo Alto NetworksやCiscoなどのエンタープライズ機器で、GREトンネルは標準機能として提供されています。
+
+- **Palo Alto Networks NGFW**: GREトンネルによるサイト間接続をサポート
+- **Cisco IOS/IOS XE**: GRE over IPsecを大規模展開
+- **MikroTik RouterOS**: GREトンネルによるルーティングプロトコル運搬が一般的
+
+> GRE Tunnels - Palo Alto Networks <source-chip title="Palo Alto Networks" url="https://docs.paloaltonetworks.com/ngfw/networking/gre-tunnels" />
+
+### 8. コンテナ・Kubernetesネットワーク（一部）
+
+CalicoなどのKubernetes CNIプラグインは、ノード間のトンネリングにIP in IPやVXLAN、**場合によってはGRE**を使用する設定が可能です。ただし、最近はVXLANやWireGuardの方が主流です。
+
+## GREが選ばれる理由と選ばれない理由
+
+### GREが選ばれる場面
+
+| 場面 | 理由 |
+|------|------|
+| ルーティングプロトコルをトンネル上で動かしたい | マルチキャスト・ブロードキャスト対応 |
+| 複数プロトコルを運搬したい | IPv4内にIPv6、IPX、AppleTalkなど任意のプロトコル |
+| シンプルなオーバーレイが欲しい | ヘッダが小さく、設定が簡単 |
+| IPsecと組み合わせたい | GRE over IPsecで「柔軟性＋セキュリティ」を両立 |
+
+### GREが選ばれない場面
+
+| 場面 | 代替技術 |
+|------|---------|
+| セキュリティだけが必要 | IPsec単体、WireGuard |
+| NAT越えが必要 | UDPベースのWireGuard、OpenVPN |
+| 高パフォーマンスが必要 | WireGuard、VXLAN |
+| クラウドネイティブ環境 | VXLAN、Geneve、SR-IOV |
+
 
 
 

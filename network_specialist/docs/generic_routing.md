@@ -204,5 +204,137 @@ CalicoなどのKubernetes CNIプラグインは、ノード間のトンネリン
 | クラウドネイティブ環境 | VXLAN、Geneve、SR-IOV |
 
 
+## セキュリティ対策
 
+GREは先述の通り**暗号化も認証も提供しない**プロトコルです。そのため、インターネットなどの非信頼ネットワークでGREトンネルを使う場合は、必ず何らかのセキュリティ対策が必要です。以下、実務で使われる主要な対策を整理します。
+
+
+### 1. 根本対策：GRE over IPsec（最も重要・最も一般的）
+
+GRE単体ではデータが平文のまま流れるため、**GRE over IPsec**という形でIPsecを組み合わせることが標準的な対策です。
+
+__なぜ組み合わせるのか__
+
+| プロトコル | 提供する機能 | 提供しない機能 |
+|-----------|-----------|-------------|
+| GRE | カプセル化・マルチキャスト対応・多プロトコル運搬 | 暗号化・認証 |
+| IPsec | 暗号化・認証・完全性保証 | マルチキャスト対応・多プロトコル運搬 |
+
+> GRE is just a way to encapsulate traffic, IPsec is what gives you the security, and GRE over IPsec is the classic recipe for building a secure routed overlay on top of an untrusted underlay. <source-chip title="AlphaPrep" url="https://blog.alphaprep.net/gre-and-ipsec-tunneling-for-ccnp-350-401-encor-configuration-verification-and-troubleshooting/" />
+
+__2つの実装方式__
+
+- **IPsec Transport Mode**: GREパケット全体を暗号化。オーバーヘッドが少なく、一般的に推奨される方式
+- **IPsec Tunnel Mode**: 外側IPヘッダも含めて暗号化。より強固だがオーバーヘッドが大きい
+
+> Combine GRE tunnels with IPsec transport mode to create encrypted GRE tunnels that provide both multi-protocol encapsulation and cryptographic security. <source-chip title="OneUptime" url="https://oneuptime.com/blog/post/2026-03-20-gre-over-ipsec-encrypted-tunneling/view" />
+
+### 2. トンネルエンドポイントの保護：ACLとファイアウォール
+
+GREトンネルの両端（トンネルソース・デスティネーションIP）に対し、**アクセス制御リスト（ACL）**で通信を絞り込みます。
+
+__推奨ACLルール__
+
+| 方向 | 許可 | 拒否 |
+|------|------|------|
+| 外部インターフェース（IN） | 信頼するピアIPからのIP Protocol 47（GRE）のみ | それ以外のGREパケットすべて |
+| 外部インターフェース（IN） | IKE/IPsec用のUDP 500、4500（IPsec使用時） | 不要なVPNプロトコル |
+
+__注意点__
+
+- GREトンネルはIP Protocol 47を使用するため、**TCP/UDPのポート番号ではフィルタリングできません**
+- ファイアウォールがIPsec/GREに対応していない場合、トンネルが正常に機能しないことがあります
+
+### 3. トンネルキー（Keyフィールド）の活用
+
+GREヘッダの**Keyフィールド（32ビット）** を使うことで、同一IP間の複数トンネルを識別し、**意図しないトンネル接続を防ぐ**ことができます。
+
+__効果__
+
+- 同じ送信元・宛先IP間で、トンネルIDを使って正当な接続のみを許可
+- 設定ミスやなりすまし接続のリスクを軽減
+
+__限界__
+
+- Keyフィールドは**平文**で送信されるため、パケットキャプチャで読み取られる可能性がある
+- セキュリティ機密情報としては扱えない（「簡易識別子」程度の位置づけ）
+
+### 4. Keepaliveによるトンネル健全性監視
+
+GREトンネルは「状態を持たない（stateless）」ため、相手がダウンしてもトンネルインターフェースがUPのままになることがあります。これにより**ブラックホール（通信が消える）** が発生します。
+
+__Keepaliveの仕組み__
+
+- トンネル両端が定期的にkeepaliveパケットを交換
+- 一定回数応答がない場合、トンネルインターフェースをDOWNにし、代替経路（通常のインターネット経由など）に切り替える
+
+> The IP-over-IP (usually GRE) tunnels (commonly in combination with IPsec to provide security) are frequently used when you want to transport private IP traffic over public IP network. If you use the GRE tunnels in combination with default routing (or route summarization), you can get serious routing issues when the tunnel destination disappears. <source-chip title="ipSpace.net" url="https://blog.ipspace.net/2007/10/gre-tunnel-keepalives/" />
+
+__セキュリティ上の効果__
+
+- DoS攻撃でトンネルが不通になった場合の**自動検知・フェイルオーバー**
+- トンネルダウン時の**ルーティングループ防止**
+
+### 5. ルーティング保護：再帰ルーティングの防止
+
+GREトンネルの宛先IPへ到達する経路が、**トンネル自身の中を通る**ように設定されると、無限ループ（再帰ルーティング）が発生します。
+
+__対策__
+
+- トンネルデスティネーションIPへの経路は、**必ずトンネル外の物理インターフェース**を使うように設定する
+- 静的ルートでトンネルデスティネーションIPのネクストホップを明示的に指定する
+
+> Recursive routing, and how to avoid it. <source-chip title="Network Direction" url="https://networkdirection.net/articles/routingandswitching/gretunnels/advancedgre/" />
+
+### 6. MTU・MSS調整による安定性確保
+
+GREヘッダ（最小4バイト、オプション付きで最大16バイト）＋外側IPヘッダ（20バイト）により、**ペイロードが小さくなる**ため、パケット断片化や通信障害が起こりやすくなります。
+
+__推奨設定__
+
+| 項目 | 推奨値 | 説明 |
+|------|--------|------|
+| トンネルMTU | 1400〜1476バイト | デフォルト1500からGRE/IPsecオーバーヘッドを差し引く |
+| TCP MSS Clamping | 1360バイト程度 | TCP SYN時にMSSを自動調整 |
+| IPsecの「DFビット無視」 | 有効化（必要に応じて） | Don't Fragmentビットをクリアして断片化を許可 |
+
+### 7. モダンな代替案：WireGuard・VXLANの検討
+
+新規構築の場合、GRE over IPsecではなく、**より安全で管理しやすい技術**を検討する価値があります。
+
+| 技術 | GRE over IPsecとの比較 |
+|------|----------------------|
+| **WireGuard** | カーネル内実装で高速。暗号化・認証を標準搭載。設定が極めてシンプル。UDPベースでNAT越えも容易。 |
+| **VXLAN** | データセンター・クラウド環境向け。UDPベースでGREよりNATに強い。 |
+| **OpenVPN** | TCP/UDP両対応。クロスプラットフォーム。設定が柔軟。 |
+| **IPsec VTI** | GREなしでIPsecだけで仮想トンネルインターフェースを作る。Ciscoなどでサポート。 |
+
+## 総括
+
+GREの本質は、**「何でも包んで運べる、ただし何も守らない、シンプルなトンネルの接着剤」** です。
+
+### 1. 包むことに特化したプロトコル
+
+- GREは**カプセル化だけ**を行います
+- IPv4、IPv6、PPP、AppleTalkなど**任意のプロトコル**を別のIPパケット内に包んで運べます
+- ヘッダは最小4バイトと小さく、**オーバーヘッドが極めて少ない**
+- IP Protocol 47で識別され、Protocol Typeフィールドで「中身が何か」を示す
+
+### 2. セキュリティは持たない
+
+- **暗号化なし**、**認証なし**、**完全性保証なし**
+- 平文で流れるため、インターネット上で単独使用は危険
+- セキュリティが必要なら、必ず**IPsecと組み合わせる（GRE over IPsec）**
+- GREが「包む」、IPsecが「守る」という役割分担が基本
+
+### 3. 柔軟性が最大の強み
+
+- IPsecだけでは通せない**マルチキャスト・ブロードキャスト**を通せる
+- ルーティングプロトコル（OSPF、BGP）をトンネル上で動かせる
+- サイト間VPN、クラウド接続、IPv6移行、MPLSなど**インフラのあらゆる場所**で使われる
+- PPTPはその応用例の一つに過ぎない
+
+### 一言で表すと
+
+> **GREは「包んで運ぶ」ことに特化したシンプルなトンネリング機構。セキュリティは持たないが、どんな中身でも運べる柔軟性が、現代のネットワークインフラにおいて依然として不可欠な存在である。**
 

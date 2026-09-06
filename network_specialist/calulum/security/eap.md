@@ -52,8 +52,94 @@ EAPは、認証装置（アクセスポイントやスイッチ）が認証処�
 ### 6. IPを必要としないデータリンク層での動作
 EAPは [PPP](https://ja.wikipedia.org/wiki/Point-to-Point_Protocol) や [IEEE 802](https://ja.wikipedia.org/wiki/IEEE_802)（イーサネット・無線LANなど）などのデータリンク層上で直接動作し、IP層を必要としません。[RFC 3748 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc3748.html) これにより、ネットワーク接続を確立する前の段階で認証を行うことができます。
 
-### まとめ
-EAPが提供するのは「特定の認証アルゴリズム」ではなく、「どんな認証方式でも載せられる共通のレール」と「そのレール上で通信するための手順・メッセージ形式」です。これにより、新しい認証方式が登場しても、既存のネットワーク機器を変更せずに導入できる柔軟性が生まれます。
+## EAPの認証
+
+EAPが認証を行う対象と手順について、以下にまとめます。
 
 
+### 認証の対象
+
+EAPが認証するのは、**ネットワークに接続しようとするクライアント（ピア）** です。[RFC 3748 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc3748.html)
+
+具体的には以下の3つの役割が関与します。
+
+- **ピア（Peer）**：認証を受ける側。PCやスマートフォンなどのクライアント。[IEEE 802.1X](https://ja.wikipedia.org/wiki/IEEE_802.1X) では**サプリカント**とも呼ばれます。
+- **認証者（Authenticator）**：認証を仲介する装置。無線LANアクセスポイントやスイッチなどです。
+- **EAPサーバー / バックエンド認証サーバー**：実際に認証を処理するサーバー。[RADIUS](https://ja.wikipedia.org/wiki/RADIUS) サーバーなどが該当します。
+
+認証者はクライアントと認証サーバーの間でメッセージを中継（パススルー）し、認証サーバーが最終的に認証の成否を決定します。[RFC 3748 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc3748.html)
+
+### 認証の手順
+
+EAPの認証は、以下の流れで進みます。[IEEE802.1X認証とは、EAPとは - その2](https://www.infraexpert.com/study/wireless51.html)
+
+**① 認証の開始**
+認証者（APなど）からピアに対して [EAP-Request/Identity](https://tex2e.github.io/rfc-translater/html/rfc3748.html) を送信し、ピアは自身の識別子（ユーザー名など）を [EAP-Response/Identity](https://tex2e.github.io/rfc-translater/html/rfc3748.html) で返します。
+
+**② 認証方式のネゴシエーション**
+認証者とピアの間で、どのEAPメソッド（[EAP-TLS](https://study-sec.com/eap-tls/)、[PEAP](https://e-words.jp/w/EAP.html)、[EAP-TTLS](https://e-words.jp/w/EAP.html) など）を使用するかを交渉します。
+
+**③ 認証情報の交換**
+選択された認証方式に従い、ピアとEAPサーバーの間で認証情報をやり取りします。例えば、パスワードのハッシュ値やデジタル証明書などが交換されます。この間、認証者は両者のメッセージを中継します。[IEEE802.1X認証とは、EAPとは - その2](https://www.infraexpert.com/study/wireless51.html)
+
+**④ 認証結果の通知**
+認証が成功すれば、EAPサーバーから [EAP-Success](https://tex2e.github.io/rfc-translater/html/rfc3748.html) が送信されます。失敗した場合は [EAP-Failure](https://tex2e.github.io/rfc-translater/html/rfc3748.html) が送信されます。
+
+**⑤ ネットワークアクセスの許可**
+[EAP-Success](https://tex2e.github.io/rfc-translater/html/rfc3748.html) を受信した認証者は、ピアに対してポートのブロックを解除し、ネットワークへのデータ通信を許可します。認証に失敗した場合は、通信を継続して遮断します。[IEEE802.1X認証とは、EAPとは - その2](https://www.infraexpert.com/study/wireless51.html)
+
+### 補足：相互認証
+
+[EAP-TLS](https://study-sec.com/eap-tls/) のように、ピアだけでなくサーバー側も証明書で認証される**相互認証**を行う方式もあります。この場合、ピアとサーバーの両方が正当であることを確認し合います。[RFC 5216 - EAP-TLS認証プロトコル 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc5216.html)
+
+## 用途
+
+EAPは主に、ネットワークへの接続前に「誰が接続しようとしているか」を確認するために使われます。[RFC 3748 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc3748.html) 具体的な用途は以下の通りです。
+
+### 1. 無線LAN（Wi-Fi）の認証
+企業や学校などの [WPA2-Enterprise](https://ja.wikipedia.org/wiki/Wi-Fi_Protected_Access) や [WPA3-Enterprise](https://ja.wikipedia.org/wiki/Wi-Fi_Protected_Access) 環境で、EAPは標準的に使用されます。[IEEE 802.1X](https://ja.wikipedia.org/wiki/IEEE_802.1X) と組み合わせることで、各ユーザーごとに異なる認証情報を用いてWi-Fiに接続できます。[Windows におけるネットワーク アクセスの拡張認証プロトコル (EAP)](https://learn.microsoft.com/ja-jp/windows-server/networking/technologies/extensible-authentication-protocol/network-access)
+
+### 2. 有線LANの認証
+無線だけでなく、有線LANのスイッチポートにおいても [IEEE 802.1X](https://ja.wikipedia.org/wiki/IEEE_802.1X) 認証にEAPが使われます。これにより、不正な端末が社内ネットワークのLANポートに挿しても、認証に失敗すれば通信が遮断されます。[IEEE 802.1X認証とは？基本的な認証の仕組みを解説](https://www.dlink-jp.com/column/ieee802.1x.html)
+
+### 3. VPN接続の認証
+[PPP](https://ja.wikipedia.org/wiki/Point-to-Point_Protocol)（Point-to-Point Protocol）上で動作するVPN接続（ダイヤルアップやL2TPなど）において、EAPはユーザー認証の枠組みとして利用されます。[EAPとは - IT用語辞典 e-Words](https://e-words.jp/w/EAP.html)
+
+### 4. ダイヤルアップ接続
+EAPはもともとPPPの拡張として開発されたため、ダイヤルアップ回線でのユーザー認証にも使用されてきました。[RFC 3748 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc3748.html)
+
+## RADIUSとの比較
+
+EAPとRADIUSは、役割が異なる2つのプロトコルです。以下に違いをまとめます。
+
+### EAPとは
+
+EAP（Extensible Authentication Protocol）は、**「どの認証方式を使うか」を決める認証フレームワーク**です。[RFC 3748 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc3748.html) パスワード、証明書、ICカードなど、様々な認証方式を統一的に扱うための「共通の器」を提供します。データリンク層（[PPP](https://ja.wikipedia.org/wiki/Point-to-Point_Protocol) や [IEEE 802.1X](https://ja.wikipedia.org/wiki/IEEE_802.1X) など）上で直接動作します。
+
+### RADIUSとは
+
+RADIUS（Remote Authentication Dial In User Service）は、**認証・認可・課金（AAA）を行うための通信プロトコル**です。[RADIUSとは](https://www.soliton.co.jp/theme/column-radius.html) ネットワーク機器（アクセスポイントやスイッチなど）と認証サーバー間の通信に使用され、UDPベースで動作します。
+
+
+### 主な違い
+
+| 項目 | EAP | RADIUS |
+|------|-----|--------|
+| **役割** | 認証方式を選び、認証情報をやり取りするフレームワーク | 認証・認可・課金をサーバーに問い合わせる通信プロトコル |
+| **動作層** | データリンク層（PPP、IEEE 802など） | ネットワーク層（UDPベース） |
+| **主な機能** | Request/Response/Success/Failureのメッセージ交換 | 認証問い合わせ、承認、利用記録の管理 |
+| **認証方式の決定** | EAPが認証方式をネゴシエーションする | RADIUS自体は認証方式を決めない |
+
+### 両者の関係
+
+EAPとRADIUSは対立するものではなく、**協力して動作**します。[RFC 3579](https://tex2e.github.io/rfc-translater/html/rfc3579.html) では、RADIUSがEAPメッセージを運ぶ仕組みが定義されています。
+
+具体的な流れは以下の通りです。[【図解】RADIUSサーバの仕組みとは](https://www.cair-n.co.jp/blog/infra/p7155/)
+
+1. クライアントと認証者（APなど）の間では、**EAP**で認証方式の交渉と認証情報のやり取りを行う
+2. 認証者と認証サーバー（RADIUSサーバー）の間では、**RADIUS**でEAPメッセージを中継する
+3. RADIUSサーバーが認証を処理し、結果を認証者へ返す
+4. 認証者がクライアントへEAP-SuccessまたはEAP-Failureを通知する
+
+たとえるなら、**EAPは「封筒の中身（認証情報）」を決めるもの**で、**RADIUSは「封筒を運ぶ郵便システム」** です。[EAPのはなし(1)](https://www.silex.jp/library/blog/20130918-1) 両者が組み合わさることで、企業のWi-FiやVPNなどの大規模な認証環境が実現されています。
 

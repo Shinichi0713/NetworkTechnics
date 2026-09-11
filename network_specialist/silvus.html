@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x6982;&#x8981;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>無線通信の技術には種類は数多いですがコスト重視で広域展開する民生向けの無線通信技術から、産業・インフラのような特定用途の無線通信技術が存在します。
+民生向けはWi-Fiや、携帯で使われるLTEなどが代表例です。</p>
+<p>産業用の用途のものは衛星通信、Private 5Gなどが存在します。そんな中、ちょっと変わり種の通信技術にSILVUSというものがあります。</p>
+<p>本日テーマ：</p>
+<blockquote>
+<p>産業用無線通信技術のSILVUSについて説明する</p>
+</blockquote>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="概要">概要</h2>
+<p>SILVUSとは、正確には<strong>Silvus Technologies</strong>（シルバス・テクノロジーズ）という米国の無線通信機器メーカーです。ただし通信分野では、この会社が開発した独自の波形技術<strong>MN-MIMO（Mobile-Networked MIMO）</strong> を指して言及されることが多いです。</p>
+<p>以下、その技術的な中身を解説します。</p>
+<h3 id="1-まず何やねん">1. まず何やねん</h3>
+<blockquote>
+<p><strong>MN-MIMOは「COFDM＋MIMOアンテナ技術＋MANET（移動自組織網）」を融合した波形で、過酷な環境下でも高帯域・長距離・耐妨害性の高いメッシュ通信を実現する。</strong></p>
+</blockquote>
+<h3 id="2-直感的なアナロジー賢い伝書鳩の網">2. 直感的なアナロジー：「賢い伝書鳩の網」</h3>
+<p>伝統的な無線は「1対1の直通」や「基地局への依存」が前提です。MN-MIMOは：</p>
+<ul>
+<li><strong>各無線機が「中継器」にもなる</strong>：鳩が他の鳩に手紙を渡して次々と運ぶ</li>
+<li><strong>複数のアンテナで同時に送受信</strong>：複数の鳩が同時に異なる経路を飛ぶ</li>
+<li><strong>電波の反射を逆手に取る</strong>：壁にぶつかるのを利用して情報量を増やす</li>
+</ul>
+<h3 id="3-mn-mimoの3本柱">3. MN-MIMOの3本柱</h3>
+<p>Silvus Technologiesの公式サイト <source-chip title="Silvus Technologies" url="https://silvustechnologies.com/why-silvus/technology/" /> によれば、MN-MIMOは以下の3技術の融合です。</p>
+<table>
+<thead>
+<tr>
+<th>技術</th>
+<th>役割</th>
+<th>MN-MIMOでの貢献</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>COFDM</strong></td>
+<td>広帯域信号を多数の狭帯域サブキャリアに分割</td>
+<td>マルチパス（反射波）に強く、障害物の多い環境でも安定</td>
+</tr>
+<tr>
+<td><strong>MIMO</strong></td>
+<td>複数アンテナで空間的に独立した信号路を作る</td>
+<td>スループット向上とリンク信頼性の向上</td>
+</tr>
+<tr>
+<td><strong>MANET</strong></td>
+<td>各ノードが自律的にメッシュ網を形成</td>
+<td>基地局不要で、ノード同士が中継し合う</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-技術的な特徴">4. 技術的な特徴</h3>
+<p><strong>4.1 Mobile-Networked MIMO（MN-MIMO）の本質</strong></p>
+<p>通常のMIMOは「1つの送受信点に複数アンテナ」を想定しますが、MN-MIMOは <strong>「移動中の複数ノードが協調してMIMOを形成する」</strong> 点が異なります。</p>
+<p>つまり：</p>
+<ul>
+<li>ノードA、B、Cがそれぞれ独立に移動しながら</li>
+<li>それらのアンテナが<strong>仮想的に1つの巨大なMIMOアレイ</strong>として機能する</li>
+</ul>
+<p>これにより、単一ノードの物理的制約を超えた空間多路利用が可能になります。</p>
+<p><strong>4.2 主な性能特徴</strong></p>
+<table>
+<thead>
+<tr>
+<th>特徴</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>高スループット</strong></td>
+<td>従来の単一天線無線に比べ、MIMOによる空間多重で高データレート</td>
+</tr>
+<tr>
+<td><strong>長距離通信</strong></td>
+<td>ビームフォーミングによる指向性制御で距離を延伸</td>
+</tr>
+<tr>
+<td><strong>耐妨害性（LPI/LPD）</strong></td>
+<td>低確率傍受/低確率検出に対応した波形設計</td>
+</tr>
+<tr>
+<td><strong>自己修復メッシュ</strong></td>
+<td>ノードの増減に応じて経路を自動再構築</td>
+</tr>
+<tr>
+<td><strong>非視界（NLOS）通信</strong></td>
+<td>建物や地形の陰でも反射波を利用して通信維持</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-用途">5. 用途</h3>
+<p>SilvusのStreamCasterシリーズは、主に以下の分野で使用されています <source-chip title="Silvus Technologies" url="https://silvustechnologies.com/" />：</p>
+<ul>
+<li><strong>軍事・防衛</strong>：戦術無線（米陸軍AN/PRC-169など）</li>
+<li><strong>公共安全</strong>：警察・消防・救急の現場通信</li>
+<li><strong>無人システム</strong>：UAV/UGV/USV間の広帯域データリンク</li>
+<li><strong>産業用</strong>：海上・石油・ガス施設など過酷環境での通信</li>
+</ul>
+<h2 id="コア技術">コア技術</h2>
+<p>SilvusのMN-MIMOが高いスループットを達成する理由は、<strong>「空間」・「周波数」・「ネットワーク」という3つの次元で情報を並列化している</strong>ことにあります。
+以下、Silvusのコア技術について物理的・数学的な根拠から段階的に解説します。</p>
+<h3 id="1-そして何やねん">1. そして何やねん</h3>
+<blockquote>
+<p><strong>MN-MIMOは、複数アンテナによる空間ストリームの並列化と、各ノードが中継器となるメッシュ構造による経路並列化を組み合わせることで、同一帯域内で複数の独立したデータ流れを同時に送受信する。</strong></p>
+</blockquote>
+<h3 id="2-直感的なアナロジー複数車線の高速道路迂回路網">2. 直感的なアナロジー：「複数車線の高速道路＋迂回路網」</h3>
+<ul>
+<li><strong>通常の無線（SISO）</strong>：1車線の道路。1台の車（データ）しか同時に走れない。</li>
+<li><strong>MIMO</strong>：同じ道路幅で<strong>複数車線</strong>を並行して走れる。車線が増えれば輸送量が増える。</li>
+<li><strong>MN-MIMO＋MANET</strong>：複数車線の高速道路が、さらに<strong>交差点なしで相互に接続された迂回路網</strong>になっている。1本が混雑しても別経路が即座に使える。</li>
+</ul>
+<h3 id="3-スループット向上の4つの物理的メカニズム">3. スループット向上の4つの物理的メカニズム</h3>
+<p><strong>メカニズム①：空間多重（Spatial Multiplexing）</strong></p>
+<p>MIMOの最も基本的なスループット向上原理です。</p>
+<p><strong>数学的な記述</strong></p>
+<p>送信アンテナ数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">N_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>、受信アンテナ数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">N_r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>、チャネル行列を <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">H</mi><mo>∈</mo><msup><mi mathvariant="double-struck">C</mi><mrow><msub><mi>N</mi><mi>r</mi></msub><mo>×</mo><msub><mi>N</mi><mi>t</mi></msub></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{H} \in \mathbb{C}^{N_r \times N_t}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7252em;vertical-align:-0.0391em;"></span><span class="mord mathbf">H</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8413em;"></span><span class="mord"><span class="mord mathbb">C</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1645em;"><span style="top:-2.357em;margin-left:-0.109em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2963em;"><span style="top:-2.357em;margin-left:-0.109em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span> とします。受信信号は：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="bold">y</mi><mo>=</mo><mi mathvariant="bold">H</mi><mi mathvariant="bold">x</mi><mo>+</mo><mi mathvariant="bold">n</mi></mrow><annotation encoding="application/x-tex">\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord mathbf" style="margin-right:0.01597em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7694em;vertical-align:-0.0833em;"></span><span class="mord mathbf">Hx</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.4444em;"></span><span class="mord mathbf">n</span></span></span></span></span></p>
+<p>ここで <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">x</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4444em;"></span><span class="mord mathbf">x</span></span></span></span> は送信信号ベクトル、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">n</mi></mrow><annotation encoding="application/x-tex">\mathbf{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4444em;"></span><span class="mord mathbf">n</span></span></span></span> は雑音です。</p>
+<p>チャネル行列 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">H</mi></mrow><annotation encoding="application/x-tex">\mathbf{H}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">H</span></span></span></span> を**特異値分解（SVD）**すると：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="bold">H</mi><mo>=</mo><mi mathvariant="bold">U</mi><mi mathvariant="bold">Σ</mi><msup><mi mathvariant="bold">V</mi><mi>H</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^H
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">H</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8913em;"></span><span class="mord mathbf">UΣ</span><span class="mord"><span class="mord mathbf" style="margin-right:0.01597em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">Σ</mi></mrow><annotation encoding="application/x-tex">\mathbf{\Sigma}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">Σ</span></span></span></span> は特異値 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>σ</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>σ</mi><mrow><mi>min</mi><mo>⁡</mo><mo stretchy="false">(</mo><msub><mi>N</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>N</mi><mi>r</mi></msub><mo stretchy="false">)</mo></mrow></msub></mrow><annotation encoding="application/x-tex">\sigma_1, \sigma_2, \ldots, \sigma_{\min(N_t, N_r)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7858em;vertical-align:-0.3552em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.5198em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mop mtight"><span class="mtight">m</span><span class="mtight">i</span><span class="mtight">n</span></span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2963em;"><span style="top:-2.357em;margin-left:-0.109em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1645em;"><span style="top:-2.357em;margin-left:-0.109em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3552em;"><span></span></span></span></span></span></span></span></span></span> を対角に持つ行列です。</p>
+<p>これにより、元のMIMOチャネルは<strong>複数の独立した並列サブチャネル（空間ストリーム）</strong> に分解されます：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>y</mi><mi>k</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><msub><mi>σ</mi><mi>k</mi></msub><msubsup><mi>x</mi><mi>k</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>+</mo><msubsup><mi>n</mi><mi>k</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo separator="true">,</mo><mspace width="1em"/><mi>k</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>min</mi><mo>⁡</mo><mo stretchy="false">(</mo><msub><mi>N</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>N</mi><mi>r</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">y_k&#x27; = \sigma_k x_k&#x27; + n_k&#x27;, \quad k = 1, 2, \ldots, \min(N_t, N_r)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0489em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-2.453em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0489em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0489em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">min</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>各サブチャネルは<strong>同じ周波数・同じ時間</strong>を使いながら、異なるデータを運べます。</p>
+<p><strong>スループットへの寄与</strong></p>
+<p>理想的なMIMOのチャネル容量は：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mo>=</mo><msub><mrow><mi>log</mi><mo>⁡</mo></mrow><mn>2</mn></msub><mi>det</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><msub><mi mathvariant="bold">I</mi><msub><mi>N</mi><mi>r</mi></msub></msub><mo>+</mo><mfrac><mtext>SNR</mtext><msub><mi>N</mi><mi>t</mi></msub></mfrac><mi mathvariant="bold">H</mi><msup><mi mathvariant="bold">H</mi><mi>H</mi></msup><mo fence="true">)</mo></mrow><mo>≈</mo><mi>min</mi><mo>⁡</mo><mo stretchy="false">(</mo><msub><mi>N</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>N</mi><mi>r</mi></msub><mo stretchy="false">)</mo><mo>⋅</mo><msub><mrow><mi>log</mi><mo>⁡</mo></mrow><mn>2</mn></msub><mo stretchy="false">(</mo><mtext>SNR</mtext><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">C = \log_2 \det\left(\mathbf{I}_{N_r} + \frac{\text{SNR}}{N_t}\mathbf{H}\mathbf{H}^H\right) \approx \min(N_t, N_r) \cdot \log_2(\text{SNR})
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="mop"><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">det</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mord mathbf">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1645em;"><span style="top:-2.357em;margin-left:-0.109em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">SNR</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.836em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathbf">H</span><span class="mord"><span class="mord mathbf">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">min</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord text"><span class="mord">SNR</span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>つまり、<strong>アンテナ数の少ない方の次元に比例して容量が線形に増加</strong>します。2×2 MIMOなら理論上約2倍、4×4なら約4倍のスループットが可能です。</p>
+<p>SilvusのStreamCasterは複数アンテナを搭載し、この空間多重を活用しています <source-chip title="Silvus Technologies" url="https://silvustechnologies.com/why-silvus/technology/" />。</p>
+<p><strong>メカニズム②：COFDMによる周波数利用効率の最適化</strong></p>
+<p><strong>COFDMの原理</strong></p>
+<p>COFDM（Coded Orthogonal Frequency Division Multiplexing）は、広帯域チャネルを<strong>多数の直交サブキャリア</strong>に分割します：</p>
+<ul>
+<li>各サブキャリアの帯域は狭く、<strong>周波数選択性フェージング</strong>の影響を受けにくい</li>
+<li>サブキャリア間は直交しているため、<strong>ガードバンドが不要</strong>で周波数利用効率が高い</li>
+<li>コーディングにより、劣化したサブキャリアの情報を復元できる</li>
+</ul>
+<p><strong>スループットへの寄与</strong></p>
+<p>伝統的なFDM（周波数分割多重）ではサブチャネル間に保護帯域が必要ですが、COFDMでは直交性によりこの保護帯域を省略できます。その結果、<strong>同じ総帯域幅でより多くの情報を運べます</strong>。</p>
+<p>さらに、チャネル状態に応じて<strong>適応変調</strong>を各サブキャリアに適用できます。良いサブキャリアには高次変調（64QAMなど）、悪いサブキャリアには堅牢な変調（QPSKなど）を割り当てることで、全体のスループットを最大化します。</p>
+<p><strong>メカニズム③：Mobile-Networked MIMOによる「分散アンテナアレイ」効果</strong></p>
+<p>これがMN-MIMOの独自性です。</p>
+<p><strong>従来MIMOの限界</strong></p>
+<p>通常のMIMOは、<strong>1つの筐体に収まる近接アンテナアレイ</strong>を前提とします。アンテナ間距離が波長程度に制限されるため、空間的な自由度にも限界があります。</p>
+<p><strong>MN-MIMOの革新</strong></p>
+<p>MN-MIMOでは、<strong>地理的に分散した複数ノードのアンテナが協調して1つの巨大な仮想アレイ</strong>を形成します。</p>
+<ul>
+<li>ノードA、B、Cがそれぞれ独立に移動</li>
+<li>それぞれが複数アンテナを持つ</li>
+<li>全アンテナが協調送信・協調受信を行う</li>
+</ul>
+<p><strong>数学的効果</strong></p>
+<p>分散配置により、<strong>チャネル行列 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">H</mi></mrow><annotation encoding="application/x-tex">\mathbf{H}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">H</span></span></span></span> のランクが増大</strong>します。チャネル行列のランクが高いほど、独立した空間ストリーム数（自由度）が増えます：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>自由度</mtext><mo>=</mo><mtext>rank</mtext><mo stretchy="false">(</mo><mi mathvariant="bold">H</mi><mo stretchy="false">)</mo><mo>≤</mo><mi>min</mi><mo>⁡</mo><mo stretchy="false">(</mo><msubsup><mi>N</mi><mi>t</mi><mtext>total</mtext></msubsup><mo separator="true">,</mo><msubsup><mi>N</mi><mi>r</mi><mtext>total</mtext></msubsup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{自由度} = \text{rank}(\mathbf{H}) \leq \min(N_t^{\text{total}}, N_r^{\text{total}})
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">自由度</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">rank</span></span><span class="mopen">(</span><span class="mord mathbf">H</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1491em;vertical-align:-0.25em;"></span><span class="mop">min</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-2.453em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">total</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-2.453em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">total</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>例えば、4ノード×各4アンテナ＝計16アンテナが協調すれば、理論上は16本の独立ストリームが可能です。これは単一筐体MIMOでは実現困難なスケールです。</p>
+<p><strong>メカニズム④：MANETメッシュによる「経路並列化」</strong></p>
+<p>MANET（Mobile Ad Hoc Network）の特性がスループットに寄与します。</p>
+<p><strong>空間的再利用（Spatial Reuse）</strong></p>
+<p>メッシュ網では、<strong>地理的に離れたノード間では同じ周波数を同時に再利用</strong>できます。</p>
+<ul>
+<li>ノードA→Bの通信と、ノードC→Dの通信が同時に行われても、互いに十分離れていれば干渉は小さい</li>
+<li>これにより、<strong>ネットワーク全体の総スループット</strong>がノード数に応じてスケールします</li>
+</ul>
+<p><strong>マルチホップによるSNR改善</strong></p>
+<p>長距離直接通信では、距離の4乗に比例して信号が減衰（自由空間では2乗、実環境では3〜4乗）します：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>P</mi><mi>r</mi></msub><mo>∝</mo><mfrac><msub><mi>P</mi><mi>t</mi></msub><msup><mi>d</mi><mi>n</mi></msup></mfrac><mo separator="true">,</mo><mspace width="1em"/><mi>n</mi><mo>≈</mo><mn>2</mn><mo>∼</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">P_r \propto \frac{P_t}{d^n}, \quad n \approx 2 \sim 4
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.5904em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span></p>
+<p>マルチホップ（A→B→C）にすると、各ホップの距離が短縮され、各リンクのSNRが改善します。高いSNRは高次変調を可能にし、結果として<strong>ホップあたりのスループットが向上</strong>します。</p>
+<h3 id="4-4つのメカニズムの相乗効果">4. 4つのメカニズムの相乗効果</h3>
+<table>
+<thead>
+<tr>
+<th>メカニズム</th>
+<th>並列化の次元</th>
+<th>スループット向上の原理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>空間多重（MIMO）</strong></td>
+<td>空間</td>
+<td>同じ周波数・時間で複数ストリームを並列送信</td>
+</tr>
+<tr>
+<td><strong>COFDM</strong></td>
+<td>周波数</td>
+<td>直交サブキャリアによる高密度周波数利用＋適応変調</td>
+</tr>
+<tr>
+<td><strong>MN-MIMO（分散アレイ）</strong></td>
+<td>空間（大規模）</td>
+<td>複数ノード協調による仮想巨大アレイと自由度増大</td>
+</tr>
+<tr>
+<td><strong>MANETメッシュ</strong></td>
+<td>ネットワーク</td>
+<td>空間再利用＋マルチホップによるSNR改善と経路冗長化</td>
+</tr>
+</tbody>
+</table>
+<p>これらが<strong>同時に</strong>働くことで、SilvusのMN-MIMOは単一技術の和を超えたスループットを達成します。</p>
+<h3 id="5-技術の総括">5. 技術の総括</h3>
+<p>Silvus MN-MIMOの高スループットは、<strong>「空間ストリームの並列化（MIMO）」＋「周波数の高密度利用（COFDM）」＋「分散ノードによる大規模仮想アレイ（MN-MIMO）」＋「メッシュ網による経路並列化（MANET）」</strong> の4つの物理的メカニズムが重ね合わさった結果です。</p>
+<p>一言で表せば：</p>
+<blockquote>
+<p><strong>「同じ周波数帯域で、空間的・経路的多重度を最大限に引き出す」</strong> ことが高スループットの根拠です。</p>
+</blockquote>
+<h2 id="優位性">優位性</h2>
+<p>SilvusのMN-MIMOが他の無線通信技術に対して優位性を持つ点は、<strong>「インフラ非依存」「過酷環境耐性」「空間的スケーラビリティ」の3つの観点</strong>に集約されます。以下、代表的な技術と対比させながら解説します。</p>
+<h3 id="1-一言でいうと">1. 一言でいうと</h3>
+<blockquote>
+<p><strong>Silvus MN-MIMOは、基地局・固定インフラを一切必要とせず、ノードが移動しながら自律的に高帯域メッシュ網を形成し、障害物・干渉・妨害に対しても通信を維持できる。</strong></p>
+</blockquote>
+<h3 id="2-他技術との比較優位性のマトリクス">2. 他技術との比較：優位性のマトリクス</h3>
+<table>
+<thead>
+<tr>
+<th>比較軸</th>
+<th>従来Wi-Fi</th>
+<th>4G/5Gセルラー</th>
+<th>従来MANET</th>
+<th>Silvus MN-MIMO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>インフラ依存</strong></td>
+<td>アクセスポイント必須</td>
+<td>基地局必須</td>
+<td>不要</td>
+<td><strong>不要</strong></td>
+</tr>
+<tr>
+<td><strong>移動中のMIMO</strong></td>
+<td>限定的</td>
+<td>基地局間ハンドオーバーが必要</td>
+<td>非対応</td>
+<td><strong>対応（MN-MIMO）</strong></td>
+</tr>
+<tr>
+<td><strong>NLOS（非視界）耐性</strong></td>
+<td>弱い</td>
+<td>中程度</td>
+<td>中程度</td>
+<td><strong>強い（COFDM＋MIMO）</strong></td>
+</tr>
+<tr>
+<td><strong>耐妨害性/LPI</strong></td>
+<td>弱い</td>
+<td>中程度</td>
+<td>中程度</td>
+<td><strong>強い（波形設計）</strong></td>
+</tr>
+<tr>
+<td><strong>帯域幅</strong></td>
+<td>中程度</td>
+<td>高い</td>
+<td>低〜中程度</td>
+<td><strong>高い</strong></td>
+</tr>
+<tr>
+<td><strong>遅延</strong></td>
+<td>低</td>
+<td>中〜高（コア網経由）</td>
+<td>低</td>
+<td><strong>低（ピアツーピア）</strong></td>
+</tr>
+<tr>
+<td><strong>スケーラビリティ</strong></td>
+<td>APのキャパシティ制限</td>
+<td>基地局のキャパシティ制限</td>
+<td>ノード数増で劣化</td>
+<td><strong>大規模メッシュ対応</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-具体的な優位性5つの柱">3. 具体的な優位性：5つの柱</h3>
+<p><strong>優位性①：インフラゼロでの高帯域通信</strong></p>
+<p><strong>5Gとの対比</strong>：</p>
+<ul>
+<li>5Gは高帯域ですが、<strong>基地局・コア網・バックホール</strong>が必須です。山岳地帯や海上、災害現場では機能しません。</li>
+<li>Silvusは<strong>ノードだけで自立したネットワーク</strong>を形成します。最初の1台があれば、そのノードが他ノードの「基地局代わり」になります。</li>
+</ul>
+<p><strong>Wi-Fiとの対比</strong>：</p>
+<ul>
+<li>Wi-Fiもメッシュ（如くWi-Fi Mesh）は存在しますが、基本的に<strong>固定インフラを前提</strong>とし、移動体の高速メッシュには不向きです。</li>
+</ul>
+<blockquote>
+<p><strong>優位性</strong>：「基地局なしで、5G級の帯域を実現できる」。</p>
+</blockquote>
+<p><strong>優位性②：移動中のノード同士でMIMOを形成する（MN-MIMO）</strong></p>
+<p><strong>従来MIMOとの対比</strong>：</p>
+<ul>
+<li>通常のMIMOは、<strong>送信機と受信機が固定</strong>（または相対速度が低い）ことを前提に設計されています。</li>
+<li>SilvusのMN-MIMOは、<strong>各ノードが高速移動しながらも、複数ノードのアンテナが協調して1つの仮想巨大アレイ</strong>を形成します。</li>
+</ul>
+<p><strong>これが重要な理由</strong>：</p>
+<ul>
+<li>UAV（ドローン）群、車両群、歩兵チームなど、<strong>全員が動いている状況</strong>でも空間多重が機能します。</li>
+<li>従来技術では、移動によるチャネル変化が速すぎてMIMOの利得が得られませんでした。</li>
+</ul>
+<blockquote>
+<p><strong>優位性</strong>：「動いているノード同士でも、空間ストリームの並列化による高スループットを維持できる」。</p>
+</blockquote>
+<p><strong>優位性③：過酷環境でのNLOS（非視界）通信</strong></p>
+<p><strong>物理的メカニズム</strong>：</p>
+<ul>
+<li><strong>COFDM</strong>：反射波・回折波を積極的に利用。直接波が届かなくても、壁や建物の反射経路を合成して復元します。</li>
+<li><strong>MIMO</strong>：複数アンテナによる空間ダイバーシティ。1本の経路が遮断されても、他の経路で補完します。</li>
+</ul>
+<p><strong>従来無線との対比</strong>：</p>
+<ul>
+<li>従来の軍用無線（如くSINCGARS）は狭帯域で堅牢ですが、<strong>データレートが極めて低い</strong>です。</li>
+<li>Silvusは「高帯域でありながらNLOSに強い」という、通常はトレードオフの関係を両立しています。</li>
+</ul>
+<blockquote>
+<p><strong>優位性</strong>：「建物の陰、山の向こう、森の中でも、高画質映像をリアルタイムで送れる」。</p>
+</blockquote>
+<p><strong>優位性④：耐妨害性・LPI/LPD（低確率傍受/低確率検出）</strong></p>
+<p>Silvusの波形は、米陸軍などの研究機関と共同で開発された経緯があり、以下の特性を持ちます <source-chip title="Silvus Technologies" url="https://silvustechnologies.com/why-silvus/research-development/" />：</p>
+<table>
+<thead>
+<tr>
+<th>技術</th>
+<th>効果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>スペクトラム拡散</strong></td>
+<td>信号を広い帯域に拡散し、雑音と区別がつきにくくする</td>
+</tr>
+<tr>
+<td><strong>適応ビームフォーミング</strong></td>
+<td>意図的な干渉方向にNullを向け、通信方向にビームを集中</td>
+</tr>
+<tr>
+<td><strong>周波数ホッピング</strong></td>
+<td>妨害電波を避けて周波数を瞬時に切り替え</td>
+</tr>
+<tr>
+<td><strong>低電力密度送信</strong></td>
+<td>検出されにくい電力レベルで通信</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Wi-Fi/5Gとの対比</strong>：</p>
+<ul>
+<li>民生技術は「妨害に強い」ことを前提に設計されていません。混信があれば単純に速度が落ちます。</li>
+<li>Silvusは<strong>電子戦（EW）環境</strong>を想定した設計です。</li>
+</ul>
+<blockquote>
+<p><strong>優位性</strong>：「妨害や傍受のリスクが高い環境でも、通信の機密性と継続性を確保できる」。</p>
+</blockquote>
+<p><strong>優位性⑤：スケーラビリティと自己修復性</strong></p>
+<p><strong>従来MANETとの対比</strong>：</p>
+<ul>
+<li>従来のMANETプロトコル（如くOLSR、AODV）は、ノード数が増えると<strong>制御オーバーヘッドが爆発的に増加</strong>し、実用的な帯域が確保できなくなります。</li>
+<li>SilvusのMN-MIMOは、ノードの増加が<strong>空間自由度の増加</strong>と<strong>経路多様性の増加</strong>に直結します。</li>
+</ul>
+<p><strong>自己修復メッシュ</strong>：</p>
+<ul>
+<li>ノードが破壊・離脱しても、残りのノードが自動的に経路を再計算します。</li>
+<li>これは<strong>中央司令系統なし</strong>で各ノードが自律的に行います。</li>
+</ul>
+<blockquote>
+<p><strong>優位性</strong>：「ノードを増やせば増やすほど、網が強靭になり、総帯域も向上する」。</p>
+</blockquote>
+<h2 id="総括">総括</h2>
+<p>Silvusの本質は、<strong>「インフラに依存しない過酷環境で、基地局型5Gに匹匹敵する帯域と、軍用無線並みの堅牢性を、移動するノード群で同時に実現する」</strong> ことにあります。</p>
+<p>以下、3つの命題としてその本質をまとめます。</p>
+<h3 id="命題13つの技術の単なる足し算ではなく相乗効果による乗算である">命題1：「3つの技術の単なる足し算」ではなく、「相乗効果による乗算」である</h3>
+<p>SilvusはCOFDM、MIMO、MANETという既存技術を組み合わせていますが、本質的な価値は<strong>単なる組み合わせではなく、それらが互いの弱点を補い合う点</strong>にあります。</p>
+<table>
+<thead>
+<tr>
+<th>技術</th>
+<th>単独の限界</th>
+<th>Silvusでの役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>COFDM</strong></td>
+<td>マルチパス耐性はあるが、単一天線では容量に限界</td>
+<td>MIMOとの組み合わせで「NLOS環境での空間多重」を可能にする</td>
+</tr>
+<tr>
+<td><strong>MIMO</strong></td>
+<td>固定近接アンテナを前提。移動体では性能が落ちる</td>
+<td>MN-MIMOにより「分散ノード間の協調MIMO」に拡張</td>
+</tr>
+<tr>
+<td><strong>MANET</strong></td>
+<td>ノード増加で制御オーバーヘッドが爆発</td>
+<td>MIMOの空間再利用により、ノード増加が「帯域増加」に直結</td>
+</tr>
+</tbody>
+</table>
+<p>つまり、Silvusの本質は <strong>「COFDMがMIMOをNLOSで使えるようにし、MIMOがMANETをスケーラブルにし、MANETがMIMOを大規模分散化する」</strong> という、3技術の<strong>相乗的融合</strong>にあります。</p>
+<h3 id="命題2インフラなしでインフラありの性能を出すという逆説的な設計思想">命題2：「インフラなしで、インフラありの性能を出す」という逆説的な設計思想</h3>
+<p>通常の無線通信は、性能を上げるほどインフラ（基地局・コア網・固定回線）に依存します。Silvusはこの常識を覆しています。</p>
+<pre><code>従来の技術のトレードオフ：
+高性能 ←────────────────→ インフラ非依存
+   5G/LTE                      旧式軍用無線
+   Wi-Fi                       従来MANET
+
+Silvusの位置：
+高性能 ←────── 両立 ──────→ インフラ非依存
+         （MN-MIMO + MANET）
+</code></pre>
+<p><strong>本質的な逆説</strong>：「基地局がないから性能が落ちる」のではなく、「ノード同士が協調すれば、むしろ基地局なしで高帯域が出せる」という設計思想です。これは分散アンテナアレイによる空間自由度の増大と、メッシュ経路の並列化によって実現されます。</p>
+<h3 id="命題3過酷環境でこそ真価を発揮するという用途特化">命題3：「過酷環境でこそ真価を発揮する」という用途特化</h3>
+<p>Silvusの本質は、<strong>「一般的に使いやすい無線」を目指していない</strong>点にもあります。</p>
+<table>
+<thead>
+<tr>
+<th>民生技術（Wi-Fi/5G）</th>
+<th>Silvus MN-MIMO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>整備された環境を前提</td>
+<td>整備されていない環境を想定</td>
+</tr>
+<tr>
+<td>基地局・インフラがあれば機能</td>
+<td>基地局がなくても機能</td>
+</tr>
+<tr>
+<td>障害物があると性能が落ちる</td>
+<td>障害物（反射体）を利用して性能を出す</td>
+</tr>
+<tr>
+<td>妨害があれば速度が落ちる</td>
+<td>妨害を波形設計で相殺する</td>
+</tr>
+</tbody>
+</table>
+<p>Silvusは <strong>「最悪の条件下で最低限の性能を保証する」</strong> のではなく、<strong>「最悪の条件下で最高の性能を引き出す」</strong> ことを目指した、極めて特化した無線技術です。</p>
+<h3 id="一言でまとめると">一言でまとめると</h3>
+<blockquote>
+<p><strong>Silvus（MN-MIMO）は、「基地局不要・移動体対応・過酷環境耐性」という3つの制約条件下で、空間・周波数・ネットワークの3次元並列化により、インフラ依存型通信と同等以上の帯域を実現する、産業・防衛特化の分散MIMOメッシュ無線技術である。</strong></p>
+</blockquote>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/3uTYZjJPP0I?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+        </body>
+        </html>

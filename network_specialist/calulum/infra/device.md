@@ -11,3 +11,63 @@
 リンクアグリゲーションは、主にネットワークスイッチ間やサーバ間で使用され、LAN環境において一般的な技術です。
 IEEE 802.3ad規格に基づき、LACP（Link Aggregation Control Protocol）というプロトコルを使用して制御されます。
 
+
+
+
+IEEE 802.11i-2004は、**無線LAN（Wi-Fi）のセキュリティ強化を定めたIEEE規格**です。2004年6月に承認され、従来の脆弱なWEP（Wired Equivalent Privacy）を正式に廃止し、後継として**WPA2（Wi-Fi Protected Access 2）**としてWi-Fi Allianceから実装されています。<source-chip title="Wikipedia" url="https://en.wikipedia.org/wiki/IEEE_802.11i" />
+
+---
+
+### 主な特徴
+
+| 項目 | 内容 |
+|------|------|
+| **正式名称** | IEEE Std 802.11i-2004: MAC Security Enhancements |
+| **目的** | 無線LANの認証と暗号化の強化 |
+| **前身の問題** | WEPの暗号化キー脆弱性、ICV（整合性チェック）の不備 |
+| **新しい概念** | RSN（Robust Security Network：頑強なセキュリティネットワーク） |
+
+---
+
+### 導入された主要技術
+
+**1. AES-CCMP（Counter Mode with Cipher Block Chaining Message Authentication Code Protocol）**
+- 暗号化アルゴリズムとして**AES（Advanced Encryption Standard）**を採用
+- WEPやWPA（TKIP）に代わる標準的な暗号化方式
+- 機密性と完全性の両方を同時に保証
+
+**2. TKIP（Temporal Key Integrity Protocol）**
+- WPA時代から引き継がれた移行用プロトコル
+- 802.11iでは、WEPからの移行期間用として位置づけられ、AES-CCMPが推奨される
+
+**3. 802.1X認証の統合**
+- EAP（Extensible Authentication Protocol）を用いた企業レベルの認証
+- RADIUSサーバーとの連携によるユーザー認証
+
+**4. 4-Way Handshake**
+- APとクライアント間で暗号化キーを安全に交換するためのプロトコル
+- セッションごとに一意なキーを生成
+
+---
+
+### WEP / WPA / WPA2（802.11i）の比較
+
+| 項目 | WEP | WPA | WPA2（802.11i） |
+|------|-----|-----|----------------|
+| **暗号化** | RC4 | RC4（TKIP） | AES（CCMP） |
+| **キー長** | 40/104 bit | 128 bit | 128 bit |
+| **完全性チェック** | ICV（脆弱） | MIC（TKIP） | CBC-MAC（CCMP） |
+| **認証** | 共有キー | 802.1X/PSK | 802.1X/PSK |
+| **安全性** | 低（解読容易） | 中（移行用） | 高（現在の標準） |
+
+---
+
+### 現在の位置づけ
+
+802.11iは、現在の無線LANセキュリティの基盤となっており、ほぼすべての現代Wi-Fi機器で**WPA2-AES**として標準サポートされています。その後、WPA3（802.11ax時代のセキュリティ強化）が登場しましたが、802.11iが確立した基本構造（AES-CCMP、4-Way Handshake、802.1X認証）は現在も引き継がれています。
+
+---
+
+### まとめ
+
+802.11iは、**「WEPの失敗を教訓に、無線LANに企業レベルのセキュリティをもたらした規格」**です。AES暗号化と強固なキー管理を導入することで、無線通信の機密性と完全性を実質的に保証できるようになり、今日のWi-Fiセキュリティの基盤となりました。

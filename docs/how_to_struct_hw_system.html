@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x958b;&#x767a;&#x9806;&#x5e8f;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>ハードウェアシステムを構築する場合、どういう手順で構築すると、通信や機器の選定で失敗がないかについて、やはり事前に知っておきたいと思います。
+何度かしていると自然とシステム構築の順序は、こう、というのが分かってきますが、系統だって整理されていると、初めての方にとっては有用な情報源になると思いました。</p>
+<p>本日テーマ：</p>
+<blockquote>
+<p>ハードウェアを用いたシステムの開発手順で、これが成功率高いと思われる順序について説明していきます。</p>
+</blockquote>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="開発順序">開発順序</h2>
+<p>今回制作対象は、電子制御を用いたシステムが前提とします。
+そうなる場合コアとなるハードウェア＝マイコンとします。
+マイコンを用いたハードウェアシステム開発を成功させるための推奨開発順序を説明していきます。</p>
+<h3 id="成功しやすい開発順序">成功しやすい開発順序</h3>
+<p><strong>フェーズ1: 要件定義・仕様化（Ideation &amp; Specification）</strong></p>
+<p>最初に「何を作るか」を明確にすることが最も重要です。</p>
+<ul>
+<li><strong>機能要件</strong>: システムが何をするか</li>
+<li><strong>非機能要件</strong>: 消費電力、コスト、サイズ、動作温度、リアルタイム性</li>
+<li><strong>入出力要件</strong>: センサー、通信インターフェース、アクチュエータ</li>
+<li><strong>制約条件</strong>: 認証（UL、CE など）、納期、予算</li>
+</ul>
+<p>この段段階で曖昧なまま進めると、後の設計変更コストが指数関数的に増大します。</p>
+<p><strong>フェーズ2: アーキテクチャ設計（System Architecture）</strong></p>
+<p>ハードウェアとソフトウェアの境界を決定します。</p>
+<ul>
+<li>マイコンの選定方針（8bit vs 32bit、ARM vs RISC-V）</li>
+<li>ソフトウェア構成（OSあり/なし、RTOSの要否）</li>
+<li>通信プロトコルの選定（UART、SPI、I2C、CAN、Ethernet など）</li>
+<li>電源設計方針</li>
+</ul>
+<p><strong>フェーズ3: 部品選定・回路設計（Component Selection &amp; Hardware Design）</strong></p>
+<ul>
+<li><strong>マイコン選定</strong>: 必要なGPIO数、メモリ容量、消費電力、周辺機能</li>
+<li><strong>センサー・アクチュエータ選定</strong></li>
+<li><strong>回路図作成・基板設計</strong></li>
+<li><strong>BOM（部品表）の作成</strong>: 調達リスクやコストを考慮</li>
+</ul>
+<p><strong>フェーズ4: テスト計画の作成（Test Plan）</strong></p>
+<p>実装より前に「どうやって正しいかを確認するか」を決めます。</p>
+<ul>
+<li>ハードウェア単体テスト（電源電圧、信号品質）</li>
+<li>ソフトウェア単体テスト</li>
+<li>統合テスト</li>
+<li>環境テスト（温度、湿度、ノイズ）</li>
+</ul>
+<p><strong>フェーズ5: プロトタイピング（Proof of Concept / Prototype）</strong></p>
+<ul>
+<li><strong>評価ボードでの先行検証</strong>: 実際のマイコン評価ボードを使い、アルゴリズムや通信の検証を先行させる</li>
+<li><strong>プロトタイプ基板の製作</strong>: 初版基板の製造</li>
+<li><strong>ソフトウェアの並行開発</strong>: ハードウェアが完成する前に、シミュレータや評価ボードでソフトウェア開発を進める</li>
+</ul>
+<p><strong>フェーズ6: ハードウェア・ソフトウェア統合（Integration）</strong></p>
+<ul>
+<li>プロトタイプ基板へのソフトウェア書き込み</li>
+<li>デバッグ（JTAG、SWD、シリアルログ）</li>
+<li>タイミング解析・電力測定</li>
+</ul>
+<p><strong>フェーズ7: 検証・実証試験（Verification &amp; Validation）</strong></p>
+<ul>
+<li><strong>ベンチテスト</strong>: 管理された環境での動作確認</li>
+<li><strong>現地試験（Field Trial）</strong>: 実際の使用環境での評価</li>
+<li><strong>ストレステスト</strong>: 長時間運転、極端な条件での試験</li>
+</ul>
+<h3 id="成功のための重要なポイント">成功のための重要なポイント</h3>
+<table>
+<thead>
+<tr>
+<th>ポイント</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ハードウェア先行、ソフトウェア並行</strong></td>
+<td>評価ボードを使ってソフトウェア開発を先行させ、基板完成後に統合する</td>
+</tr>
+<tr>
+<td><strong>Fail Fast</strong></td>
+<td>早期にプロトタイプを作り、問題を早期発見する</td>
+</tr>
+<tr>
+<td><strong>テストを最初に設計</strong></td>
+<td>実装後にテストを考えると手戻りが増える</td>
+</tr>
+<tr>
+<td><strong>バージョン管理</strong></td>
+<td>ハードウェアのリビジョンとソフトウェアのバージョンを厳密に管理</td>
+</tr>
+<tr>
+<td><strong>ドキュメントを同期</strong></td>
+<td>設計変更があれば即座にドキュメントを更新</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ハードウェア設計">ハードウェア設計</h2>
+<p>マイコンシステム開発において、<strong>フェーズ2（アーキテクチャ設計）<strong>と</strong>フェーズ3（部品選定・回路設計）</strong> は、基板を製造した後に気づいた問題を修正するコストが最も高い段階です。以下に、各フェーズで実際に行うべき作業と、必要な検討事項を高い解像度でまとめました。</p>
+<h3 id="フェーズ2-アーキテクチャ設計system-architecture">フェーズ2: アーキテクチャ設計（System Architecture）</h3>
+<p>このフェーズの目的は、<strong>「システム全体の骨格を決め、後戻りを防ぐ」</strong> ことです。ここでの決定が部品選定、回路設計、ソフトウェア設計のすべてに波及します。</p>
+<p><strong>1. システム要件の分解と具体化</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>ユーザー要件（曖昧な要求）を技術仕様に翻訳する</li>
+<li>ユースケース図・シーケンス図を作成し、システムの動作シナリオを可視化する</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<table>
+<thead>
+<tr>
+<th>検討項目</th>
+<th>具体的な問い</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>処理性能</strong></td>
+<td>制御ループは何μs/ ms周期で回る必要があるか？ DSP処理や浮動小数点演算は必要か？</td>
+</tr>
+<tr>
+<td><strong>リアルタイム性</strong></td>
+<td>割り込み応答時間の上限は？ ミスした場合の影響は？（安全関連か？）</td>
+</tr>
+<tr>
+<td><strong>消費電力</strong></td>
+<td>バッテリー駆動か電源駆動か？ 待機時の消費電流の上限は？</td>
+</tr>
+<tr>
+<td><strong>動作環境</strong></td>
+<td>温度範囲（商用0~70℃、産業用-40~85℃、車載-40~125℃）? 湿度、振動、EMC/ノイズ環境は？</td>
+</tr>
+<tr>
+<td><strong>サイズ制約</strong></td>
+<td>搭載スペースの物理的制限は？ 基板の層数に制約はあるか？</td>
+</tr>
+<tr>
+<td><strong>コスト目標</strong></td>
+<td>目標BOMコストは？ 量産時のスケールは？（100台、1万台、100万台で選定が変わる）</td>
+</tr>
+<tr>
+<td><strong>セキュリティ</strong></td>
+<td>通信の暗号化が必要か？ ファームウェアの読み出し保護は必要か？</td>
+</tr>
+<tr>
+<td><strong>認証要件</strong></td>
+<td>業界規格（IEC 62368、ISO 26262、IEC 61508 など）の適用は？</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. ハードウェアとソフトウェアの境界（HW/SW Partitioning）</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>各機能を「ハードウェアで実装するか」「ソフトウェアで実装するか」「外部ICに任せるか」を決定する</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<ul>
+<li><strong>信号処理</strong>: アナログフィルタ vs デジタルフィルタ（アンチエイリアシングはハードウェア必須）</li>
+<li><strong>通信プロトコル</strong>: ソフトウェアビットバンギング vs 専用ハードウェアペリフェラル（後者が推奨）</li>
+<li><strong>電源シーケンス</strong>: ディスクリート回路 vs 電源管理IC（PMIC） vs ソフトウェア制御</li>
+<li><strong>安全機能</strong>: ウォッチドッグタイマーは独立ICにするか、マイコン内蔵で十分か</li>
+<li><strong>トレードオフ</strong>: ハードウェア化はコスト増・柔軟性低下、ソフトウェア化は処理負荷増・消費電力増</li>
+</ul>
+<p><strong>3. マイコン選定方針の検討</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>マイコンのアーキテクチャレベルでの方針決定</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>検討内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ビット幅</strong></td>
+<td>8bit（単純制御、低コスト）、32bit（複雑処理、通信スタック）</td>
+</tr>
+<tr>
+<td><strong>コアアーキテクチャ</strong></td>
+<td>ARM Cortex-M（エコシステム豊富）、RISC-V（ライセンスフリー、新興）、独自コア（調達安定性）</td>
+</tr>
+<tr>
+<td><strong>メモリ構成</strong></td>
+<td>Flash容量（コードサイズ見積もり）、RAM容量（スタック、ヒープ、バッファ）、EEPROM要否</td>
+</tr>
+<tr>
+<td><strong>周辺機能</strong></td>
+<td>必要なUART/SPI/I2C/CAN/ADC/DAC/PWM/タイマーのチャンネル数と性能</td>
+</tr>
+<tr>
+<td><strong>消費電力</strong></td>
+<td>稼働時電流、スリープ時電流、起動時間（スリープ戦略との両立）</td>
+</tr>
+<tr>
+<td><strong>パッケージ</strong></td>
+<td>QFN（小型）、LQFP（実装容易）、BGA（高密度・検査困難）</td>
+</tr>
+<tr>
+<td><strong>開発環境</strong></td>
+<td>IDE（Keil、IAR、VS Code+gcc）、デバッガ（J-Link、ST-Link）、SDK品質</td>
+</tr>
+<tr>
+<td><strong>供給安定性</strong></td>
+<td>メーカーの供給体制、複数ソースの有無、長期供給保証</td>
+</tr>
+</tbody>
+</table>
+<p><strong>4. ソフトウェア構成の検討</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>ソフトウェアの全体構成（OS/RTOS、ミドルウェア、アプリケーション層）を決定</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<ul>
+<li><strong>OS/RTOSの要否</strong>: 単純な前処理なら裸（Bare-metal）で十分。複数タスク並行や通信スタックが必要ならFreeRTOS/Zephyr/ThreadX等</li>
+<li><strong>通信スタック</strong>: TCP/IPスタック（lwIP等）、CANopen、Modbus、Bluetooth LEスタック等のメモリ占有量</li>
+<li><strong>ファイルシステム</strong>: SDカードや外部Flash使用時のFAT/exFAT等の要否</li>
+<li><strong>OTAアップデート</strong>: 将来のファームウェア更新を見越したブートローダー構成（A/Bパーティション等）</li>
+<li><strong>フレームワーク</strong>: Arduino（プロトタイピング向け）、HAL（メーカー提供）、レジスタ直書き（性能重視）</li>
+</ul>
+<p><strong>5. 通信プロトコルと電源設計方針</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>システム内・システム外の通信方式と電源構成を決定</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<ul>
+<li><strong>内部通信</strong>: センサーとのI2C（配線少、低速）、SPI（高速、配線多）、ADC（アナログ）</li>
+<li><strong>外部通信</strong>: UART+外部トランシーバ（RS-485/CAN）、USB（デバイス/ホスト）、Ethernet（TCP/IP）、無線（Wi-Fi/BLE/LoRa/Zigbee）</li>
+<li><strong>電源入力</strong>: ACアダプタ、USB、PoE、バッテリー、エネルギーハーベスティング</li>
+<li><strong>電圧レール</strong>: システム内に必要な電圧（5V、3.3V、1.8V、負電圧等）と電流容量</li>
+<li><strong>電源シーケンス</strong>: マイコンと周辺ICの起動順序に制約はあるか（FPGA等と接続する場合重要）</li>
+<li><strong>ノイズ対策</strong>: スイッチングレギュレータ vs LDO（低ノイズ）、電源分離（アナログ/デジタル）</li>
+</ul>
+<h3 id="フェーズ3-部品選定回路設計component-selection--hardware-design">フェーズ3: 部品選定・回路設計（Component Selection &amp; Hardware Design）</h3>
+<p>このフェーズの目的は、<strong>「アーキテクチャで決めた方針を具体的な部品と回路で実現し、基板製造後の手戻りをゼロに近づける」</strong> ことです。</p>
+<p><strong>1. マイコンの確定選定</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>複数メーカーの候補を比較し、具体的な型番を決定する</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ピン配置（Pinout）</strong></td>
+<td>必要な周辺機能が物理的に同時使用可能か？ ピン多重化の制約を確認</td>
+</tr>
+<tr>
+<td><strong>クロック構成</strong></td>
+<td>外部水晶発振器が必要か、内蔵オシレータで十分か？ 精度要件（USBは±0.25%等）</td>
+</tr>
+<tr>
+<td><strong>プログラミング方式</strong></td>
+<td>SWD/JTAGピンの確保、ブートモード切り替えピンの確保</td>
+</tr>
+<tr>
+<td><strong>デバッグ機能</strong></td>
+<td>トレース（SWO/ETM）ピンを確保するか、UARTログで十分か</td>
+</tr>
+<tr>
+<td><strong>リセット回路</strong></td>
+<td>電圧監視IC（SV）の閾値、リセット遅延時間、手動リセットスイッチ</td>
+</tr>
+<tr>
+<td><strong>調達情報</strong></td>
+<td>在庫状況、納期、価格、代理店の対応、代替品の有無</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. センサー・アクチュエータの選定</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>システムの入出力に関わる部品を選定し、マイコンとのインターフェースを設計する</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<ul>
+<li><strong>電気的仕様の整合性</strong>: センサーの電源電圧（5V/3.3V/1.8V）とマイコンのI/O電圧が一致するか？ レベルシフトが必要か？</li>
+<li><strong>信号帯域</strong>: センサーの出力帯域に対し、ADCのサンプリングレートは十分か？（ナイキスト定理の確認）</li>
+<li><strong>駆動能力</strong>: アクチュエータ（モーター、リレー等）の駆動電流をマイコンIOやトランジスタ/MOSFETで賄えるか？</li>
+<li><strong>保護回路</strong>: ESD保護、過電流保護、逆接続保護が必要か？</li>
+<li><strong>キャリブレーション</strong>: センサーの個体差や温度ドリフトを補正する仕組みは必要か？</li>
+<li><strong>インターフェース互換</strong>: I2Cデバイスのプルアップ抵抗値（1k~10k）、SPIのCPOL/CPHAモード確認</li>
+</ul>
+<p><strong>3. 周辺回路・インターフェース回路の設計</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>マイコンと外部部品を接続するための各種回路を設計する</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<ul>
+<li><strong>退避回路（バックアップ電源）</strong>: RTCやバックアップレジスタ用のコイン電池回路</li>
+<li><strong>クロック回路</strong>: 水晶発振子の負荷容量計算（クリスタルメーカーの推奨値）、発振開始時間の確認</li>
+<li><strong>プログラミングコネクタ</strong>: 製造時の書き込みを考慮したテストポイント/コネクタの配置</li>
+<li><strong>LED/表示</strong>: 電源・状態表示LEDの電流制限抵抗計算</li>
+<li><strong>ボタン/入力</strong>: チャタリング防止（ハードウェアRCフィルタ or ソフトウェア対処）</li>
+</ul>
+<p><strong>4. 回路図作成の注意点</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>回路図をツール（KiCad、Altium Designer、Eagle等）で作成する</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<ul>
+<li><strong>ネットラベルの命名規則</strong>: 一貫性のある命名で可読性を確保（例: <code>UART_TX_MCU</code>, <code>3V3_ANA</code>）</li>
+<li><strong>電源ネットの分離</strong>: アナログ電源（AVCC）とデジタル電源（DVCC）を分離するか？</li>
+<li><strong>デカップリングコンデンサ</strong>: 各電源ピンに適切な容量（100nF + 10μF等）を配置する設計意図を明記</li>
+<li><strong>ノイズ対策</strong>: フェライトビーズによる電源フィルタリング、TVSダイオードによる過電圧保護</li>
+<li><strong>レビュー工程</strong>: 設計レビュー（Peer Review）を実施し、少なくとも2人の目で確認する</li>
+</ul>
+<p><strong>5. 基板設計（レイアウト）の検討</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>回路図を基に基板の物理的レイアウトを設計する</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>層数</strong></td>
+<td>2層（安価、配線制約あり）vs 4層（電源/グランド層あり、ノイズ対策容易）</td>
+</tr>
+<tr>
+<td><strong>部品配置</strong></td>
+<td>コネクタは基板端、重い部品は基板中央、発熱部品の配置考慮</td>
+</tr>
+<tr>
+<td><strong>電源配線</strong></td>
+<td>電源層を使うか、太い配線でスター結線するか。電圧降下と発熱の計算</td>
+</tr>
+<tr>
+<td><strong>グランド設計</strong></td>
+<td>アナロググランドとデジタルグランドの分離/結合ポイントの設計</td>
+</tr>
+<tr>
+<td><strong>クロック線</strong></td>
+<td>水晶発振子回路をマイコンに近接、クロック線のストリップライン化</td>
+</tr>
+<tr>
+<td><strong>シグナルインテグリティ</strong></td>
+<td>高速信号（USB/Ethernet）のインピーダンス整合、差動ペアの長さ合わせ</td>
+</tr>
+<tr>
+<td><strong>熱設計</strong></td>
+<td>レギュレータやパワーICの放熱（ヒートシンク、銅箔面積、ビアによる熱伝導）</td>
+</tr>
+<tr>
+<td><strong>製造性（DFM）</strong></td>
+<td>部品間のクリアランス、リフロー実装を考慮した部品方向、テストパッドの配置</td>
+</tr>
+<tr>
+<td><strong>実装性（DFA）</strong></td>
+<td>手実装部品を減らす、両面実装の回避（コスト削減）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. BOM作成と調達戦略</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>すべての部品をリストアップし、調達可能性とコストを確認する</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<ul>
+<li><strong>部品のライフサイクル</strong>: EOL（End of Life）予定の部品を避ける、NRND（Not Recommended for New Design）の確認</li>
+<li><strong>複数ソース</strong>: 重要部品（マイコン、レギュレータ等）はピン互換の代替品を確保する</li>
+<li><strong>在庫・納期</strong>: 半導体不足等を考慮し、長納期部品を早期発注する</li>
+<li><strong>コスト見積もり</strong>: 量産時の価格交渉余地、代理店のサポート体制</li>
+<li><strong>部品の統一</strong>: 抵抗・コンデンサの値を統一し、実装時の誤挿入を防ぐ（例: 100nFデカップリングは全所共通）</li>
+<li><strong>パッケージ統一</strong>: 同じ容量でも0402/0603/0805等のパッケージを統一し、実装工程を簡略化</li>
+</ul>
+<p><strong>7. コスト・納期・品質のトレードオフ管理</strong></p>
+<p><strong>やること:</strong></p>
+<ul>
+<li>プロジェクト制約内で最適なバランスを取る</li>
+</ul>
+<p><strong>検討が必要な事項:</strong></p>
+<ul>
+<li><strong>コスト削減</strong>: 部品の統一、基板層数の削減、部品実装面の削減 vs 性能・信頼性の維持</li>
+<li><strong>納期短縮</strong>: 既存評価ボードの回路を流用、モジュール（Wi-Fiモジュール等）の使用 vs コスト増</li>
+<li><strong>品質確保</strong>: 部品の温度グレード、メーカーの品質実績、AEC-Q200（車載用）等の認証</li>
+</ul>
+<h3 id="後戻りを防ぐための実践的チェックリスト">後戻りを防ぐための実践的チェックリスト</h3>
+<p>基板製造前に必ず確認すべき項目をまとめてみました。</p>
+<p><strong>回路図レビュー時のチェック項目</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> マイコンの全電源ピンにデカップリングコンデンサがあるか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> リセットピンにプルアップ/プルダウンが適切に入っているか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> プログラミングピンが他の機能と競合していないか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> ADC入力にアナログ電源電圧を超える電圧が入らない保護があるか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> 電源入力に逆接続保護ダイオードまたはMOSFETがあるか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> 発振器回路の負荷容量が計算値と一致しているか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> 全てのICの未使用ピンが適切に処理されているか</li>
+</ul>
+<p><strong>基板設計レビュー時のチェック項目</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> 電源層/グランド層にスリットがなく、電流経路が確保されているか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> 水晶発振子とマイコンの距離が10mm以内か</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> 発熱部品から熱敏感部品（センサー等）が離れているか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> コネクタの向きが実機のケース・配線と整合するか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> マウントホールの位置とサイズがケースと合うか</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> シルク印刷の部品番号が実装後も読める位置にあるか</li>
+</ul>
+<h3 id="まとめ">まとめ</h3>
+<p><strong>フェーズ2</strong>では「<strong>何を使ってどう動かすか</strong>」の方針を決め、<strong>フェーズ3</strong>では「<strong>具体的にどの部品をどう配線するか</strong>」を決定します。特に以下の3点を徹底することで、後戻りを最小限に抑えられます。</p>
+<ol>
+<li><strong>評価ボードで先行検証</strong>: マイコンやセンサーの評価ボードを使い、回路図作成前に動作確認を行う</li>
+<li><strong>ピン配置の事前検証</strong>: マイコンのピン多重化機能をデータシートで完全に確認し、必要な周辺機能が同時に使えるか検証する</li>
+<li><strong>設計レビューの徹底</strong>: 回路図・基板設計の段階で、少なくとも1回の正式な設計レビューを実施する</li>
+</ol>
+<p>これらのフェーズで時間をかけて丁寧に検討することは、基板のリスピン（再製造）や部品の全面的な選定し直しという大きな手戻りを防ぐための最も効果的な投資です。</p>
+<p><img src="file:///d:\PycharmProjects\security_specialist\network_tech\docs\image\how_to_struct_hw_system\1789264952943.png" alt="1789264952943"></p>
+<h2 id="失敗しやすい点">失敗しやすい点</h2>
+<p>マイコンを用いたハードウェアシステム開発において、<strong>基板製造後や量産移行時に手戻りが発生しやすいポイント</strong>を、原因・症状・影響・対策のセットで整理いたしました。これらは実際の開発現場で繰り返し発生する典型的な失敗パターンです。</p>
+<h3 id="1-マイコン選定ピン配置関連">1. マイコン選定・ピン配置関連</h3>
+<p><strong>1-1. ピン多重化（Pin Multiplexing）の見落とし</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+マイコンは1つの物理ピンに複数の機能（UART_TX、SPI_SCK、GPIO、ADC_IN等）が割り当てられていますが、<strong>「機能Aと機能Bを同時に使える」という前提で設計し、実際には排他だった</strong>というケースが頻発します。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>基板製造後、特定のUARTが動作しない</li>
+<li>ADCとSPIが同時に使えないことが判明する</li>
+<li>ソフトウェアでどう工夫しても必要な周辺機能を全て有効化できない</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>**基板のリスピン（全面設計し直し）**が必要になる</li>
+<li>代替ピンを使う場合、配線が基板内を横断し、信号品質が悪化する</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>データシートの「Pinout」章と「Peripheral Multiplexing」表を<strong>一字一句確認</strong>する</li>
+<li>メーカーが提供する「Pinout Diagram」や「Excelピン配置ツール」を使用し、衝突チェックを行う</li>
+<li>評価ボードで<strong>全周辺機能を同時に有効化するテストコード</strong>を書いて動作確認してから回路図を確定させる</li>
+</ul>
+<p><strong>1-2. デバッグピンの確保忘れ</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+小型化やコスト削減のために、SWD/JTAGピンやUARTログ出力ピンを「製品化時には不要」と判断して基板から排除する、あるいは他の機能に割り当ててしまう。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>基板製造後、プログラムが書き込めない</li>
+<li>ハングアップ時にログが取れず、原因特定に数週間かかる</li>
+<li>量産時のファームウェア書き込み工程でトラブルが発生する</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>ブートローダー経由でなんとか書き込む苦肉の策が必要になる</li>
+<li>デバッグ不能でプロジェクトが数週間〜数月遅延する</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>**テストパッド（Test Pad）**として少なくともSWDIO、SWCLK、UART_TX、GNDは必ず基板に残す</li>
+<li>プロダクションコードではデバッグピンを別機能に使わない設計とする</li>
+<li>プログラミング用コネクタ（1.27mmピッチの小さなものでも）を実装する</li>
+</ul>
+<p><strong>1-3. メモリ容量の過小見積もり</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+開発初期では機能が少なくて済むため、Flash/RAMの使用量が少ない。しかし通信スタック、GUI、ログ機能などを追加していくと、後半で容量不足になる。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>コンパイル時に「flash overflow」「ram overflow」エラーが頻発する</li>
+<li>スタックとヒープが衝突し、不定動作（ランダムなハングアップ）が発生する</li>
+<li>最適化レベルを上げることでデバッグが困難になる</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>マイコンの変更（ピン互換のない場合は基板再設計）</li>
+<li>機能の削減（ログ出力の停止、通信プロトコルの簡略化）</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>初期見積もり時に<strong>余裕を2〜3倍</strong>見積もる（Flashは実使用量の1.5〜2倍、RAMは2〜3倍）</li>
+<li>通信スタック（TCP/IP、TLS、Bluetooth）のメモリ使用量を事前に調査する</li>
+<li>開発初期から定期的にメモリマップ（<code>.map</code>ファイル）を確認し、使用量を追跡する</li>
+</ul>
+<h3 id="2-電源設計関連">2. 電源設計関連</h3>
+<p><strong>2-1. 電源容量（電流）の過小見積もり</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+各部品の消費電流を単純に足し算するだけで、<strong>ピーク電流</strong>（通信時のバースト、モーター起動時、Wi-Fi送信時等）を考慮しない。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>Wi-Fi送信時やモーター駆動時にマイコンがリセットする</li>
+<li>電源電圧が一時的に低下し、ブラウンアウトリセットが発生する</li>
+<li>ADCの読み値がノイズに埋もれる</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>電源ICの交換（場合によっては基板のパターン変更）</li>
+<li>大容量コンデンサの追加実装（スペースがない場合困難）</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li><strong>ピーク電流</strong>を考慮して電源レギュレータの電流容量を選定する（平均電流の2〜3倍を目安）</li>
+<li>電源入力に十分な容量のバルクコンデンサ（10μF〜100μF）を配置する</li>
+<li>大電流部品（通信モジュール等）には<strong>独立した電源レール</strong>を設ける</li>
+</ul>
+<p><strong>2-2. デカップリングコンデンサの不備</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+「とりあえず100nFを入れておけばいい」という安易な考えで、配置や容量選定を適当にする。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>マイコンが不定周期でリセットする</li>
+<li>クロックが発振しない、または途中で止まる</li>
+<li>ESDやサージ試験で動作が不安定になる</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>ノイズ対策のための基板修正（カットジャンパー配線やコンデンサの追加実装）</li>
+<li>EMC試験の不合格と再試験コスト</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>マイコンの<strong>全ての電源ピン</strong>に、できるだけピン近くに100nFのデカップリングコンデンサを配置する</li>
+<li>データシートに推奨値が記載されている場合は必ず従う</li>
+<li>電源入力部には大容量（10μF以上）と小容量（100nF）を並列に配置し、広い周波数帯域をカバーする</li>
+</ul>
+<p><strong>2-3. 電源シーケンスの無視</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+マイコン、FPGA、周辺ICが複数の電源電圧（3.3V、1.8V、1.2V等）を必要とする場合、<strong>起動順序</strong>に制約があることを知らずに設計する。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>電源投入時にラッチアップ（過電流）が発生する</li>
+<li>特定の電源レールだけ先に立ち上がることで、ICの入力ピンに規格外の電圧が印加される</li>
+<li>起動時の確率的不安定動作</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>ICの破損（物理的な破壊）</li>
+<li>電源シーケンスICの追加実装による基板修正</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>複数電源を持つICのデータシートの「Power Supply Sequencing」章を必ず確認する</li>
+<li>電源シーケンスIC（TPS7xx等）またはリセットICを使用して順序を制御する</li>
+<li>電源レール間にダイオードを挿入し、逆電圧印加を防ぐ</li>
+</ul>
+<h3 id="3-通信信号品質関連">3. 通信・信号品質関連</h3>
+<p><strong>3-1. 通信プロトコルの電圧レベル不一致</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+「3.3V系」で統一しているつもりが、特定のセンサーやモジュールが5Vトレラントでない、あるいは1.8V I/Oだったことに気づかない。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>通信エラー（CRCエラー、フレーミングエラー）が頻発する</li>
+<li>マイコンまたは周辺ICのGPIOが破損する</li>
+<li>温度変化で通信が不安定になる</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>レベルシフトICの追加実装（基板スペースが必要）</li>
+<li>ICの交換（破損時）</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>全てのICの「Absolute Maximum Ratings」と「Electrical Characteristics」を確認し、I/O電圧レベルを統一する</li>
+<li>異なる電圧レベル間を接続する場合は、<strong>双方向レベルシフトIC</strong>（TXS0108等）を設計段階で入れる</li>
+<li>I2Cの場合、プルアップ電圧を確認する（3.3V系に5Vプルアップを接続すると破損する）</li>
+</ul>
+<p><strong>3-2. 通信バスの終端・プルアップの欠如</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+I2Cのプルアップ抵抗やCAN/RS-485の終端抵抗が「当たり前」として見落とされる。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>I2CでACKが返ってこない、通信が途中で止まる</li>
+<li>CAN/RS-485で特定のノードだけ通信できない</li>
+<li>信号の立ち上がりが遅く、通信速度を上げられない</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>抵抗の追加実装（テストパッドがあれば対応可能）</li>
+<li>通信速度を下げる妥協（性能低下）</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>I2Cは<strong>必ずプルアップ抵抗</strong>（1kΩ〜10kΩ、配線長と容量に応じて計算）を入れる</li>
+<li>CAN/RS-485はバス両端に<strong>終端抵抗</strong>（120Ω）を入れる</li>
+<li>長配線の場合、信号反射を考慮したインピーダンス整合を設計する</li>
+</ul>
+<p><strong>3-3. SPI/I2Cのモード・ビット順設定ミス</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+センサー毎にSPIのCPOL/CPHAモードやI2Cのスレーブアドレスが異なることを確認せずに設計・実装する。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>センサーからの読み出し値が常に0xFFまたは0x00</li>
+<li>書き込んだレジスタ値が反映されない</li>
+<li>特定のセンサーだけ動作しない</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>ソフトウェアの大幅な修正（タイミング調整やビットバンギングへの切り替え）</li>
+<li>場合によってはセンサーの変更</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>センサーのデータシートでSPIモード（Mode 0〜3）を確認し、マイコンの設定と一致させる</li>
+<li>I2Cスレーブアドレスを回路図に明記する（メーカーによっては複数パターンあり）</li>
+<li>評価ボードで通信を確立してから基板設計を進める</li>
+</ul>
+<h3 id="4-部品選定調達関連">4. 部品選定・調達関連</h3>
+<p><strong>4-1. EOL（生産終了）・NRND部品の選定</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+性能やコストで最適な部品を選んだが、メーカーが生産終了を発表していた、あるいは新規設計非推奨（NRND）だった。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>試作段階では調達できたが、量産時に在庫がない</li>
+<li>代替部品がピン互換でなく、基板の再設計が必要になる</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>量産遅延（数週間〜数ヶ月）</li>
+<li>認証取得済みの製品の基板を変更する場合、再認証が必要になる場合もある</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>メーカーのウェブサイトで部品のステータス（Active/EOL/NRND）を確認する</li>
+<li>長期供給保証（Long-term supply guarantee）がある部品を優先する</li>
+<li>重要部品は<strong>ピン互換の代替品を2〜3社</strong>確保しておく</li>
+</ul>
+<p><strong>4-2. パッケージ・実装方法の確認不足</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+QFNやBGAなどの底部電極パッケージを選定し、実装業者や自社実装設備で対応できないことに後から気づく。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>実装業者から「対応できない」と返却される</li>
+<li>手実装が不可能で修理不能になる</li>
+<li>X線検査設備がないため、BGAのはんだ接合不良を検出できない</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>パッケージの変更（場合によっては機能互換のない別型番に変更が必要）</li>
+<li>実装業者の変更（対応できる業者は単価が高い場合がある）</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>実装方法（リフロー実装、手実装の有無）を設計段階で確認する</li>
+<li>初回はLQFPやSOPなど<strong>実装・検査が容易なパッケージ</strong>を選定する</li>
+<li>QFN/BGAを使う場合は、実装業者の能力と検査設備を事前に確認する</li>
+</ul>
+<p><strong>4-3. 部品の温度グレードの見落とし</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+安価な商用グレード（0〜70℃）の部品を選定したが、実際の使用環境が産業用（-40〜85℃）や車載（-40〜125℃）だった。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>低温環境で発振器が発振しない</li>
+<li>高温環境で電源レギュレータが熱停止する</li>
+<li>温度変化に伴うADCドリフトが仕様を超える</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>全ての部品を産業用/車載グレードに変更（コスト増）</li>
+<li>場合によっては部品の代替えが困難で設計変更が必要</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>使用環境の温度範囲を要件定義で明確にする</li>
+<li>部品選定時に温度グレードを必ず確認し、BOMに明記する</li>
+<li>特に水晶発振器、電解コンデンサ、電源ICは温度特性に注意する</li>
+</ul>
+<h3 id="5-基板レイアウト関連">5. 基板レイアウト関連</h3>
+<p><strong>5-1. 水晶発振器回路の配置ミス</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+水晶発振器をマイコンから遠くに配置したり、デカップリングコンデンサを離して配置したりする。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>発振しない、または発振が不安定（温度変化で停止）</li>
+<li>クロックのジッタが大きく、通信エラーが増える</li>
+<li>USB等のクロック精度を要求する機能が動作しない</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>水晶発振器の変更（別の負荷容量や周波数）</li>
+<li>基板のリスピン</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>水晶発振器と負荷コンデンサは<strong>マイコンのクロックピンに極力近接</strong>させる（10mm以内が理想）</li>
+<li>発振器回路の下にグランド層を配置し、他の信号線を通さない</li>
+<li>負荷容量は <code>CL = (C1 × C2) / (C1 + C2) + Cstray</code> の式で計算し、クリスタルメーカーの推奨値に合わせる</li>
+</ul>
+<p><strong>5-2. グランド設計の不備</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+デジタル回路とアナログ回路のグランドを分離しない、あるいは分離しすぎて電位差が生じる。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>ADCの読み値にデジタルノイズが乗る</li>
+<li>通信エラーの頻発</li>
+<li>ESD試験で動作不良が発生する</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>基板のパターン修正（カットジャンパー）</li>
+<li>シールドケースの追加（コスト増）</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>アナロググランド（AGND）とデジタルグランド（DGND）は<strong>一点接地</strong>（スター結線）にする</li>
+<li>4層基板では、内層にグランドプレーンを全面配置する</li>
+<li>ADCの参照電圧（VREF）ピンには独立したデカップリングを入れる</li>
+</ul>
+<p><strong>5-3. 熱設計の無視</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+電源レギュレータやパワーMOSFETの発熱を計算せず、放熱対策（ヒートシンク、銅箔面積）を設計しない。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>基板が高温になり、部品が熱停止する</li>
+<li>温度上昇に伴い、電源電圧がドリフトする</li>
+<li>長時間運転後に動作不良が発生する</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>放熱板やヒートシンクの追加実装（物理的スペースが必要）</li>
+<li>レギュレータの変更（効率の良いスイッチングレギュレータへの変更等）</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>電源ICの消費電力を <code>P = (VIN - VOUT) × IOUT</code> で計算し、温度上昇を見積もる</li>
+<li>データシートの「Thermal Resistance（θJA）」を用いて、想定電力での温度上昇を計算する</li>
+<li>発熱部品の下に<strong>熱ビア</strong>を配置し、内層グランドへ熱を逃がす</li>
+</ul>
+<h3 id="6-ソフトウェアハードウェア連携関連">6. ソフトウェア・ハードウェア連携関連</h3>
+<p><strong>6-1. ブートローダー・起動構成の設計忘れ</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+「ファームウェアは1回書き込めば済む」と考え、量産時の書き込み方法やOTAアップデートを考慮しない。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>量産時に1台ずつデバッガで書き込む必要があり、工数が膨大になる</li>
+<li>出荷後のバグ修正が不可能になる</li>
+<li>ブートピンのプルアップ/プルダウン設定ミスで起動しない</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>専用の書き込み装置（ポゴピン治具等）の追加製作</li>
+<li>製品の回収と交換（ファームウェア更新不能時）</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>ブートモードピン（BOOT0等）のプル抵抗を適切に設定する</li>
+<li>量産時の書き込み方法（UARTブートローダー、SWD、専用プログラマ）を設計段階で決定する</li>
+<li>OTAアップデートが必要な場合、<strong>デュアルバンク構成</strong>（A/Bパーティション）を設計に入れる</li>
+</ul>
+<p><strong>6-2. ウォッチドッグタイマーの不適切な設計</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+ウォッチドッグタイマー（WDT）を有効にするが、キック（クリア）タイミングの設計を適当にする。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>正常時にもWDTリセットが発生する（キック間隔が短すぎる）</li>
+<li>WDTが機能しない（割り込みハンドラ内でキックしてしまう等）</li>
+<li>無限ループ時にWDTが作動しない</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>ソフトウェアの大幅な見直し</li>
+<li>製品の信頼性低下</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>WDTのキックは<strong>メインループの最上位</strong>で行い、割り込みハンドラ内では絶対に行わない</li>
+<li>キック間隔は、最悪実行時間を考慮して余裕を持って設定する</li>
+<li>リセット原因レジスタを読み出し、WDTリセットかどうかをログに記録する仕組みを作る</li>
+</ul>
+<h3 id="7-テスト検証関連">7. テスト・検証関連</h3>
+<p><strong>7-1. テストポイント・プロービングポイントの不足</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+「デバッグはソフトウェアで済む」と考え、基板上に電圧測定点や信号観測点を設けない。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>電源電圧のリプルやノイズを測定できない</li>
+<li>通信信号の波形をオシロスコープで確認できない</li>
+<li>故障解析時に部品の足元を直接プローブする必要があり、ショートのリスクがある</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>故障解析の遅延（数週間）</li>
+<li>基板の破損（プローブによるショート）</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>重要な信号（電源ライン、クロック、通信線）には<strong>テストパッド</strong>を配置する</li>
+<li>電源ラインには測定用のスルーホールやテストピンを設ける</li>
+<li>基板設計レビューで「テスト容易性」をチェック項目に入れる</li>
+</ul>
+<p><strong>7-2. 実際の使用環境での試験不足</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+室温でのベンチテストだけで合格し、現地環境（温度、湿度、ノイズ、電源品質）での試験を行わない。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>現地設置後、特定の時間帯だけ動作不良が発生する（商用電源のノイズ等）</li>
+<li>夏場や冬場に動作不良が発生する</li>
+<li>特定の機器の近くでだけ通信エラーが増える</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>現地での調査対応（人件費、旅費）</li>
+<li>製品の回収・交換</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li><strong>環境試験</strong>（高温、低温、温度サイクル）を実施する</li>
+<li><strong>電源品質試験</strong>（電圧変動、瞬低、ノイズ重畳）を実施する</li>
+<li><strong>EMC試験</strong>（放射エミッション、静電気、サージ）を事前に検討する</li>
+<li>可能であれば、実際の使用現場で<strong>フィールドトライアル</strong>を行う</li>
+</ul>
+<h3 id="8-製造量産移行関連">8. 製造・量産移行関連</h3>
+<p><strong>8-1. 実装性（DFM: Design for Manufacturing）の無視</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+回路としては正しくても、実装工程での歩留まりを考慮しない設計をする。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>部品間のクリアランスが小さく、実装時にブリッジや立ち上がり不良が発生する</li>
+<li>両面実装が必要になり、実装コストが高騰する</li>
+<li>シルク印刷が部品に隠れて実装確認ができない</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>実装業者からの設計変更要求</li>
+<li>歩留まり低下による単価上昇</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>部品間のクリアランスは実装業者の推奨値（通常0.2mm以上）を確保する</li>
+<li>両面実装は極力避け、片面実装で済む設計を目指す</li>
+<li>シルク印刷の部品番号は、実装後も見える位置に配置する</li>
+</ul>
+<p><strong>8-2. プロトタイプと量産版の差異</strong></p>
+<p><strong>なぜ失敗するか:</strong>
+「プロトタイプで動いたから量産版も同じはず」と、部品の代替えや基板仕様の変更の影響を検証しない。</p>
+<p><strong>症状:</strong></p>
+<ul>
+<li>量産版でだけ特定の不良が発生する</li>
+<li>代替部品の特性差（ESR、動作電圧範囲等）で動作不良になる</li>
+<li>基板材質の変更（FR-4のグレード等）で高周波特性が変化する</li>
+</ul>
+<p><strong>影響:</strong></p>
+<ul>
+<li>量産ラインの停止</li>
+<li>出荷済み製品の回収</li>
+</ul>
+<p><strong>対策:</strong></p>
+<ul>
+<li>部品の変更は<strong>工程変更管理（ECN）</strong> を徹底し、影響範囲を評価する</li>
+<li>量産版の初回ロットは<strong>工程試作（PV: Process Validation）</strong> として、プロトタイプと同等の試験を実施する</li>
+<li>代替部品はデータシートの全項目を比較し、特に温度特性やESR等を確認する</li>
+</ul>
+<h2 id="総括">総括</h2>
+<p>ハードウェアシステム設計の本質は、<strong>「後戻りコストの非対称性を前提とした、不確実性の前倒し管理」</strong> にあります。</p>
+<p>ソフトウェアと異なり、基板が製造された時点で設計変更のコストは数十〜数百倍に跳ね上がります。したがって成功する設計とは、<strong>「正しい順序で、正しい確認を、製造前に終わらせる設計」</strong> です。</p>
+<h3 id="本質的な3原則">本質的な3原則</h3>
+<p><strong>1. アーキテクチャで後戻りを殺す</strong>
+ハードウェア/ソフトウェアの境界、電源方針、通信プロトコル、マイコンの選定方針を、部品を選ぶ前に決定します。ここでの曖昧さが、基板リスピンという致命的な手戻りになります。</p>
+<p><strong>2. データシートを設計の憲法とする</strong>
+「動くだろう」ではなく、「ピン多重化表に同時使用可能と書いてあるか」「電源シーケンスの順序は」「水晶の負荷容量は」という事実に基づいて設計します。推測ではなく、メーカーが保証する範囲内だけを信用します。</p>
+<p><strong>3. 評価ボードで先行検証し、基板は統合のためだけに使う</strong>
+未知の部分（新しいマイコン、センサー、通信モジュール）は必ず評価ボードやブレッドボードで先行して動作確認します。プロトタイプ基板は「初めての実験台」ではなく、「検証済み要素の統合台」であるべきです。</p>
+<h3 id="失敗の本質">失敗の本質</h3>
+<p>ほとんどの手戻りは、<strong>「インターフェースの軽視」</strong> から生じます。</p>
+<ul>
+<li><strong>電圧のインターフェース</strong>: 3.3Vと5Vと1.8Vの混在</li>
+<li><strong>論理のインターフェース</strong>: SPIモード、I2Cアドレス、プルアップの有無</li>
+<li><strong>物理のインターフェース</strong>: ピン配置の衝突、デバッグピンの不足</li>
+<li><strong>時間のインターフェース</strong>: 電源シーケンス、クロック精度、起動順序</li>
+</ul>
+<p>これらはすべて「つなげれば動くだろう」という楽観が生む過ちです。</p>
+<h3 id="設計の黄金律">設計の黄金律</h3>
+<blockquote>
+<p><strong>「基板を送る前に、回路図上ですべき不安を排除しているか」</strong></p>
+</blockquote>
+<p>具体的には：</p>
+<ul>
+<li>全周辺機能を評価ボードで同時有効化したか</li>
+<li>電源のピーク電流とデカップリングを確認したか</li>
+<li>プログラミング・デバッグの経路を確保したか</li>
+<li>代替部品と温度グレードを確認したか</li>
+<li>テストポイントを基板に置いたか</li>
+</ul>
+<p>ということでハードウェアシステムの設計について一通り説明した今回でした。
+最後まで読んでいただきありがとうございます。</p>
+
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/3uTYZjJPP0I?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+
+            
+        </body>
+        </html>

@@ -51,3 +51,119 @@ Security Association (SA) は、**「暗号通信を行うためのセットア�
 ルーターはこのSA（契約書）をメモリに保存しておき、パケットが来たら「SPI（契約番号）」を見て、瞬時に暗号化や復号の処理を行います。
 
 **次は、このSAが何らかの理由で切れてしまった時に起こるトラブルや、再接続の仕組み（DPD：Dead Peer Detection）についてお話ししましょうか？**
+
+
+EAPは現在も、**企業ネットワーク・モバイル通信・クラウド環境**などで広く使われています。以下に主な利用場面と、その理由をまとめます。
+
+---
+
+## 現在の主な利用場面
+
+### 1. 企業・学校のWi-Fi認証（WPA2-Enterprise / WPA3-Enterprise）
+
+最も一般的な利用場面です。家庭用Wi-Fiのように「共通のパスワード（PSK）」を使うのではなく、**ユーザーごとに異なる認証情報**で接続します。[Enterprise Wi-Fi Authentication: EAP Methods Guide 2026](https://fleetdm.com/articles/enterprise-wifi-authentication-methods)
+
+- **使われる方式**：[EAP-TLS](https://sageaxe.com/blog/802-1x-eap-tls-certificate-authentication)（証明書）、[PEAP](https://www.purple.ai/en-us/guides/eap-tls-vs-peap-which-authentication-protocol-is-right-for-your-network)（ID/パスワード）、[EAP-TTLS](https://www.ironwifi.com/blogs/best-eap-methods-wifi/) など
+- **WPA3-Enterprise 192-bitモード**では、**EAP-TLSのみが許可**されるようになりました（セキュリティ要件の厳格化）。[What Are the EAP Method Requirements For WPA3-Enterprise?](https://securew2.com/blog/eap-method-requirements-for-wpa3-enterprise)
+
+### 2. 有線LANのポート認証（IEEE 802.1X NAC）
+
+無線だけでなく、**オフィスのLANポート**にケーブルを挿した際の認証にも使われます。認証に失敗した端末はスイッチポートで遮断されるため、不正端末の侵入を防ぎます。[802.1X Network Access Control Enterprise Deployment](https://www.decryptiondigest.com/blog/network-access-control-8021x-deployment)
+
+### 3. VPN接続の認証
+
+リモートワークなどで、社外からVPN（SSL-VPNやIPsec）に接続する際のユーザー認証フレームワークとしても使われます。[Windows におけるネットワーク アクセスの拡張認証プロトコル (EAP)](https://learn.microsoft.com/ja-jp/windows-server/networking/technologies/extensible-authentication-protocol/network-access)
+
+### 4. 5G / モバイルネットワークの認証
+
+比較的新しい利用場面として、**5Gネットワーク**でもEAPが使われています。具体的には [EAP-AKA'](https://www.rfc-editor.org/rfc/rfc9048.html)（Authentication and Key Agreement prime）という方式で、SIM/eSIMを使った端末認証に使用されます。[EAP AKA Prime Explained](https://www.p1sec.com/blog/eap-aka-prime-what-aka-changes-and-why-it-matters-in-mobile-network-security)
+
+また、**Wi-Fiと5Gの統合**（企業Wi-Fiを5Gコアネットワークに接続する場面）でも、EAPを使ったSIMベース認証の研究・運用が進んでいます。[EAP and Seamless Access with SIM Authentication](https://syndicated.wifinowglobal.com/resource/eap-and-seamless-access-with-sim-based-authentication/)
+
+---
+
+## なぜEAPが使われるのか（利用される理由）
+
+| 理由 | 説明 |
+|------|------|
+| **① ユーザー・デバイスごとの個別認証ができる** | 共通パスワード（PSK）ではなく、ユーザーIDや証明書で個別に認証・監査できる。退職者のアカウント無効化も即座に可能。 |
+| **② 多様な認証方式を統一的に扱える** | パスワード、証明書、SIM、指紋など、要件に応じて認証方式を選べる「共通の枠組み」として機能する。 |
+| **③ バックエンド（RADIUS）との連携が標準化されている** | APやスイッチは認証処理を中継するだけで、実際の認証判断を一元管理できる。大規模環境での運用に適している。 |
+| **④ 相互認証が可能** | EAP-TLSなどでは、サーバー側も証明書で認証されるため、「偽AP（Evil Twin）」への接続を防げる。 |
+| **⑤ フィッシング耐性** | EAP-TLSの証明書ベース認証は、ID/パスワードを使わないためフィッシング攻撃に強い。最新のセキュリティ基準（WPA3-Enterprise 192-bit）でも採用されている。 |
+| **⑥ 通信開始前（データリンク層）で認証できる** | IPアドレスの割り当て前に認証を完了できるため、不正端末をネットワークの入口で遮断できる。 |
+
+---
+
+## まとめ
+
+> **EAPは現在、企業Wi-Fi（WPA2/WPA3-Enterprise）、有線LANの802.1X、VPN、さらには5Gモバイル認証まで、幅広く使われています。使われる理由は、「個別認証・相互認証・バックエンド連携・フィッシング耐性」など、セキュリティ要件の高い環境で求められる機能を、統一的なフレームワークとして提供しているからです。**
+
+
+「通常のTCPによる接続」との比較ですが、文脈から判断して**EAPによる認証のやり取り**との違いを説明します。
+
+---
+
+## 結論：動作するレイヤーと目的が根本的に異なる
+
+| 項目 | EAP（認証フレームワーク） | TCP（トランスポート層プロトコル） |
+|------|--------------------------|----------------------------------|
+| **OSI層** | データリンク層（L2） | トランスポート層（L4） |
+| **目的** | **「誰が接続しようとしているか」を確認する** | **「データを確実に届ける」** |
+| **必要な前提** | IPアドレス不要 | IPアドレスが必要（L3の上に乗る） |
+| **やり取りするもの** | Identity、認証方式のネゴシエーション、証明書、パスワード | シーケンス番号、ACK、ウィンドウサイズ、ポート番号 |
+| **接続確立後** | Success/Failureで**認証結果を通知して終了** | アプリケーション間で**継続的なデータ通信**を行う |
+| **ポート番号** | 使わない | 使う（HTTP:80、HTTPS:443など） |
+
+---
+
+## 具体的な違い
+
+### 1. タイミングが異なる：TCPよりも「前」で動作する
+
+通常のTCP接続は、**IPアドレスが割り当てられてから**、アプリケーション（Webブラウザ、メールなど）が通信を始めるために使います。
+
+一方、EAPは**IPアドレスがまだない段階**で動作します。
+
+```
+[端末] → EAP認証（IPなし、L2で動作） → 認証成功 → IP割り当て → TCP接続（L4） → アプリ通信
+   ↑_________________ ここがEAPの管轄 ___________________________↑
+                                                    ↑____ TCPの管轄 ____↑
+```
+
+つまり、**EAPはTCP接続の「入口の警備」で、TCPは「入口を通った後の運搬」**です。
+
+---
+
+### 2. TCPは「通信の信頼性」を、EAPは「接続する権利」を扱う
+
+- **TCP**は、一度接続が許可された後に「データが欠けず、順序通りに届くか」を保証します。再送制御、順序制御、輻輳制御などが主な仕事です。
+- **EAP**は、「この端末・このユーザーに通信を許可するか」を判断します。許可されなければ、TCP接続を始めることすらできません。
+
+---
+
+### 3. EAPは「接続確立」ではなく「認証フレームワーク」
+
+TCPには「3ウェイハンドシェイク（SYN → SYN-ACK → ACK）」という接続確立の手順がありますが、これは**通信路の確保**です。
+
+EAPにはRequest/Response/Success/Failureというメッセージ交換がありますが、これは**認証情報のやり取り**であり、通信路そのものを確保するものではありません。EAPが成功した後、初めてネットワークアクセスが許可されるのです。
+
+---
+
+## もし「ポートフォワーディングされたTCP接続」との比較なら
+
+もし質問が「ポートフォワーディングされた接続」と「通常のTCP接続」の違いという意味でしたら、以下のようになります。
+
+| 項目 | 通常のTCP接続 | ポートフォワーディングされたTCP接続 |
+|------|-------------|----------------------------------|
+| **宛先IP** | 通信相手の実IP | NATのグローバルIP（実際は内部に転送される） |
+| **ポート番号** | 実際のサービスポート | 外部用と内部用で異なる場合がある（8080→80） |
+| **通信相手の認識** | 直接相手と通信している | ルーター/FWを介在して、中継されている |
+| **セキュリティ** | 通常 | NAT越しのため、接続元の制御が必要 |
+
+---
+
+## まとめ
+
+> **EAPとTCPは「全く別のレイヤーで別の目的」を持っています。EAPはデータリンク層で「接続する権利」を確認する認証フレームワークであり、TCPはトランスポート層で「許可された後のデータ通信」を確実に届けるプロトコルです。EAPはTCPよりも前の段階で動作し、IPアドレスすら不要な状態で認証を完了させます。**
+

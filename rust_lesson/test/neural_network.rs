@@ -452,3 +452,93 @@ fn main() {
     }
     println!("テスト報酬: {} ステップ", test_reward);
 }
+
+use ndarray::prelude::*;
+use rand::Rng;
+
+fn sigmoid(x: f64) -> f64 {
+    1.0 / (1.0 + (-x).exp())
+}
+
+fn sigmoid_derivative(x: f64) -> f64 {
+    x * (1.0 - x)
+}
+
+struct NeuralNetwork {
+    weights_input_hidden: Array2<f64>,
+    weights_hidden_output: Array2<f64>,
+    bias_hidden: Array2<f64>,
+    bias_output: Array2<f64>,
+    learning_rate: f64,
+}
+
+impl NeuralNetwork {
+    fn new(input_dim: usize, hidden_dim: usize, output_dim: usize, lr: f64) -> Self {
+        let mut rng = rand::thread_rng();
+
+        let weights_input_hidden = Array2::from_shape_fn((input_dim, hidden_dim), |_| rng.gen_range(-1.0..1.0));
+        let weights_hidden_output = Array2::from_shape_fn((hidden_dim, output_dim), |_| rng.gen_range(-1.0..1.0));
+        let bias_hidden = Array2::from_shape_fn((1, hidden_dim), |_| rng.gen_range(-1.0..1.0));
+        let bias_output = Array2::from_shape_fn((1, output_dim), |_| rng.gen_range(-1.0..1.0));
+
+        Self {
+            weights_input_hidden,
+            weights_hidden_output,
+            bias_hidden,
+            bias_output,
+            learning_rate: lr,
+        }
+    }
+
+    fn feedforward(&self, inputs: &Array2<f64>) -> (Array2<f64>, Array2<f64>) {
+        let hidden_raw = inputs.dot(&self.weights_input_hidden) + &self.bias_hidden;
+        let hidden_out = hidden_raw.mapv(sigmoid);
+
+        let final_raw = hidden_out.dot(&self.weights_hidden_output) + &self.bias_output;
+        let final_out = final_raw.mapv(sigmoid);
+
+        (hidden_out, final_out)
+    }
+
+    fn train(&mut self, inputs: &Array2<f64>, targets: &Array2<f64>) {
+        let (hidden_out, final_out) = self.feedforward(inputs);
+
+        // 出力層の誤差とデルタ
+        let output_errors = targets - &final_out;
+        let output_deltas = output_errors * final_out.mapv(sigmoid_derivative);
+
+        // 隠れ層の誤差とデルタ
+        let hidden_errors = output_deltas.dot(&self.weights_hidden_output.t());
+        let hidden_deltas = hidden_errors * hidden_out.mapv(sigmoid_derivative);
+
+        // 重みとバイアスの更新
+        self.weights_hidden_output += &(hidden_out.t().dot(&output_deltas) * self.learning_rate);
+        self.bias_output += &(output_deltas.sum_axis(Axis(0)).insert_axis(Axis(0)) * self.learning_rate);
+
+        self.weights_input_hidden += &(inputs.t().dot(&hidden_deltas) * self.learning_rate);
+        self.bias_hidden += &(hidden_deltas.sum_axis(Axis(0)).insert_axis(Axis(0)) * self.learning_rate);
+    }
+}
+
+fn main() {
+    let inputs = array![[0.0, 0.0], [0.0, 1.0], [1.0, 0.0], [1.0, 1.0]];
+    let targets = array![[0.0], [1.0], [1.0], [0.0]];
+
+    let mut nn = NeuralNetwork::new(2, 4, 1, 0.5);
+
+    // XOR学習ループ
+    for _ in 0..20000 {
+        nn.train(&inputs, &targets);
+    }
+
+    let (_, outputs) = nn.feedforward(&inputs);
+    println!("--- XOR Prediction Results ---");
+    for i in 0..4 {
+        println!(
+            "[{:.0}, {:.0}] => {:.4}",
+            inputs[[i, 0]],
+            inputs[[i, 1]],
+            outputs[[i, 0]]
+        );
+    }
+}

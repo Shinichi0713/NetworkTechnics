@@ -42,13 +42,16 @@
 
 ### 1. 開発時期の概略
 
+まずは開発経緯についてです。
+
+
 | 年 | 出来事 |
 |----|--------|
-| **2001年6月** | **MEF（Metro Ethernet Forum）** が37社（通信事業者、機器ベンダーなど）によって設立 <source-chip title="Lightwave Online" url="https://www.lightwaveonline.com/network-design/packet-transport/article/16659688/metro-ethernet-forum-created-to-accelerate-adoption-of-optical-ethernet-in-metro-networks" /> |
+| **2001年6月** | **MEF（Metro Ethernet Forum）** が[37社（通信事業者、機器ベンダーなど）によって設立](https://www.lightwaveonline.com/network-design/packet-transport/article/16659688/metro-ethernet-forum-created-to-accelerate-adoption-of-optical-ethernet-in-metro-networks) |
 | **2000年代前半** | IEEE 802.1ad（Provider Bridges / Q-in-Q）の策定作業が進行 |
-| **2005年** | MEFが **MEF1** コンプライアンスの認証プログラムを開始。Carrier EthernetをSONET/SDHなどの代替として本格推進 <source-chip title="Lightwave Online" url="https://www.lightwaveonline.com/network-design/packet-transport/article/16648341/making-the-case-for-ethernet-everywhere" /> |
+| **2005年** | MEFが **MEF1** コンプライアンスの認証プログラムを開始。[Carrier EthernetをSONET/SDHなどの代替として本格推進](https://www.lightwaveonline.com/network-design/packet-transport/article/16648341/making-the-case-for-ethernet-everywhere) |
 | **2006年頃** | IEEE 802.1ah（Provider Backbone Bridges / PBB）の議論が活発化。802.1adのスケーラビリティ限界が明らかになる |
-| **2008年** | IEEE 802.1ah-2008として標準化 <source-chip title="IEEE Standards Association" url="https://standards.ieee.org/ieee/802.1ah/3689/" /> |
+| **2008年** | [IEEE 802.1ah-2008として標準化](https://standards.ieee.org/ieee/802.1ah/3689/) |
 
 ### 2. 開発された動機
 
@@ -132,5 +135,131 @@ IEEEが「技術的な仕様」を決める一方、MEFは **「事業者が提�
 
 これにより、「イーサネット回線1本」ではなく、**「どのようなサービス品質を保証するイーサネット回線」** として事業者間で取引できるようになりました。
 
+
+## 仕組み
+
+本質は、**「企業のイーサネットフレームを『そのままの形で包み込み』、事業者ネットワークの中では『事業者用の新しいアドレスと識別子』で転送し、出口で元のフレームを取り出す」**という**カプセル化（トンネリング）** の仕組みです。
+
+以下、段階的に追って説明します。
+
+### 1. 全体の流れ（概念図）
+
+```
+【企業A 本社】          【事業者ネットワーク】           【企業A 支社】
+  [CE] ──UNI──→ [PE] ══════[P]════════[P]══════→ [PE] ────UNI──→ [CE]
+              (入口)    (コア)      (コア)      (出口)
+```
+
+- **CE**（Customer Edge）：企業側のスイッチ/ルーター
+- **PE**（Provider Edge）：事業者ネットワークの入口・出口スイッチ
+- **P**（Provider）：事業者コアのスイッチ
+- **UNI**（User-to-Network Interface）：企業と事業者の境界
+
+### 2. 802.1ad（Q-in-Q）の仕組み：タグを二重化する
+
+最も基本的な「LANフレームをWAN越しに運ぶ」仕組みです。
+
+__入口（PE）での処理__
+
+企業から来たフレームにはすでに**C-VLANタグ**（顧客のVLAN、802.1Q）が付いている場合と、付いていない場合があります。
+
+```
+【企業が送信した元のフレーム】
+| 目的MAC | 送信元MAC | [C-VLANタグ] | タイプ | ペイロード | FCS |
+```
+
+PEはこのフレームを受け取ると、**外側に事業者用のS-VLANタグ（Service VLAN）を付加**します。
+
+```
+【事業者ネットワーク内でのフレーム（802.1ad）】
+| 目的MAC | 送信元MAC | S-VLANタグ | [C-VLANタグ] | タイプ | ペイロード | FCS |
+              ↑
+         「Q-in-Q」：タグが二重になる
+```
+
+- **S-VLANタグ**：事業者が「企業Aの本社-支社間の回線」というサービスを識別するためのタグ
+- **C-VLANタグ**：企業が自分のLAN内で使っているVLAN。事業者は中身を見る必要がなく、そのまま保持
+
+__コア（P）での転送__
+
+コアのスイッチは**S-VLANタグだけを見て転送**します。C-VLANタグの中身は気にしません。
+
+__出口（PE）での処理__
+
+相手側のPEに到達すると、**S-VLANタグを外して**元のフレームを取り出し、企業側のCEに渡します。
+
+```
+【支社のCEに届くフレーム】
+| 目的MAC | 送信元MAC | [C-VLANタグ] | タイプ | ペイロード | FCS |
+              ↑
+         本社で送信した時と「完全に同じ」フレーム
+```
+
+> **結果：企業Aは「本社と支社が同じイーサネットセグメントにいるように」見える。事業者の存在を意識しない。**
+
+### 3. 802.1ah（PBB / MAC-in-MAC）の仕組み：フレーム全体を包む
+
+802.1adでは、事業者コアのスイッチが**顧客のMACアドレスを学習する必要がありました**。企業が多くなると、コアスイッチのMACテーブルが巨大化するという問題がありました。
+
+802.1ahはこれを解決するため、**「フレーム全体を新しいイーサネットフレームで包む」** 方式（MAC-in-MAC）を導入しました。
+
+__入口（PE: Provider Backbone Edge Bridge）での処理__
+
+```
+【企業が送信した元のフレーム（そのまま）】
+| 顧客目的MAC | 顧客送信元MAC | [C-VLANタグ] | タイプ | ペイロード | FCS |
+```
+
+PEはこの**フレーム全体をペイロードとして扱い**、外側に新しいヘッダを付けます。
+
+```
+【事業者ネットワーク内でのフレーム（802.1ah）】
+| 事業者目的MAC | 事業者送信元MAC | B-VLANタグ | I-SID | [元のフレーム全体] | FCS |
+                    ↑
+         「MAC-in-MAC」：元のフレームが丸ごとペイロードに入る
+```
+
+ここで重要なのは以下の3つです。
+
+| フィールド | 役割 |
+|-----------|------|
+| **B-VLAN**（Backbone VLAN） | 事業者コアネットワーク内での転送用VLAN（S-VLANと役割は似ているが、PBBN専用） |
+| **I-SID**（Service Instance ID） | 24ビットのサービス識別子。「企業A 本社-支社間の回線」というサービスを特定 |
+| **事業者MACアドレス** | コアネットワーク内での送受信アドレス。顧客のMACアドレスはここには一切出てこない |
+
+__コア（P: Provider Backbone Core Bridge）での転送__
+
+コアスイッチは**事業者MACアドレスとB-VLANだけを見て転送**します。
+
+```
+重要：コアスイッチは「顧客のMACアドレス」を全く学習しない
+```
+
+企業が1,000社いても、各企業が100台のPCを持っていても、コアスイッチが管理するMACテーブルは**事業者のPE機器のMACだけ**で済みます。これが802.1ahの最大のスケーラビリティ上の利点です。
+
+__出口での処理__
+
+相手側のPEは外側のヘッダ（事業者MAC, B-VLAN, I-SID）を**完全に剥がし**、内側の元のフレームを取り出して企業に渡します。
+
+### 4. なぜ「LANの通信」がそのまま転送できるのか
+
+この仕組みの本質は、**「レイヤー2（イーサネット）のフレームを、より大きなレイヤー2フレームの中にカプセル化して運ぶ」** 点にあります。
+
+__企業側から見た世界__
+
+```
+本社のPC ──ICMP Echo Request──→ 支社のPC
+              ↑
+    「相手のMACアドレスに直接送っている」ように見える
+              ↑
+    実際には事業者ネットワークが中継しているが、
+    フレームの中身は一切変わらない
+```
+
+- **IPアドレスの変更は不要**：ルーティング（L3）ではなく、ブリッジング（L2）として転送される
+- **ブロードキャストも転送できる**：E-LANサービスでは、ブロードキャスト/マルチキャストフレームも事業者ネットワークが複製して各拠点に届ける
+- **プロトコルに依存しない**：IPv4でもIPv6でも、NetBIOSでも、何でもそのまま運べる
+
+![1790034651703](image/earthenet/1790034651703.png)
 
 

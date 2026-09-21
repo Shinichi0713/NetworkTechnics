@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x6982;&#x8981;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>Google ColabでC++のコードを動作させましたが、これがどんな原理で動作しているかについて説明していきます。</p>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="概要">概要</h2>
+<p>Google Colab で C++（cpp）のコードが動作する原理は、<strong>「ブラウザ上で直接 C++ を実行しているのではなく、バックエンドの Linux 仮想マシン（VM）上で g++ コンパイラを使ってコンパイル・実行し、その結果をブラウザに表示している」</strong> という仕組みです。</p>
+<h3 id="1-colab-のアーキテクチャの全体像">1. Colab のアーキテクチャの全体像</h3>
+<pre><code>[ユーザーのブラウザ]
+        ↓ HTTP/WebSocket
+[Jupyter Notebook インターフェース（Colabフロントエンド）]
+        ↓
+[Google Colab バックエンド（Linux VM / コンテナ）]
+        ├── g++ コンパイラ
+        ├── Python ランタイム
+        └── ファイルシステム
+</code></pre>
+<p>Colab の裏側は <strong>Ubuntu ベースの Linux VM</strong> が動作しています。Python セル（<code>!</code> や <code>%%</code> マジック）を使うことで、この Linux シェルに直接アクセスできます。</p>
+<h3 id="2-c-を実行する具体的な仕組み">2. C++ を実行する具体的な仕組み</h3>
+<p>Colab では、以下の流れで C++ コードを実行します。</p>
+<p><strong>ステップ 1: ソースコードをファイルに書き出す</strong></p>
+<p>Jupyter Notebook の <code>%%writefile</code> マジックコマンドを使い、VM 上のファイルシステムに <code>.cpp</code> ファイルを作成します。</p>
+<pre><code class="language-python">%%writefile hello.cpp
+<span class="hljs-comment">#include &lt;iostream&gt;</span>
+<span class="hljs-built_in">int</span> main() {
+    std::cout &lt;&lt; <span class="hljs-string">&quot;Hello from C++&quot;</span> &lt;&lt; std::endl;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>これは <strong>Python ではなく、Jupyter のセルマジック</strong> で、バックエンドの Linux ファイルシステムに直接ファイルを書き込みます。</p>
+<p><strong>ステップ 2: g++ でコンパイルする</strong></p>
+<p><code>!</code>（感嘆符）を使うことで、シェルコマンドをバックエンドの Linux VM 上で実行できます。</p>
+<pre><code class="language-python">!g++ hello.cpp -o hello
+</code></pre>
+<p>これはバックエンドのシェルで <code>g++</code> コマンドを直接実行し、実行ファイル <code>hello</code> を生成します。</p>
+<p><strong>ステップ 3: 実行ファイルを実行する</strong></p>
+<pre><code class="language-python">!./hello
+</code></pre>
+<p>同様に、バックエンドの Linux VM 上でネイティブバイナリを実行し、その標準出力をブラウザに返します。</p>
+<h3 id="3-なぜこの仕組みで動くのか">3. なぜこの仕組みで動くのか</h3>
+<p><strong>バックエンドが Linux VM である</strong></p>
+<p>Google Colab のセッションごとに割り当てられるバックエンドは、<strong>フル機能の Linux 環境</strong>です。以下が利用可能です。</p>
+<ul>
+<li><strong>g++ / gcc</strong>: GNU Compiler Collection（C++ コンパイラ）</li>
+<li><strong>make / cmake</strong>: ビルドツール</li>
+<li><strong>apt</strong>: パッケージマネージャ（<code>!apt install ...</code> で追加ライブラリもインストール可能）</li>
+</ul>
+<p><strong>Jupyter の「!」と「%%」マジック</strong></p>
+<p>Jupyter Notebook（Colab の基盤）には以下の機能があります。</p>
+<table>
+<thead>
+<tr>
+<th>機能</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>!コマンド</code></td>
+<td>バックエンドのシェルでコマンドを実行</td>
+</tr>
+<tr>
+<td><code>%%writefile ファイル名</code></td>
+<td>セルの内容をファイルとして書き出す</td>
+</tr>
+<tr>
+<td><code>%%shell</code></td>
+<td>セル全体をシェルスクリプトとして実行</td>
+</tr>
+</tbody>
+</table>
+<p>これらにより、Python ランタイムの「中」から<strong>シェル経由で任意の Linux コマンド</strong>（g++ コンパイルも含む）を実行できます。</p>
+<h3 id="4-補足c-セルマジックも存在する">4. 補足：「C++ セルマジック」も存在する</h3>
+<p>より簡潔に書くため、外部ライブラリを使う方法もあります。</p>
+<pre><code class="language-python">!pip install jupyter-cpp
+</code></pre>
+<pre><code class="language-python">%load_ext jupyter_cpp
+</code></pre>
+<pre><code class="language-cpp">%%cpp
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    std::cout &lt;&lt; <span class="hljs-string">&quot;Hello&quot;</span> &lt;&lt; std::endl;
+}
+</code></pre>
+<p>これは裏側で「ファイル書き出し → g++ コンパイル → 実行 → 出力表示」を<strong>自動化したラッパー</strong>に過ぎず、原理は同じです。</p>
+<h3 id="例題">例題</h3>
+<p>Google ColabでC++を実行するメリットを確認する例題を扱います。
+N×N 行列の三重ループ乗算の計算をGoogle Colab上でPythonとC++の実行ファイルによる計算を行い、計算速度を比較してみます。</p>
+<h3 id="python">Python</h3>
+<p>Pythonで2次元の行列計算を行います。</p>
+<pre><code class="language-python">N = <span class="hljs-number">300</span>  <span class="hljs-comment"># 行列のサイズ（N x N）</span>
+</code></pre>
+<p>以下が実際に行列計算を行っているPythonコードです。</p>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">import</span> random
+
+<span class="hljs-comment"># 乱数シード固定で再現性を確保</span>
+random.seed(<span class="hljs-number">42</span>)
+
+<span class="hljs-comment"># N x N 行列を生成（値は 0.0 〜 1.0）</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">create_matrix</span>(<span class="hljs-params">n</span>):
+    <span class="hljs-keyword">return</span> [[random.random() <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n)] <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n)]
+
+A = create_matrix(N)
+B = create_matrix(N)
+
+<span class="hljs-comment"># 行列乗算（純粋 Python）</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">matmul_python</span>(<span class="hljs-params">A, B, n</span>):
+    C = [[<span class="hljs-number">0.0</span>] * n <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n)]
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):
+        <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):
+            a_ik = A[i][k]
+            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):
+                C[i][j] += a_ik * B[k][j]
+    <span class="hljs-keyword">return</span> C
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Python: <span class="hljs-subst">{N}</span> x <span class="hljs-subst">{N}</span> 行列の乗算を開始します...&quot;</span>)
+start = time.time()
+C_py = matmul_python(A, B, N)
+elapsed_py = time.time() - start
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Python 実行時間: <span class="hljs-subst">{elapsed_py:<span class="hljs-number">.3</span>f}</span> 秒&quot;</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;結果の一部: C[0][0] = <span class="hljs-subst">{C_py[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>]:<span class="hljs-number">.6</span>f}</span>&quot;</span>)
+</code></pre>
+<p>実行すると以下でした。</p>
+<p>計算に2.38secかかりました。</p>
+<pre><code>Python: 300 x 300 行列の乗算を開始します...
+Python 実行時間: 2.380 秒
+結果の一部: C[0][0] = 71.517190
+</code></pre>
+<h3 id="c">C++</h3>
+<p>続いて同じ計算をC++で計算します。</p>
+<pre><code class="language-cpp"># C++ ソースコードをファイルに書き出す
+cpp_code = f<span class="hljs-number">&#x27;&#x27;&#x27;</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdlib&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;ctime&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std::chrono;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{{
+    <span class="hljs-type">const</span> <span class="hljs-type">int</span> N = {N};
+    <span class="hljs-built_in">srand</span>(<span class="hljs-number">42</span>);
+
+    <span class="hljs-comment">// N x N 行列の生成</span>
+    vector&lt;vector&lt;<span class="hljs-type">double</span>&gt;&gt; <span class="hljs-built_in">A</span>(N, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">double</span>&gt;(N));
+    vector&lt;vector&lt;<span class="hljs-type">double</span>&gt;&gt; <span class="hljs-built_in">B</span>(N, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">double</span>&gt;(N));
+    vector&lt;vector&lt;<span class="hljs-type">double</span>&gt;&gt; <span class="hljs-built_in">C</span>(N, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">double</span>&gt;(N, <span class="hljs-number">0.0</span>));
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; ++i) {{
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; N; ++j) {{
+            A[i][j] = (<span class="hljs-type">double</span>)<span class="hljs-built_in">rand</span>() / RAND_MAX;
+            B[i][j] = (<span class="hljs-type">double</span>)<span class="hljs-built_in">rand</span>() / RAND_MAX;
+        }}
+    }}
+
+    cout &lt;&lt; <span class="hljs-string">&quot;C++: &quot;</span> &lt;&lt; N &lt;&lt; <span class="hljs-string">&quot; x &quot;</span> &lt;&lt; N &lt;&lt; <span class="hljs-string">&quot; 行列の乗算を開始します...&quot;</span> &lt;&lt; endl;
+    <span class="hljs-keyword">auto</span> start = high_resolution_clock::<span class="hljs-built_in">now</span>();
+
+    <span class="hljs-comment">// 行列乗算</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; ++i) {{
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; N; ++k) {{
+            <span class="hljs-type">double</span> a_ik = A[i][k];
+            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; N; ++j) {{
+                C[i][j] += a_ik * B[k][j];
+            }}
+        }}
+    }}
+
+    <span class="hljs-keyword">auto</span> end = high_resolution_clock::<span class="hljs-built_in">now</span>();
+    <span class="hljs-type">double</span> elapsed = <span class="hljs-built_in">duration</span>&lt;<span class="hljs-type">double</span>&gt;(end - start).<span class="hljs-built_in">count</span>();
+
+    cout &lt;&lt; fixed;
+    cout.<span class="hljs-built_in">precision</span>(<span class="hljs-number">3</span>);
+    cout &lt;&lt; <span class="hljs-string">&quot;C++ 実行時間: &quot;</span> &lt;&lt; elapsed &lt;&lt; <span class="hljs-string">&quot; 秒&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="hljs-string">&quot;結果の一部: C[0][0] = &quot;</span> &lt;&lt; C[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] &lt;&lt; endl;
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}}
+<span class="hljs-string">&#x27;&#x27;&#x27;</span>
+
+<span class="hljs-function">with <span class="hljs-title">open</span><span class="hljs-params">(<span class="hljs-string">&#x27;matmul.cpp&#x27;</span>, <span class="hljs-string">&#x27;w&#x27;</span>)</span> as f:
+    f.write(cpp_code)
+print(<span class="hljs-string">&quot;C++ ソースを matmul.cpp に書き出しました。&quot;</span>)
+</span></code></pre>
+<p>その後、このC++コードをコンパイルします。</p>
+<pre><code># コンパイル（最適化オプション -O2 を付与）
+!g++ -O2 -o matmul matmul.cpp
+print(&quot;コンパイル完了&quot;)
+</code></pre>
+<p>その後、実行ファイルを実行します。</p>
+<pre><code># 実行
+!./matmul
+</code></pre>
+<p>計算にかかった時間は0.01secでした。
+1/230の計算速度だったことになります。</p>
+<pre><code>C++: 300 x 300 行列の乗算を開始します...
+C++ 実行時間: 0.010 秒
+結果の一部: C[0][0] = 77.978
+</code></pre>
+<h3 id="なぜ差が出るのか要点">なぜ差が出るのか（要点）</h3>
+<p>以下のような点が速度差に結びついた理由です。</p>
+<ul>
+<li>コンパイル vs インタプリタ：C++ は実行前に機械語に変換されるのに対し、Python は実行時に逐次解釈される</li>
+<li>動的型付けのコスト：Python の list には型情報のボックス化オーバーヘッドがある</li>
+<li>メモリレイアウト：C++ の vector はメモリ上に連続配置されるが、Python のリストはポインタの配列</li>
+<li>ループ処理の効率：C++ の for ループは CPU レジスタ最適化が効きやい</li>
+</ul>
+<blockquote>
+<p><strong>ポイント</strong>：Python で <code>numpy</code> や <code>numba</code> を使えば C++ に近い速度が出ますが、<strong>言語自体の純粋な処理能力の差</strong>を知ることは、計算量の多い処理をどこで実装すべきか判断する上で重要です。</p>
+</blockquote>
+<h2 id="総括">総括</h2>
+<p>以下のように整理できます。</p>
+<h3 id="cに処理を寄せるべき場面">C++に処理を寄せるべき場面</h3>
+<p><strong>「純粋Pythonのforループが支配的で、かつ実行回数が膨大な処理」</strong> です。</p>
+<p><strong>具体的には</strong></p>
+<ul>
+<li><strong>行列・ベクトルの多重ループ演算</strong>（numpyで賄えない自作処理）</li>
+<li><strong>シミュレーション・モンテカルロ法</strong>（乱数生成乱数生成＋億回単位の反復）</li>
+<li><strong>ピクセル単位の画像・信号処理</strong></li>
+<li><strong>大規模グラフ探索・動的計画法</strong></li>
+</ul>
+<h3 id="逆にpythonで十分な場面">逆に、Pythonで十分な場面</h3>
+<table>
+<thead>
+<tr>
+<th>場面</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pandas/numpyでのデータ処理</td>
+<td>内部がC/C++で実装済み</td>
+</tr>
+<tr>
+<td>PyTorch/TensorFlowの学習・推論</td>
+<td>内部がCUDA/C++で最適化済み</td>
+</tr>
+<tr>
+<td>Webスクレイピング・API通信</td>
+<td>ボトルネックはネットワークI/O</td>
+</tr>
+<tr>
+<td>ファイル入出力中心の処理</td>
+<td>ディスクI/Oが支配的</td>
+</tr>
+</tbody>
+</table>
+<h3 id="判断の基準">判断の基準</h3>
+<pre><code>C++化を検討すべき条件：
+  □ 純粋Pythonのforループがボトルネック
+  □ 処理時間が1秒以上かかる
+  □ 同じ処理を大量に繰り返す
+  □ リアルタイム性が求められる（例：30fps画像処理）
+</code></pre>
+<h3 id="実務での最適解pythoncのハイブリッド">実務での最適解：「Python＋C++」のハイブリッド</h3>
+<p>全部をC++にするのではなく、<strong>重い部分だけ</strong>をC++に寄せるのが現実的です。</p>
+<table>
+<thead>
+<tr>
+<th>手法</th>
+<th>使い方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>subprocess</strong></td>
+<td>C++実行ファイルをPythonから呼び出す</td>
+</tr>
+<tr>
+<td><strong>Cython</strong></td>
+<td>Python風構文でC拡張を書く</td>
+</tr>
+<tr>
+<td><strong>pybind11</strong></td>
+<td>C++コードをPythonモジュールとして呼び出す</td>
+</tr>
+<tr>
+<td><strong>ctypes</strong></td>
+<td>コンパイル済み共有ライブラリを呼び出す</td>
+</tr>
+</tbody>
+</table>
+
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/3uTYZjJPP0I?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+
+            
+        </body>
+        </html>

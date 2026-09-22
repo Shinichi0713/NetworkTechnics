@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x5e83;&#x57df;&#x30a4;&#x30fc;&#x30b5;&#x30cd;&#x30c3;&#x30c8;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>企業での拠点間のネットワーク通信を行うためにはどうすればよいのでしょうか？
+考えてみると事業所が異なる拠点でも同じように社内ポータルを閲覧して、勤怠やレポートを報告して・・・。
+この通信を支える技術が広域イーサネットです。</p>
+<p>本日テーマ：</p>
+<blockquote>
+<p>広域イーサネットとはどのようなネットワークでしょうか</p>
+</blockquote>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="広域イーサネット">広域イーサネット</h2>
+<p>広域イーサネット（Carrier Ethernet / Wide Area Ethernet）とは、<strong>本来オフィス内LANで使われるイーサネット技術を、通信事業者の回線を使って広域（都市間・全国・国際）にまで拡張したネットワークサービス・技術</strong>のことです。</p>
+<p>以下にその概要をまとめます。</p>
+<h3 id="1-基本的な考え方">1. 基本的な考え方</h3>
+<p>従来、企業の拠点間を結ぶ広域回線には <strong>専用線（ leased line ）</strong> や <strong>フレームリレー・ATM・ MPLS-VPN</strong> などが使われていました。これらは確実でしたが、<strong>回線コストが高く、帯域変更にも時間がかかる</strong>という課題がありました。</p>
+<p>広域イーサネットは、<strong>顧客の拠点AのLANポートと拠点BのLANポートを、事業者網を通じて「あたかも同じLANスイッチに繋がっているかのように」見せる</strong>ことで、イーサネットフレームをそのまま広域に転送します。これにより、<strong>ルーターの複雑な設定が不要</strong>になり、帯域の増減も柔軟に行えます。</p>
+<h3 id="2-主な特徴">2. 主な特徴</h3>
+<table>
+<thead>
+<tr>
+<th>特徴</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>インターフェースの統一</strong></td>
+<td>拠点ルーター・L3スイッチのイーサネットポート（RJ45やSFP）をそのまま使える</td>
+</tr>
+<tr>
+<td><strong>帯域の柔軟性</strong></td>
+<td>10Mbps から 100Gbps まで、必要に応じて変更可能</td>
+</tr>
+<tr>
+<td><strong>低コスト</strong></td>
+<td>従来の専用線やフレームリレーと比べて、回線・ポート単価が安い</td>
+</tr>
+<tr>
+<td><strong>短い開通期間</strong></td>
+<td>物理的な配線工事が少なく、論理的な回線設定で開通</td>
+</tr>
+<tr>
+<td><strong>QoS保証</strong></td>
+<td>音声・映像・業務システムの優先度を設定可能</td>
+</tr>
+<tr>
+<td><strong>マルチポイント接続</strong></td>
+<td>2拠点間だけでなく、数十拠点を1つの論理LAN（E-LAN）として接続可能</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-サービスと規格">3. サービスと規格</h3>
+<p>広域イーサネットのサービス形態は、<strong>MEF（Metro Ethernet Forum）</strong> という業界団体が規格化しています。代表的な3タイプは以下の通りです。</p>
+<table>
+<thead>
+<tr>
+<th>サービス名</th>
+<th>接続形態</th>
+<th>用途の例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>E-Line</strong></td>
+<td>1対1（P2P）の仮想専用線</td>
+<td>本社と工場の1対1接続</td>
+</tr>
+<tr>
+<td><strong>E-LAN</strong></td>
+<td>多対多（any-to-any）の論理LAN</td>
+<td>全国の支社を1つのLANとして統合</td>
+</tr>
+<tr>
+<td><strong>E-Tree</strong></td>
+<td>1対多（Rooted Multipoint）</td>
+<td>動画配信、放送、校長室→各教室など</td>
+</tr>
+</tbody>
+</table>
+<h2 id="開発背景経緯">開発背景・経緯</h2>
+<p>広域イーサネット（Carrier Ethernet / Metro Ethernet）の開発は、<strong>2000年代初頭（2001年頃）から本格的に始まり</strong>、その後10年ほどかけて標準化と実用化が進みました。</p>
+<p>以下、動機と経緯を段階的に説明します。</p>
+<h3 id="1-開発時期の概略">1. 開発時期の概略</h3>
+<p>まずは開発経緯についてです。</p>
+<table>
+<thead>
+<tr>
+<th>年</th>
+<th>出来事</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2001年6月</strong></td>
+<td><strong>MEF（Metro Ethernet Forum）</strong> が<a href="https://www.lightwaveonline.com/network-design/packet-transport/article/16659688/metro-ethernet-forum-created-to-accelerate-adoption-of-optical-ethernet-in-metro-networks">37社（通信事業者、機器ベンダーなど）によって設立</a></td>
+</tr>
+<tr>
+<td><strong>2000年代前半</strong></td>
+<td>IEEE 802.1ad（Provider Bridges / Q-in-Q）の策定作業が進行</td>
+</tr>
+<tr>
+<td><strong>2005年</strong></td>
+<td>MEFが <strong>MEF1</strong> コンプライアンスの認証プログラムを開始。<a href="https://www.lightwaveonline.com/network-design/packet-transport/article/16648341/making-the-case-for-ethernet-everywhere">Carrier EthernetをSONET/SDHなどの代替として本格推進</a></td>
+</tr>
+<tr>
+<td><strong>2006年頃</strong></td>
+<td>IEEE 802.1ah（Provider Backbone Bridges / PBB）の議論が活発化。802.1adのスケーラビリティ限界が明らかになる</td>
+</tr>
+<tr>
+<td><strong>2008年</strong></td>
+<td><a href="https://standards.ieee.org/ieee/802.1ah/3689/">IEEE 802.1ah-2008として標準化</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-開発された動機">2. 開発された動機</h3>
+<p>動機は大きく分けて <strong>「企業側の要望」</strong> と <strong>「通信事業者側の要望」</strong> の2つが交錯したものでした。</p>
+<p><strong>企業側の動機：「LANとWANの統一を！」</strong></p>
+<p>2000年代には、企業の社内ネットワーク（LAN）はすでに<strong>イーサネットで統一</strong>されていました。しかし、拠点間を繋ぐ広域回線（WAN）はATMやフレームリレー、SONET/SDH専用線など、<strong>LANとは異なる技術</strong>が使われていました。</p>
+<blockquote>
+<p>これにより、</p>
+<ul>
+<li><strong>プロトコルの変換コスト</strong>がかかる</li>
+<li><strong>帯域の単価が高い</strong>（T1/E1やSONET回線はイーサネットに比べ高価）</li>
+<li><strong>柔軟な帯域変更が困難</strong>（専用線の帯域は物理的に決まる）</li>
+</ul>
+</blockquote>
+<p>企業は「LANで使っているイーサネットを、そのまま広域でも使えないか」と求め始めました。</p>
+<p><strong>通信事業者側の動機：「コスト削減と収益性向上」</strong></p>
+<p>通信事業者もまた、従来のインフラに課題を抱えていました。</p>
+<blockquote>
+<ul>
+<li><strong>SONET/SDH機器は高価</strong>で、柔軟な帯域配分が困難</li>
+<li><strong>ATM/フレームリレーは時代遅れ</strong>になりつつあり、IP/Ethernetへの統合が進んでいた</li>
+<li>データトラフィックが増大し、<strong>より低コストでスケールする技術</strong>が必要</li>
+</ul>
+</blockquote>
+<p>2006年のIEEE資料には以下のように記されています。</p>
+<blockquote>
+<p>「キャリアグレードEthernet機器の市場が成長している。企業がよりコスト効果の良い帯域とサービスを求め、サービスプロバイダがネットワークインフラコストを削減して収益性を高めようとしている」<source-chip title="IEEE 802.1 PBT Overview" url="https://grouper.ieee.org/groups/802/1/files/public/docs2006/new-bottorff-pbt-overview-1006-01.pdf" /></p>
+</blockquote>
+<h3 id="3-技術的経緯普通のイーサネットでは通信事業者ネットワークで使えなかった">3. 技術的経緯：「普通のイーサネット」では通信事業者ネットワークで使えなかった</h3>
+<p>ここが最も重要な点です。単に「イーサネットを遠くまで引っ張る」だけでは、通信事業者のネットワークでは<strong>技術的に使えませんでした</strong>。</p>
+<p><strong>普通のイーサネットの限界</strong></p>
+<table>
+<thead>
+<tr>
+<th>限界</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VLAN数の制限</strong></td>
+<td>IEEE 802.1QのVLAN IDは12ビット（最大4094個）。通信事業者が複数の企業クライアントを抱えるには不足</td>
+</tr>
+<tr>
+<td><strong>MACアドレスのフラッディング</strong></td>
+<td>未知のMACアドレスに対し、ネットワーク全体にフレームを氾濫させる。広域では帯域の無駄が致命的</td>
+</tr>
+<tr>
+<td><strong>STP（スパニングツリープロトコル）の制約</strong></td>
+<td>ループ回避のため一部のリンクをブロックするため、帯域が無駄になる。広域ネットワークでは許容しがたい</td>
+</tr>
+<tr>
+<td><strong>ブロードキャストドメインの肥大化</strong></td>
+<td>広域に広がるとブロードキャストが全網に氾濫し、性能を劣化させる</td>
+</tr>
+<tr>
+<td><strong>OAM（運用管理保守）の不足</strong></td>
+<td>リンク障害の検知やサービス品質の監視機能が、通信事業者レベルでは不十分</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>「ネイティブEthernetスイッチは、通信事業者ネットワークで使用する際に重大なスケーラビリティ問題に直面していた」<source-chip title="Optical Zeitgeist Laboratory" url="https://www.zeitgeistlab.ca/doc/Provider-Bridge-%28PB%29-and-Provider-Backbone-Bridge-%28PBB%29.html" /></p>
+</blockquote>
+<p><strong>標準化の段階的な進化</strong></p>
+<p>これらの問題を解決するため、以下の技術が順に開発されました。</p>
+<p><strong>第1段：IEEE 802.1ad（Provider Bridges / Q-in-Q）— 2005年頃</strong></p>
+<ul>
+<li><strong>VLANタグを二重化</strong>（顧客のVLANタグをそのまま保ちつつ、事業者側のVLANタグを外側に追加）</li>
+<li>これにより、<strong>複数の顧客が同じVLAN IDを使っても衝突しない</strong></li>
+<li>顧客と事業者の「最小限の協調」で動作</li>
+</ul>
+<blockquote>
+<p>「既存のBridged LANプロトコルと互換・相互運用可能な形で、複数の独立したユーザにMACサービスの分離インスタンスを提供する」<source-chip title="IEEE 802.1" url="https://www.ieee802.org/1/pages/802.1ad.html" /></p>
+</blockquote>
+<p><strong>第2段：IEEE 802.1ah（Provider Backbone Bridges / PBB）— 2008年</strong></p>
+<p>しかし802.1adでも、事業者側のVLANタグ（S-TAG）が<strong>12ビット（4094個）</strong> に制限されるため、大規模事業者には依然として不足でした。</p>
+<p>802.1ahでは以下の革新を導入しました。</p>
+<ul>
+<li><strong>MAC-in-MACカプセル化</strong>：顧客のイーサネットフレーム全体を、新しい事業者用MACヘッダで包む</li>
+<li><strong>I-SID（Service Instance VLAN Identifier）</strong>：24ビット（最大約1600万個）のサービス識別子で、<strong>最大2^20サービスインスタンス</strong>をサポート <source-chip title="IEEE Standards Association" url="https://standards.ieee.org/ieee/802.1ah/3689/" /></li>
+<li>事業者のコアネットワークでは<strong>顧客のMACアドレスを全く学習する必要がない</strong>（スケーラビリティが劇的に向上）</li>
+</ul>
+<pre><code>【802.1ahのカプセル化イメージ】
+
+[顧客フレーム: 顧客MACsrc → 顧客MACdst, 顧客VLAN]
+        ↓
+[事業者フレーム: 事業者MACsrc → 事業者MACdst, I-SID, [顧客フレーム]]
+</code></pre>
+<p><strong>並行して：MEFによる「サービス定義」の標準化</strong></p>
+<p>IEEEが「技術的な仕様」を決める一方、MEFは <strong>「事業者が提供するサービスをどう定義するか」</strong> を標準化しました。</p>
+<ul>
+<li><strong>MEF 6（Metro Ethernet Services Definitions）</strong>：E-Line（ point-to-point）、E-LAN（multipoint-to-multipoint）、E-Tree（root-to-leaves）などのサービスモデルを定義</li>
+<li><strong>MEF 10</strong>：サービスの属性（帯域保証、遅延要件など）を標準化</li>
+</ul>
+<p>これにより、「イーサネット回線1本」ではなく、<strong>「どのようなサービス品質を保証するイーサネット回線」</strong> として事業者間で取引できるようになりました。</p>
+<h2 id="仕組み">仕組み</h2>
+<p>本質は、<strong>「企業のイーサネットフレームを『そのままの形で包み込み』、事業者ネットワークの中では『事業者用の新しいアドレスと識別子』で転送し、出口で元のフレームを取り出す」<strong>という</strong>カプセル化（トンネリング）</strong> の仕組みです。</p>
+<p>以下、段階的に追って説明します。</p>
+<h3 id="1-全体の流れ概念図">1. 全体の流れ（概念図）</h3>
+<pre><code>【企業A 本社】          【事業者ネットワーク】           【企業A 支社】
+  [CE] ──UNI──→ [PE] ══════[P]════════[P]══════→ [PE] ────UNI──→ [CE]
+              (入口)    (コア)      (コア)      (出口)
+</code></pre>
+<ul>
+<li><strong>CE</strong>（Customer Edge）：企業側のスイッチ/ルーター</li>
+<li><strong>PE</strong>（Provider Edge）：事業者ネットワークの入口・出口スイッチ</li>
+<li><strong>P</strong>（Provider）：事業者コアのスイッチ</li>
+<li><strong>UNI</strong>（User-to-Network Interface）：企業と事業者の境界</li>
+</ul>
+<h3 id="2-8021adq-in-qの仕組みタグを二重化する">2. 802.1ad（Q-in-Q）の仕組み：タグを二重化する</h3>
+<p>最も基本的な「LANフレームをWAN越しに運ぶ」仕組みです。</p>
+<p><strong>入口（PE）での処理</strong></p>
+<p>企業から来たフレームにはすでに<strong>C-VLANタグ</strong>（顧客のVLAN、802.1Q）が付いている場合と、付いていない場合があります。</p>
+<pre><code>【企業が送信した元のフレーム】
+| 目的MAC | 送信元MAC | [C-VLANタグ] | タイプ | ペイロード | FCS |
+</code></pre>
+<p>PEはこのフレームを受け取ると、<strong>外側に事業者用のS-VLANタグ（Service VLAN）を付加</strong>します。</p>
+<pre><code>【事業者ネットワーク内でのフレーム（802.1ad）】
+| 目的MAC | 送信元MAC | S-VLANタグ | [C-VLANタグ] | タイプ | ペイロード | FCS |
+              ↑
+         「Q-in-Q」：タグが二重になる
+</code></pre>
+<ul>
+<li><strong>S-VLANタグ</strong>：事業者が「企業Aの本社-支社間の回線」というサービスを識別するためのタグ</li>
+<li><strong>C-VLANタグ</strong>：企業が自分のLAN内で使っているVLAN。事業者は中身を見る必要がなく、そのまま保持</li>
+</ul>
+<p><strong>コア（P）での転送</strong></p>
+<p>コアのスイッチは<strong>S-VLANタグだけを見て転送</strong>します。C-VLANタグの中身は気にしません。</p>
+<p><strong>出口（PE）での処理</strong></p>
+<p>相手側のPEに到達すると、<strong>S-VLANタグを外して</strong>元のフレームを取り出し、企業側のCEに渡します。</p>
+<pre><code>【支社のCEに届くフレーム】
+| 目的MAC | 送信元MAC | [C-VLANタグ] | タイプ | ペイロード | FCS |
+              ↑
+         本社で送信した時と「完全に同じ」フレーム
+</code></pre>
+<blockquote>
+<p><strong>結果：企業Aは「本社と支社が同じイーサネットセグメントにいるように」見える。事業者の存在を意識しない。</strong></p>
+</blockquote>
+<h3 id="3-8021ahpbb--mac-in-macの仕組みフレーム全体を包む">3. 802.1ah（PBB / MAC-in-MAC）の仕組み：フレーム全体を包む</h3>
+<p>802.1adでは、事業者コアのスイッチが<strong>顧客のMACアドレスを学習する必要がありました</strong>。企業が多くなると、コアスイッチのMACテーブルが巨大化するという問題がありました。</p>
+<p>802.1ahはこれを解決するため、<strong>「フレーム全体を新しいイーサネットフレームで包む」</strong> 方式（MAC-in-MAC）を導入しました。</p>
+<p><strong>入口（PE: Provider Backbone Edge Bridge）での処理</strong></p>
+<pre><code>【企業が送信した元のフレーム（そのまま）】
+| 顧客目的MAC | 顧客送信元MAC | [C-VLANタグ] | タイプ | ペイロード | FCS |
+</code></pre>
+<p>PEはこの<strong>フレーム全体をペイロードとして扱い</strong>、外側に新しいヘッダを付けます。</p>
+<pre><code>【事業者ネットワーク内でのフレーム（802.1ah）】
+| 事業者目的MAC | 事業者送信元MAC | B-VLANタグ | I-SID | [元のフレーム全体] | FCS |
+                    ↑
+         「MAC-in-MAC」：元のフレームが丸ごとペイロードに入る
+</code></pre>
+<p>ここで重要なのは以下の3つです。</p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>B-VLAN</strong>（Backbone VLAN）</td>
+<td>事業者コアネットワーク内での転送用VLAN（S-VLANと役割は似ているが、PBBN専用）</td>
+</tr>
+<tr>
+<td><strong>I-SID</strong>（Service Instance ID）</td>
+<td>24ビットのサービス識別子。「企業A 本社-支社間の回線」というサービスを特定</td>
+</tr>
+<tr>
+<td><strong>事業者MACアドレス</strong></td>
+<td>コアネットワーク内での送受信アドレス。顧客のMACアドレスはここには一切出てこない</td>
+</tr>
+</tbody>
+</table>
+<p><strong>コア（P: Provider Backbone Core Bridge）での転送</strong></p>
+<p>コアスイッチは<strong>事業者MACアドレスとB-VLANだけを見て転送</strong>します。</p>
+<pre><code>重要：コアスイッチは「顧客のMACアドレス」を全く学習しない
+</code></pre>
+<p>企業が1,000社いても、各企業が100台のPCを持っていても、コアスイッチが管理するMACテーブルは<strong>事業者のPE機器のMACだけ</strong>で済みます。これが802.1ahの最大のスケーラビリティ上の利点です。</p>
+<p><strong>出口での処理</strong></p>
+<p>相手側のPEは外側のヘッダ（事業者MAC, B-VLAN, I-SID）を<strong>完全に剥がし</strong>、内側の元のフレームを取り出して企業に渡します。</p>
+<h3 id="4-なぜlanの通信がそのまま転送できるのか">4. なぜ「LANの通信」がそのまま転送できるのか</h3>
+<p>この仕組みの本質は、<strong>「レイヤー2（イーサネット）のフレームを、より大きなレイヤー2フレームの中にカプセル化して運ぶ」</strong> 点にあります。</p>
+<p><strong>企業側から見た世界</strong></p>
+<pre><code>本社のPC ──ICMP Echo Request──→ 支社のPC
+              ↑
+    「相手のMACアドレスに直接送っている」ように見える
+              ↑
+    実際には事業者ネットワークが中継しているが、
+    フレームの中身は一切変わらない
+</code></pre>
+<ul>
+<li><strong>IPアドレスの変更は不要</strong>：ルーティング（L3）ではなく、ブリッジング（L2）として転送される</li>
+<li><strong>ブロードキャストも転送できる</strong>：E-LANサービスでは、ブロードキャスト/マルチキャストフレームも事業者ネットワークが複製して各拠点に届ける</li>
+<li><strong>プロトコルに依存しない</strong>：IPv4でもIPv6でも、NetBIOSでも、何でもそのまま運べる</li>
+</ul>
+<p><img src="file:///d:\PycharmProjects\security_specialist\network_tech\network_specialist\calulum\infra\image\earthenet\1790034651703.png" alt="1790034651703"></p>
+<h2 id="カプセル化">カプセル化</h2>
+<p>通常ネットワーク越しにパケットを転送する場合はL3技術を用いるものですが、広域イーサネットではどうでしょうか？</p>
+<p><strong>「事業者が企業のIPパケットに対してL3ルーティングを行うか」という観点と、「事業者のコアネットワーク内部でL3/MPLS技術を使うか」という観点を分ける</strong>必要があります。</p>
+<p>結論から言えば、<strong>Carrier Ethernet（E-Line/E-LAN/E-Tree）として提供されるサービスは、企業のIPパケットに対しては「L3ルーティングを行わない（透過的なL2転送）」のが基本</strong>です。しかし<strong>事業者のコア内部では、L3/MPLS技術を使ってそのL2フレームを運ぶことが一般的</strong>です。</p>
+<h3 id="1-企業から見た世界l3転送は行われていない">1. 企業から見た世界：「L3転送は行われていない」</h3>
+<p>MEF（Metro Ethernet Forum）が定義する標準的なCarrier Ethernetサービスは、<strong>「L2 VPN」</strong> として機能します。</p>
+<pre><code>【企業Aの本社】                    【企業Aの支社】
+[PC: 10.1.1.2] ──┐            ┌──→ [PC: 10.1.2.2]
+[ルーター]        │            │     [ルーター]
+  ↓ IPパケット    │            │       ↑ IPパケット
+[CEスイッチ]──→ [事業者PE]═══[事業者PE]──→ [CEスイッチ]
+                 ↑___________↑
+              事業者は「IPヘッダを見ない」
+              イーサネットフレームをそのまま中継するだけ
+</code></pre>
+<ul>
+<li>企業のルーターは、遠隔地のルーターの<strong>MACアドレス</strong>を宛先としてフレームを送信します</li>
+<li>事業者のPEは、その<strong>イーサネットフレームをカプセル化して中継</strong>し、出口で復元します</li>
+<li><strong>事業者はIPヘッダを見ない（原則として）</strong> ため、企業のIPサブネット設計に干渉しません</li>
+</ul>
+<p>この意味では、<strong>「L3での転送はしていない」</strong> という理解は正しいです。事業者はあくまで「ケーブルの延長」を提供しているに過ぎません。</p>
+<h3 id="2-しかし事業者のコア内部ではl3mplsを使うことが多い">2. しかし事業者のコア内部では「L3/MPLS」を使うことが多い</h3>
+<p>ここが重要な分岐点です。<strong>企業のフレームを「そのまま運ぶ」ことと、事業者が「どの技術で運ぶか」は別の話</strong>です。</p>
+<p>実際の通信事業者のコアネットワークでは、802.1ah（PBB）だけで網全体を構築するのではなく、以下のような<strong>L3/MPLS技術を組み合わせて</strong>使うことが一般的です。</p>
+<table>
+<thead>
+<tr>
+<th>技術</th>
+<th>概要</th>
+<th>L3的要素</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MPLS</strong> (Multiprotocol Label Switching)</td>
+<td>L2フレームにラベルを付けて転送。IPルーティングとは独立した経路制御が可能</td>
+<td>ラベル配布にBGP/OSPF-TEなどL3プロトコルを使用</td>
+</tr>
+<tr>
+<td><strong>VPLS</strong> (Virtual Private LAN Service)</td>
+<td>MPLSを使ってイーサネットの擬似ワイヤーを複数構築し、LANをエミュレート</td>
+<td>MPLS（L3インフラ上で動作）</td>
+</tr>
+<tr>
+<td><strong>PBB-EVPN</strong> (Ethernet VPN)</td>
+<td>BGPを使ってMACアドレスの到達性情報を広報。MPLSやVXLANで転送</td>
+<td>BGP（L3プロトコル）でMACルート交換</td>
+</tr>
+<tr>
+<td><strong>Segment Routing</strong></td>
+<td>MPLSやIPv6の拡張ヘッダで経路を制御。IP/MPLSコアで使われる</td>
+<td>IPv6/MPLSの制御平面</td>
+</tr>
+</tbody>
+</table>
+<pre><code>【企業から見たフレームの流れ】
+[企業フレーム] → [PEがカプセル化] → [事業者コア] → [PEが復元] → [企業フレーム]
+
+【事業者コア内部の実態（例：MPLSの場合）】
+[PE] → [P] → [P] → [PE]
+  ↓      ↓     ↓      ↓
+MPLSラベル付きパケットとして転送
+（IPルーティングテーブルとは別のラベル転送テーブル）
+</code></pre>
+<p>つまり、<strong>企業のIPパケットに対して事業者が「ルーティング（L3転送）」を行うわけではありませんが、そのIPパケットが入ったイーサネットフレームを運ぶために、事業者のコアではL3/MPLS技術が使われることが多い</strong>のです。</p>
+<h3 id="3-l3転送を行う広域イーサネットサービスも存在する">3. 「L3転送を行う」広域イーサネットサービスも存在する</h3>
+<p>また、Carrier Ethernetとは別に、事業者が<strong>L3まで見て転送するサービス</strong>も存在します。</p>
+<table>
+<thead>
+<tr>
+<th>サービス</th>
+<th>事業者の動作</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L2 VPN</strong> (E-Line/E-LAN)</td>
+<td>IPヘッダを見ない。L2フレームを透過転送</td>
+<td>Carrier Ethernet</td>
+</tr>
+<tr>
+<td><strong>L3 VPN</strong> (IP VPN)</td>
+<td>IPヘッダを見て、企業ごとにVRF（仮想ルーティングテーブル）で分離してルーティング</td>
+<td>MPLS L3 VPN、IP-VPN</td>
+</tr>
+<tr>
+<td><strong>IP Transit</strong></td>
+<td>インターネット接続。BGPで経路交換し、IPパケットをルーティング</td>
+<td>インターネット回線</td>
+</tr>
+</tbody>
+</table>
+<p>企業が「広域のイーサネット回線」を契約しても、それが <strong>「L2接続サービス」なのか「L3 VPNサービス」なのか</strong>は契約によって異なります。</p>
+<h2 id="総括">総括</h2>
+<p>広域イーサネットが果たす役割の本質は、<strong>「物理的に離れた場所にある複数のLANを、事業者のネットワークという『見えない回線』を通じて、あたかも同じイーサネットセグメントであるかのように接続する」</strong> ことにあります。</p>
+<p>以下、5つの観点から総括します。</p>
+<h3 id="1-本質的な役割ケーブルの延長">1. 本質的な役割：「ケーブルの延長」</h3>
+<p>広域イーサネットの最も核心的な価値は、<strong>「企業にとってWANの存在を意識させない」</strong> 点です。</p>
+<pre><code>【企業から見た世界】
+本社LAN  ═══════════════════════  支社LAN
+    ↑                              ↑
+「同じスイッチに繋がっているように見える」
+
+【実際の実現方式】
+本社LAN → [PE] → (事業者のカプセル化・中継) → [PE] → 支社LAN
+</code></pre>
+<ul>
+<li>企業のルーターは、遠隔地の相手の<strong>MACアドレス</strong>を宛先にしてフレームを送信します</li>
+<li>IPアドレスの書き換えも、ルーティングテーブルの調整も<strong>不要</strong>です</li>
+<li>ブロードキャスト、マルチキャスト、IPv6、NetBIOSなど、<strong>L2で動作するあらゆるプロトコルがそのまま通ります</strong></li>
+</ul>
+<blockquote>
+<p><strong>つまり、広域イーサネットは「地理的距離を論理的に消去するL2の透明なパイプ」です。</strong></p>
+</blockquote>
+<h3 id="2-技術的本質構造を隠蔽するカプセル化">2. 技術的本質：「構造を隠蔽するカプセル化」</h3>
+<p>事業者ネットワークが企業のフレームを中継する際、<strong>「中身を見ずに、外側だけを自分たちの管理用に書き換える」</strong> というカプセル化が本質的な技術です。</p>
+<table>
+<thead>
+<tr>
+<th>技術</th>
+<th>隠蔽の仕方</th>
+<th>解決した問題</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>802.1ad（Q-in-Q）</strong></td>
+<td>顧客VLANタグの外側に事業者VLANタグを追加</td>
+<td>複数顧客のVLAN ID衝突を回避</td>
+</tr>
+<tr>
+<td><strong>802.1ah（PBB）</strong></td>
+<td>顧客フレーム全体を事業者用MACヘッダで包む（MAC-in-MAC）</td>
+<td>コアスイッチのMACテーブル肥大化を防止</td>
+</tr>
+<tr>
+<td><strong>MPLS/VPLS</strong></td>
+<td>L2フレームにMPLSラベルを付けてL3コアで転送</td>
+<td>事業者コアでのスケーラブルな転送</td>
+</tr>
+<tr>
+<td><strong>EVPN</strong></td>
+<td>BGPでMACアドレスの到達性を広報し、MPLS/VXLANで転送</td>
+<td>マルチホーミング・冗長化の制御平面を近代化</td>
+</tr>
+</tbody>
+</table>
+<p><strong>重要なのは、「カプセル化の中身（企業のフレーム）は一切変更されない」</strong> という点です。事業者は外側のヘッダだけを見て転送し、出口で完全に剥がします。</p>
+<blockquote>
+<p><strong>技術的本質は、「企業の通信内容（内側）」と「事業者の運用制御（外側）」を完全に分離するカプセル化アーキテクチャです。</strong></p>
+</blockquote>
+<h3 id="3-進化の本質スケーラビリティの問題を段階的に解決した歴史">3. 進化の本質：「スケーラビリティの問題を段階的に解決した歴史」</h3>
+<p>広域イーサネットの発展は、<strong>「普通のイーサネットを広域に出したら何が問題か」を一つずつ解決した歴史</strong>です。</p>
+<pre><code>2000年代前半：「イーサネットを広域で使いたい」という需要発生
+      ↓
+問題1：VLAN IDが4094個しかない → 802.1ad（Q-in-Q）で解決
+      ↓
+問題2：コアスイッチが顧客MACを全て学習しなければならない → 802.1ah（PBB）で解決
+      ↓
+問題3：STPによる帯域の無駄、障害復旧の遅さ → MPLS/EVPN/Segment Routingで解決
+      ↓
+現在：「L2 VPNとしての柔軟性」と「L3/MPLSコアとしてのスケーラビリティ」を統合
+</code></pre>
+<blockquote>
+<p><strong>進化の本質は、「イーサネットの利便性（シンプルさ・低コスト・統一インターフェース）」を「キャリアグレードのスケーラビリティ・信頼性・管理性」と融合させ続けたことです。</strong></p>
+</blockquote>
+<h3 id="4-ビジネス的本質lanとwanの境界をなくしたサービス化">4. ビジネス的本質：「LANとWANの境界をなくしたサービス化」</h3>
+<p>技術的な役割を超えて、広域イーサネットは<strong>企業ネットワークの運用パラダイムを変えました</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>従来（専用線/フレームリレー/ATM）</th>
+<th>広域イーサネット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LAN機器とWAN機器が異なる</td>
+<td>イーサネットポートをそのまま使える</td>
+</tr>
+<tr>
+<td>帯域変更に物理的な工事・長期契約が必要</td>
+<td>論理的に帯域を変更可能（10M→1Gなど）</td>
+</tr>
+<tr>
+<td>プロトコル変換が必要（LAN←→WAN）</td>
+<td>プロトコル変換なし（L2透過）</td>
+</tr>
+<tr>
+<td>拠点追加のたびに複雑な設定</td>
+<td>E-LANでany-to-anyの論理LANを構築可能</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>ビジネス的本質は、「LANのシンプルさと経済性をWAN世界に持ち込み、ネットワーク接続を『物理資産』から『論理サービス』へと変換した」ことです。</strong></p>
+</blockquote>
+<h3 id="5-現代における位置づけsd-wanやクラウド時代の基盤">5. 現代における位置づけ：「SD-WANやクラウド時代の基盤」</h3>
+<p>広域イーサネットは古い技術ではなく、<strong>現代のネットワークアーキテクチャの基盤</strong>として進化し続けています。</p>
+<pre><code>【現代の企業ネットワーク】
+[支社A]──┐
+[支社B]──┼──→ [SD-WAN CPE] ──→ [インターネット/IP-VPN] ──→ [クラウド/SaaS]
+[支社C]──┘         ↑
+              その下には「広域イーサネットの技術」が使われることも多い
+              （事業者のL2 VPN基盤、EVPN over MPLSなど）
+</code></pre>
+<ul>
+<li><strong>SD-WAN</strong>：多くの場合、<strong>事業者のL2/L3 VPN基盤</strong>の上にオーバーレイで構築されます</li>
+<li><strong>クラウド接続（AWS/Azure Direct Connectなど）</strong>：事業者の広域イーサネットからクラウドのL2接続へダイレクトに接続する形態が一般的</li>
+<li><strong>5G/モバイルバックホール</strong>：基地局とコア間の接続にもCarrier Ethernet技術が使われています</li>
+</ul>
+<blockquote>
+<p><strong>現代における本質は、「クラウド・SD-WAN・5G時代においても、『拠点間のL2透過接続』という基盤的役割を担い続けている」ことです。</strong></p>
+</blockquote>
+
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/3uTYZjJPP0I?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+            
+        </body>
+        </html>

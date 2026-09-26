@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x6982;&#x8981;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>ASと呼ばれるルータのグループで構成されたネットワークの内部をトポロジーを構築して自律的にネットワーク情報を交換するプロトコルがあります。
+その中でも安定感抜群なものがOSPFです。</p>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="概要">概要</h2>
+<p><strong>OSPF（Open Shortest Path First）</strong> とは、<strong>1つの組織（自律システム：AS）の内部で、「ネットワークの地図（トポロジー）」を全ルーターで共有し、それぞれがDijkstra最短経路アルゴリズムを使って最適な経路を自律的に計算するリンクステート型の内部ゲートウェイプロトコル（IGP）</strong> です。</p>
+<h3 id="1-本質地図を配って各自が最短経路を計算する">1. 本質：「地図を配って、各自が最短経路を計算する」</h3>
+<p>OSPFの最大の特徴は、<strong>「距離ベクトル型（RIPなど）ではなく、リンクステート型である」</strong> 点にあります。</p>
+<p><strong>距離ベクトル型（RIPなど）との違い</strong></p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>距離ベクトル型（RIP）</th>
+<th>リンクステート型（OSPF）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>交換する情報</strong></td>
+<td>「私はこのネットワークまで○ホップで行けます」</td>
+<td>「私はこういうインターフェースを持ち、こういう隣接ルーターと繋がっています」</td>
+</tr>
+<tr>
+<td><strong>持っている情報</strong></td>
+<td>隣接ルーターから聞いた「2番目の情報」</td>
+<td>自分で集めた「1番目の生のトポロジー（地図）」</td>
+</tr>
+<tr>
+<td><strong>経路計算</strong></td>
+<td>隣から聞いた情報を足し算していく</td>
+<td>地図全体から最短経路を計算（Dijkstra法）</td>
+</tr>
+<tr>
+<td><strong>収束速度</strong></td>
+<td>遅い（ホップ数の伝搬に時間がかかる）</td>
+<td>速い（トポロジー変更を即座にflood）</td>
+</tr>
+<tr>
+<td><strong>ループのリスク</strong></td>
+<td>ある（カウントトゥインフィニティ問題）</td>
+<td>ほぼない（地図ベースなので一貫性がある）</td>
+</tr>
+</tbody>
+</table>
+<pre><code>【RIPの考え方】
+[ルーターA] 「10.0.0.0/24は私の左に1ホップです」
+    ↓
+[ルーターB] 「10.0.0.0/24は私の左に2ホップです」
+    ↓
+[ルーターC] 「10.0.0.0/24は私の左に3ホップです」
+    ↑ 情報が「伝言ゲーム」的に伝わる
+
+【OSPFの考え方】
+[全ルーターが持つリンクステートデータベース（LSDB）]
+「ルーターAはeth0で10.0.1.0/30に接続、コスト1」
+「ルーターBはeth0で10.0.1.0/30に接続、eth1で10.0.2.0/30に接続」
+「ルーターCはeth0で10.0.2.0/30に接続」
+    ↑
+全ルーターが「同じ地図」を持つ。
+各自がDijkstra法で「自分から見た最短経路」を計算する
+</code></pre>
+<blockquote>
+<p><strong>本質は、「全ルーターがネットワーク全体の地図（トポロジーデータベース）を同一に保ち、各自が最短経路を計算する」ことです。</strong></p>
+</blockquote>
+<h3 id="2-ospfの動作5つのステップ">2. OSPFの動作：5つのステップ</h3>
+<p><strong>① Helloパケットによる隣接発見</strong></p>
+<p>OSPFルーターは、OSPFが有効なインターフェースから<strong>10秒間隔（デフォルト、ブロードキャスト環境）</strong> でHelloパケットをマルチキャスト（224.0.0.5）します。</p>
+<table>
+<thead>
+<tr>
+<th>Helloで確認すること</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>隣接ルーターの存在</strong></td>
+<td>同じネットワーク上にOSPF有効なルーターがいるか</td>
+</tr>
+<tr>
+<td><strong>パラメータの一致</strong></td>
+<td>エリアID、認証、Hello/Dead間隔、サブネットマスクなど</td>
+</tr>
+<tr>
+<td><strong>DR/BDRの選出</strong></td>
+<td>ブロードキャスト・NBMA環境での代表ルーター選出</td>
+</tr>
+</tbody>
+</table>
+<p><strong>② 隣接関係（Adjacency）の確立</strong></p>
+<p>Helloで一致が確認できたら、<strong>DBD（Database Description）</strong> パケットで「自分が持っている地図の目録」を交換し、<strong>LSR/LSU（Link-State Request/Update）</strong> で不足している地図情報をやり取りします。</p>
+<pre><code>[ルーターA] ←──DBD: 「私はこういうLSAを持っています」──→ [ルーターB]
+[ルーターA] ←──LSR: 「そのLSAの詳細をください」────────→ [ルーターB]
+[ルーターA] ←──LSU: 「詳細なLSAデータです」────────────→ [ルーターB]
+[ルーターA] ←──LSAck: 「受信確認です」────────────────→ [ルーターB]
+</code></pre>
+<p><strong>③ リンクステートデータベース（LSDB）の同期</strong></p>
+<p>全ルーターが<strong>同一のLSDB</strong>を持つようになります。LSDBは<strong>LSA（Link-State Advertisement）</strong> というレコードの集合です。</p>
+<table>
+<thead>
+<tr>
+<th>LSAタイプ</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type 1: Router LSA</strong></td>
+<td>各ルーターが自らのリンク状態を広報（全ルーターが生成）</td>
+</tr>
+<tr>
+<td><strong>Type 2: Network LSA</strong></td>
+<td>DRがブロードキャストセグメントの状態を広報</td>
+</tr>
+<tr>
+<td><strong>Type 3: Summary LSA (IP network)</strong></td>
+<td>ABRが他エリアのネットワーク経路を広報</td>
+</tr>
+<tr>
+<td><strong>Type 4: Summary LSA (ASBR)</strong></td>
+<td>ABRがASBRの位置情報を広報</td>
+</tr>
+<tr>
+<td><strong>Type 5: External LSA</strong></td>
+<td>ASBRが外部（BGP側など）の経路を広報</td>
+</tr>
+<tr>
+<td><strong>Type 7: NSSA External LSA</strong></td>
+<td>NSSAのASBRが外部経路を広報（ABRがType5に変換）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>④ SPF計算（Dijkstraアルゴリズム）</strong></p>
+<p>各ルーターが、LSDBを元に <strong>「自分を根とする最短経路木」</strong> を計算します。</p>
+<pre><code>【LSDBから計算するイメージ】
+LSDB: A─(cost1)─B─(cost2)─C─(cost1)─D
+       └(cost3)─E────────────(cost5)─┘
+
+ルーターAから見た最短経路木:
+A → B (cost1)
+A → B → C (cost3)
+A → B → C → D (cost4)
+A → E (cost3)  ← A→B→C→D→E(cost1+2+1+5=9)より短い
+</code></pre>
+<p><strong>⑤ ルーティングテーブルへの反映</strong></p>
+<p>SPF計算結果を、OSPFの経路として<strong>ルーティングテーブルに登録</strong>します。管理距離（Administrative Distance）は<strong>110</strong>です。</p>
+<h3 id="3-エリアarea大規模ネットワークへの対応">3. エリア（Area）：大規模ネットワークへの対応</h3>
+<p>OSPFは<strong>階層的なエリア設計</strong>を持ち、大規模ネットワークを分割管理できます。</p>
+<pre><code>【OSPFのエリア構造】
+              ┌─────────────┐
+              │  Area 0     │  ← バックボーン（必須）
+              │ (Backbone)  │
+              │  [ABR]──[ABR] │
+              └──┬─────┬────┘
+                 │     │
+            ┌────┘     └────┐
+         [ABR]             [ABR]
+            │                │
+        Area 10          Area 20
+      (営業部門)        (開発部門)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>用語</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Area</strong></td>
+<td>LSAのフラood範囲を限定する論理的な分割単位</td>
+</tr>
+<tr>
+<td><strong>Backbone Area (Area 0)</strong></td>
+<td>全エリアが接続する中核エリア</td>
+</tr>
+<tr>
+<td><strong>ABR (Area Border Router)</strong></td>
+<td>エリアとバックボーンを繋ぐ境界ルーター。Type3 LSAでエリア間経路を要約・広報</td>
+</tr>
+<tr>
+<td><strong>Internal Router</strong></td>
+<td>1つのエリア内にのみ所属するルーター</td>
+</tr>
+<tr>
+<td><strong>ASBR (AS Boundary Router)</strong></td>
+<td>OSPFドメインと外部（BGPなど）を繋ぐ境界ルーター</td>
+</tr>
+</tbody>
+</table>
+<p><strong>エリア分割のメリット：</strong></p>
+<ul>
+<li><strong>LSDBサイズの削減</strong>：エリア内ルーターは自エリアのLSAだけを保持すればよい</li>
+<li><strong>SPF計算の軽減</strong>：他エリアの変化がType3 LSAとして要約されるため、全網でSPF再計算が走らない</li>
+<li><strong>トラフィックの局所化</strong>：エリア内のフラoodが他エリアに漏れにくい</li>
+</ul>
+<blockquote>
+<p><strong>Backbone Area</strong>
+<strong>バックボーンエリア（Backbone Area / Area 0）</strong> は、OSPFにおいて <strong>「全てのエリアが必ず接続する中核となるエリア」</strong> です。
+<strong>なぜ必要か</strong>
+OSPFはエリアに分割することで、各エリア内のルーターが持つ<strong>リンクステートデータベース（LSDB）のサイズ</strong>と<strong>SPF計算の負荷</strong>を抑えます。しかし、エリア同士が直接経路を交換すると、<strong>エリア間のループ</strong>が発生する危険があります。
+そこで、<strong>エリア間の経路交換は必ずArea 0を経由させる</strong>というルールを設けました。</p>
+<pre><code>【構造】
+  Area 10 ──→ [ABR] ──→ Area 0 ←── [ABR] ←── Area 20
+(営業)       (境界)    (中核)    (境界)       (開発)
+→ エリア間通信は「Area 10 → Area 0 → Area 20」と必ず中継
+→ エリア間のループが構造的に起きにくい
+</code></pre>
+<p><strong>役割の本質</strong></p>
+<table>
+<thead>
+<tr>
+<th>役割</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ハブ</strong></td>
+<td>全エリア間経路交換の集約点</td>
+</tr>
+<tr>
+<td><strong>隠蔽</strong></td>
+<td>各エリアの詳細なトポロジー（Type1/2 LSA）はArea 0には届かない。ABRが<strong>Type3 LSA（サマリー経路）</strong> に変換して広報</td>
+</tr>
+<tr>
+<td><strong>ループ防止</strong></td>
+<td>エリア間ルーティングを「星型（Hub-and-Spoke）」に限定し、一貫性を保つ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>つまり、バックボーンエリアは「エリア分割による負荷軽減」と「エリア間経路交換の一貫性・ループ防止」を両立させるための、OSPF階層設計の中核です。</strong></p>
+</blockquote>
+<h3 id="4-ospfのコスト計算">4. OSPFのコスト計算</h3>
+<p>OSPFの経路選択は <strong>「コスト」</strong> というメトリックで行います。</p>
+<pre><code>コスト = リファレンス帯域 / インターフェース帯域
+
+デフォルトのリファレンス帯域 = 100Mbps
+
+例：
+・GigabitEthernet (1Gbps) → 100/1000 = 0.1 → 1（小数は切り上げ）
+・FastEthernet (100Mbps) → 100/100 = 1
+・Ethernet (10Mbps) → 100/10 = 10
+</code></pre>
+<p>現代では10Gbps/100Gbpsが一般的なため、<strong>リファレンス帯域を10,000Mbps（10Gbps）や更高に変更</strong>する必要があります（設定ミスで高速リンクが正しく評価されないケースが多い）。</p>
+<h3 id="5-ネットワークタイプ環境に応じた動作">5. ネットワークタイプ：環境に応じた動作</h3>
+<p>OSPFは接続環境に応じて<strong>異なる動作モード</strong>を持ちます。</p>
+<table>
+<thead>
+<tr>
+<th>ネットワークタイプ</th>
+<th>環境</th>
+<th>DR/BDR選出</th>
+<th>Hello間隔</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Broadcast</strong></td>
+<td>イーサネットLAN</td>
+<td>あり</td>
+<td>10秒</td>
+</tr>
+<tr>
+<td><strong>Non-Broadcast (NBMA)</strong></td>
+<td>フレームリレー、ATM</td>
+<td>あり</td>
+<td>30秒</td>
+</tr>
+<tr>
+<td><strong>Point-to-Point</strong></td>
+<td>PPP、HDLC、専用線</td>
+<td>なし</td>
+<td>10秒</td>
+</tr>
+<tr>
+<td><strong>Point-to-Multipoint</strong></td>
+<td>部分メッシュNBMA</td>
+<td>なし</td>
+<td>30秒</td>
+</tr>
+</tbody>
+</table>
+<p><strong>DR（Designated Router）/ BDR（Backup DR）</strong> は、ブロードキャスト環境で <strong>「全ルーターが互いにフル隣接関係を持つ」</strong> のを防ぐための代表者です。DRを経由してLSAを交換することで、隣接関係数を <code>O(n)</code> から <code>O(1)</code> に削減します。</p>
+<h2 id="ospfによる冗長化">OSPFによる冗長化</h2>
+<p><strong>OSPFによる冗長化</strong>とは、<strong>「同じ宛先に対して複数の経路（コストが等しいまたは不等しい）を学習しておき、リンクやルーターの故障時に自動的に代替経路に切り替える」</strong> ことです。</p>
+<h3 id="1-基本の仕組み地図を持つから迂回できる">1. 基本の仕組み：「地図を持つ」から迂回できる</h3>
+<p>OSPFは全ルーターが<strong>同一のリンクステートデータベース（LSDB）＝地図</strong>を持ちます。</p>
+<pre><code>【冗長経路の例】
+        [R1]═══10Gbps═══[R2]
+       /  ╲              /  ╲
+    1Gbps  10Gbps    1Gbps  1Gbps
+     /      ╲        /      \
+   [PC]    [R3]════[R4]    [サーバ]
+            ↑________________↑
+         このリンクが切れたら？
+
+OSPFの対応：
+1. R3がリンクダウンを検知
+2. 新しいLSAをフラood
+3. 全ルーターがSPFを再計算
+4. 「R3→R1→R2→R4」という迂回経路を自動的に採用
+</code></pre>
+<p>**VRRPが「同じサブネット内のゲートウェイの冗長化」**なのに対し、**OSPFは「ルーター間の経路そのものの冗長化」**です。</p>
+<h3 id="2-等コスト冗長ecmpequal-cost-multi-path">2. 等コスト冗長：ECMP（Equal-Cost Multi-Path）</h3>
+<p>同じ宛先に対して<strong>同じコストの複数経路</strong>がある場合、OSPFは<strong>両方をルーティングテーブルに登録</strong>し、負荷分散（パケット単位またはフロー単位）を行います。</p>
+<pre><code>【ECMPの例：コストが同じ場合】
+[PC]──[R1]═══cost10═══[R2]──[サーバ]
+          ╲___cost10___/
+
+→ R1のルーティングテーブル：
+  10.0.2.0/24 → [R2直接: cost10], [R3経由: cost10]
+  両方をアクティブにして負荷分散
+</code></pre>
+<p><strong>故障時は、残った1本に自動的に集約</strong>されます。設定変更は一切不要です。</p>
+<h3 id="3-不等コスト冗長故障時の自動迂回">3. 不等コスト冗長：故障時の自動迂回</h3>
+<p>等しくなくても、OSPFは<strong>代替経路を常に把握</strong>しています。</p>
+<table>
+<thead>
+<tr>
+<th>状況</th>
+<th>OSPFの動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>リンク切断</strong></td>
+<td>該当LSAが無効化され、SPF再計算。代替経路へ即座に切り替え</td>
+</tr>
+<tr>
+<td><strong>ルーター故障</strong></td>
+<td>Deadタイマー（通常40秒）満了で隣接関係解除。LSA更新とSPF再計算</td>
+</tr>
+<tr>
+<td><strong>コスト変更</strong></td>
+<td>新しいLSAでコストが更新され、最適経路が再選定</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-vrrpスタッキングとの違い">4. VRRP・スタッキングとの違い</h3>
+<table>
+<thead>
+<tr>
+<th>技術</th>
+<th>冗長化の対象</th>
+<th>レイヤー</th>
+<th>切り替えのトリガー</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VRRP</strong></td>
+<td>デフォルトゲートウェイ（L3SWの1台）</td>
+<td>L2/L3境界</td>
+<td>L3SWのダウン検知</td>
+</tr>
+<tr>
+<td><strong>スタッキング</strong></td>
+<td>スイッチ本体の故障</td>
+<td>L2/L3</td>
+<td>メンバ故障時のマスター引き継ぎ</td>
+</tr>
+<tr>
+<td><strong>OSPF</strong></td>
+<td>ルーター間の経路・リンク</td>
+<td>L3</td>
+<td>リンクダウン・LSA更新・SPF再計算</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>OSPFの冗長化は「経路そのもの」を動的に再計算するため、VRRPのように「仮想IP・仮想MAC」を使う必要がありません。単に「生きている経路に自動的に流れる」だけです。</strong></p>
+</blockquote>
+<h2 id="ループ発生の可能性">ループ発生の可能性</h2>
+<p>OSPFのLSA（リンクステート広告）のフラッディング（情報交換）時に、原則としてループは発生しません。 以下の仕組みで防止されています。</p>
+<h3 id="1-フラッディングの仕組みとループ防止">1. フラッディングの仕組みとループ防止</h3>
+<p>OSPFでは、新しいLSAを受信したルーターは <strong>「受信したポート以外の全ポート」</strong> にそのLSAを転送（フラッディング）します。これは一見ループしそうですが、以下の仕組みで防がれます。</p>
+<p><strong>① Sequence Number（LS Sequence Number）</strong></p>
+<p>各LSAには<strong>32ビットのシーケンス番号</strong>が付いています。</p>
+<ul>
+<li>ルーターが自分のLSAを更新するたびに、シーケンス番号を<strong>インクリメント</strong></li>
+<li>他のルーターが<strong>同じまたは古いシーケンス番号のLSA</strong>を受信した場合、<strong>破棄</strong>します</li>
+<li>より新しいシーケンス番号のLSAだけを受け入れてフラッディングします</li>
+</ul>
+<pre><code>【ループ防止のイメージ】
+[R1] ──LSA(seq=0x80000001)──→ [R2] ──LSA(seq=0x80000001)──→ [R3]
+  ↑___________________________________________________________↓
+  R3がR1に同じLSAを送り返そうとするが、
+  R1は「seq=0x80000001は自分が出したものと同じ」→ 破棄
+</code></pre>
+<p><strong>② MaxAge（Max Age）とLSAの寿命</strong></p>
+<p>各LSAには<strong>Age（経過時間）</strong> フィールドがあり、<strong>最大3600秒（1時間）</strong> で無効化されます。</p>
+<ul>
+<li>LSAは発生元から<strong>1秒ごとにAgeがインクリメント</strong>されていく</li>
+<li>Ageが<strong>MaxAge（3600）に達すると、そのLSAは削除</strong>される</li>
+<li>これにより、「どこかで回り続ける古いLSA」が永遠に残ることはありません</li>
+</ul>
+<p><strong>③ LSAck（Link-State Ack）による確認</strong></p>
+<p>フラッディングされたLSAには、隣接ルーターから<strong>LSAck（Link-State Ack）</strong> が返されます。確認応答がない場合は再送しますが、<strong>重複したLSAはackだけ返して破棄</strong>されます。</p>
+<h3 id="2-エリアを跨ぐ場合は構造的にループしない">2. エリアを跨ぐ場合は「構造的に」ループしない</h3>
+<p>OSPFのエリア設計自体が、<strong>LSAの循環を構造的に防いでいます</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>LSAの種類</th>
+<th>フラッディング範囲</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type 1, 2</strong>（Router/Network）</td>
+<td><strong>同一エリア内のみ</strong></td>
+<td>エリア境界（ABR）で止まる</td>
+</tr>
+<tr>
+<td><strong>Type 3</strong>（Summary）</td>
+<td>ABRが<strong>エリア0を経由して</strong>他エリアに広報</td>
+<td>エリア間は「星型（Area 0がハブ）」のため循環しない</td>
+</tr>
+<tr>
+<td><strong>Type 5</strong>（External）</td>
+<td>全エリア（NSSA除く）に広がるが、ABRが変換・制御</td>
+<td>Area 0を必ず経由する構造</td>
+</tr>
+</tbody>
+</table>
+<pre><code>【エリア間でループしない構造】
+Area 10 ──[ABR]──→ Area 0 ←──[ABR]── Area 20
+              ↑_________________↓
+         Type3 LSAはABRが生成。エリア間の循環は構造的に起きにくい
+</code></pre>
+<p>エリア0（バックボーン）が<strong>全エリア間経路交換の唯一の中継点</strong>であるため、エリア間でのLSA循環は起きません。</p>
+<h3 id="3-ではまったくループしないのか">3. では、まったくループしないのか</h3>
+<p>原則として<strong>LSAのフラッディング自体がループすることはありません</strong>が、以下のような<strong>設定ミスや特殊な状況</strong>では問題が生じる可能性があります。</p>
+<table>
+<thead>
+<tr>
+<th>状況</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>エリアの非対称配置</strong></td>
+<td>Area 0が分断された状態（ partitioned backbone ）で、仮想的なリンク（virtual link）を使う場合に、設計が複雑化して予期せぬ経路が発生する可能性がある</td>
+</tr>
+<tr>
+<td><strong>双方向再配布（Redistribution）の誤設定</strong></td>
+<td>OSPFと他プロトコル（BGPなど）間で<strong>相互に経路を再配布</strong>すると、メトリックの操作によって<strong>経路ループ</strong>が発生することがある（LSAのフラッディングループではなく、<strong>パケット転送のループ</strong>）</td>
+</tr>
+<tr>
+<td><strong>MaxAgeのLSAが残存</strong></td>
+<td>極めて稀だが、ソフトウェアバグなどでMaxAgeに達したLSAが削除されず残ると、データベースが不整合になる可能性がある</td>
+</tr>
+</tbody>
+</table>
+<h2 id="総括">総括</h2>
+<p>OSPFの内容を総括していきます。</p>
+<h3 id="1-一言で言うと">1. 一言で言うと</h3>
+<blockquote>
+<p><strong>OSPFは「1つの組織内で、全ルーターがネットワーク全体の地図（トポロジー）を共有し、各自が最短経路を計算するリンクステート型IGP」です。</strong></p>
+</blockquote>
+<h3 id="2-なぜospfなのかripとの違い">2. なぜOSPFなのか（RIPとの違い）</h3>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>RIP（距離ベクトル）</th>
+<th>OSPF（リンクステート）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>持つ情報</td>
+<td>隣から聞いた「2手の情報」</td>
+<td>自分で集めた「生の地図（LSDB）」</td>
+</tr>
+<tr>
+<td>経路計算</td>
+<td>ホップ数を足し算（伝言ゲーム）</td>
+<td>Dijkstra法で地図から最短経路を計算</td>
+</tr>
+<tr>
+<td>収束速度</td>
+<td>遅い（カウントトゥインフィニティ）</td>
+<td>速い（トポロジー変更を即座にフラood）</td>
+</tr>
+<tr>
+<td>ループリスク</td>
+<td>ある</td>
+<td>ほぼない（地図ベースで一貫性がある）</td>
+</tr>
+<tr>
+<td>大規模対応</td>
+<td>不向き</td>
+<td><strong>エリア分割で対応可能</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-動作の核心5ステップ">3. 動作の核心：5ステップ</h3>
+<ol>
+<li><strong>Hello</strong>（10秒間隔）：隣接ルーターを発見・パラメータ確認</li>
+<li><strong>DBD/LSR/LSU/LSAck</strong>：地図の目録交換→詳細要求→詳細配布→確認応答</li>
+<li><strong>LSDB同期</strong>：全ルーターが<strong>同一の地図</strong>を完成させる</li>
+<li><strong>SPF計算</strong>：各自がDijkstra法で「自分を根とする最短経路木」を計算</li>
+<li><strong>ルーティングテーブル反映</strong>：管理距離110で経路を登録</li>
+</ol>
+<h3 id="4-エリア設計の核心">4. エリア設計の核心</h3>
+<pre><code>Area 10 ──[ABR]──→ Area 0 ←──[ABR]── Area 20
+(営業)              (中核)             (開発)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>エリア</strong></td>
+<td>LSAのフラood範囲を限定し、LSDBサイズとSPF負荷を削減</td>
+</tr>
+<tr>
+<td><strong>Area 0（バックボーン）</strong></td>
+<td>全エリア間経路交換の唯一の中継点。エリア間ループを構造的に防ぐ</td>
+</tr>
+<tr>
+<td><strong>ABR</strong></td>
+<td>エリア境界でType1/2 LSAを<strong>Type3サマリー</strong>に変換して広報</td>
+</tr>
+<tr>
+<td><strong>ASBR</strong></td>
+<td>外部（BGPなど）の経路をType5 LSAとしてOSPFドメインに注入</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>エリア分割は「負荷軽減」と「一貫性・ループ防止」を両立させる設計。</strong></p>
+</blockquote>
+<h3 id="5-冗長化の核心">5. 冗長化の核心</h3>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ECMP</strong>（等コスト）</td>
+<td>同じコストの複数経路を同時にアクティブにして<strong>負荷分散</strong></td>
+</tr>
+<tr>
+<td><strong>自動迂回</strong>（不等コスト）</td>
+<td>リンク・ルーター故障時、LSA更新→SPF再計算で<strong>代替経路へ自動切り替え</strong></td>
+</tr>
+<tr>
+<td><strong>切り替えトリガー</strong></td>
+<td>リンクダウン、Deadタイマー満了、コスト変更</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>VRRPが「ゲートウェイの冗長化」なら、OSPFは「経路そのものの動的冗長化」。</strong></p>
+</blockquote>
+<h3 id="6-ループ防止の核心">6. ループ防止の核心</h3>
+<table>
+<thead>
+<tr>
+<th>仕組み</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>シーケンス番号</strong></td>
+<td>古い/同じLSAは破棄。新しいものだけをフラッディング</td>
+</tr>
+<tr>
+<td><strong>MaxAge（3600秒）</strong></td>
+<td>LSAに寿命あり。永遠に回り続けることはない</td>
+</tr>
+<tr>
+<td><strong>LSAck</strong></td>
+<td>確認応答で重複排除</td>
+</tr>
+<tr>
+<td><strong>エリア階層</strong></td>
+<td>Type1/2はエリア内のみ。エリア間はArea 0経由の星型構造で循環防止</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>LSAのフラッディング自体がループすることはない。ただし、OSPFと他プロトコル間の「相互再配布（redistribution）」の誤設定では、パケット転送のループが起きる可能性がある。</strong></p>
+</blockquote>
+
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/LAmZrJFe9cw?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+            
+        </body>
+        </html>

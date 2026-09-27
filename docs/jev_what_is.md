@@ -1,11 +1,10 @@
-
 agent利用できるLLM/AGI開発が熱視線の中で、ちょっと変わった言語モデルが発表されました。
 
 このモデルは自己回帰による文章生成ではなく、スコアを出力する過去のBERTのようなモデルです。
 
 今日はそんなモデルについて語っていきます。
 
-![1790400676092](image/jev_what_is/1790400676092.png)
+![1790426254999](image/jev_what_is/1790426254999.png)
 
 ## Jevとは
 
@@ -17,11 +16,11 @@ agent利用できるLLM/AGI開発が熱視線の中で、ちょっと変わっ�
 
 具体的には、以下の3種類の構造化された出力のみを返します。[Introducing System One Models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)
 
-| タイプ | 返す内容 |
-|--------|----------|
+| タイプ           | 返す内容                                           |
+| ---------------- | -------------------------------------------------- |
 | **Choice** | 定義された選択肢から1つを選ぶ（最大255個の選択肢） |
-| **Score** | 2〜10段階の順序付きスケールで評価 |
-| **Noul** | Yes/Noの質問に対し、0〜1の確率で回答 |
+| **Score**  | 2〜10段階の順序付きスケールで評価                  |
+| **Noul**   | Yes/Noの質問に対し、0〜1の確率で回答               |
 
 出力の形式が事前に固定されているため、モデルが定義外の値や無効な型を返すことはありません。TypeSafe AIはこれを「**構造的に幻覚（hallucination）が起こり得ない**」設計として説明しています。[Jev (AI model)](https://en.wikipedia.org/wiki/Jev_(AI_model))
 
@@ -35,11 +34,9 @@ TypeSafe AIは2024年に、元OpenAI研究者の **Diogo Almeida** 氏を中心�
 
 Almeida氏の動機は、「モデルはすでに対話で超人的な性能を持っているのに、なぜ自動化が進んでいないのか」という問いでした。彼は対話型モデルが人間を喜ばせることに最適化されすぎており、ソフトウェア内で確実に動作する知性としては不十分だと考え、Jevの開発を始めました。[Introducing System One Models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)
 
-
 ### 4. トレーニング方法：RLCD
 
 Jevは **RLCD（Reinforcement Learning for Calibrated Decisions）** という独自の学習方法で訓練されています。これは人間の好みではなく、**確率が実際の結果とどれだけ一致するか（calibration）** を最適化する手法です。つまり、Jevが「80%の確信」と言った場合、実際に約80%の確率で正解していることを目指しています。[What is Jev?](https://www.jevtypesafeai.com/what-is-jev)
-
 
 ### 5. 性能と特徴
 
@@ -51,7 +48,6 @@ TypeSafe AIが公表する主な性能指標は以下の通りです。[Introduc
 - **サンプリング**: トークンを1つずつ順次生成するのではなく、すべての出力を1回のクエリで並列生成
 
 ただし、これらの数値（特に速度とコストの比較）はTypeSafe AI自身のワークフロー評価に基づいており、同社も「現実世界の結果としては上限に近い値である可能性がある」と注意を促しています。[Jev (AI model)](https://en.wikipedia.org/wiki/Jev_(AI_model))
-
 
 ### 6. モデル名の由来
 
@@ -110,7 +106,6 @@ Jevのユースケースは、**「人間が読む文章を生成する」**の�
 
 Jevは70〜500ミリ秒で応答し、入力トークンが非常に安価（$0.042/百万トークン）であるため、**ペタバイト級のデータを一つひとつAIで処理・特徴量化**するようなユースケースも想定されています。大量の非構造化データを構造化された特徴やインサイトに変換するパイプラインに組み込むことができます。[Introducing System One Models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)
 
--
 ### 3. リアルタイムアプリケーション
 
 100ミリ秒程度の応答速度を活かし、**UX（ユーザー体験）が重要なリアルタイムアプリ**にも組み込めます。たとえば、ユーザーの入力をリアルタイムで評価し、即座に次の画面や処理を分岐させるような場面です。LLMを使うと数秒の待ち時間が発生してしまうため、こうした用途には従来不向きでした。[Introducing System One Models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)
@@ -125,7 +120,6 @@ Jevは70〜500ミリ秒で応答し、入力トークンが非常に安価（$0.
 - この推論過程に論理的な飛躍はないか？
 
 Jevは確率較正されているため、「自信が低い場合は人間にエスカレーションする」といった信頼性の高いガードレールとして機能します。[Introducing System One Models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)
-
 
 ### 5. AIエージェントの判断ループ
 

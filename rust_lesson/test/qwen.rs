@@ -307,3 +307,90 @@ fn main() {
     println!("Input shape  : {:?}", input_ids.size());
     println!("Logits shape : {:?}", logits.size());
 }
+
+use tch::{nn, nn::Module, nn::OptimizerConfig, Device, Kind, Tensor};
+
+// --- (前述の Qwen2RMSNorm, Qwen2RotaryEmbedding, Qwen2Attention, Qwen2MLP, Qwen2DecoderLayer, Qwen2ForCausalLM の定義) ---
+
+fn train() -> anyhow::Result<()> {
+    tch::maybe_init();
+    let device = Device::cuda_if_available();
+    println!("Using device: {:?}", device);
+
+    // 1. ハイパーパラメータ設定
+    let vocab_size = 1000;      // 語彙数（ダミー設定）
+    let hidden_size = 256;      // 隠れ層の次元数
+    let num_layers = 4;         // デコーダ層数
+    let num_heads = 8;          // Query ヘッド数
+    let num_kv_heads = 2;       // KV ヘッド数 (GQA)
+    let intermediate_size = 1024;
+
+    let batch_size = 4;
+    let seq_len = 32;
+    let epochs = 10;
+    let learning_rate = 3e-4;
+    let max_grad_norm = 1.0;
+
+    // 2. Variable Store とモデルの構築
+    let mut vs = nn::VarStore::new(device);
+    let model = Qwen2ForCausalLM::new(
+        vs.root(),
+        vocab_size,
+        hidden_size,
+        num_layers,
+        num_heads,
+        num_kv_heads,
+        intermediate_size,
+    );
+
+    // 3. オプティマイザの設定 (AdamW)
+    let mut opt = nn::AdamW::default().build(&vs, learning_rate)?;
+
+    // 4. 学習ループ
+    println!("Starting training...");
+    for epoch in 1..=epochs {
+        // --- ダミーデータ作成 ---
+        // input_ids: [B, S]
+        let input_ids = Tensor::randint(vocab_size, &[batch_size, seq_len], (Kind::Int64, device));
+        
+        // Causal LM ターゲット: 入力を 1 トークンシフト [B, S-1]
+        // input_seq : 0 ~ S-2
+        // target_seq: 1 ~ S-1
+        let input_seq = input_ids.slice(1, 0, seq_len - 1, 1);
+        let target_seq = input_ids.slice(1, 1, seq_len, 1);
+
+        // --- 順伝播 ---
+        // logits: [B, S-1, Vocab]
+        let logits = model.forward(&input_seq);
+
+        // --- Cross Entropy Loss 計算 ---
+        // Loss 計算のために形状を平坦化:
+        // logits  -> [B * (S-1), Vocab]
+        // targets -> [B * (S-1)]
+        let logits_flat = logits.view(&[-1, vocab_size]);
+        let targets_flat = target_seq.view(&[-1]);
+
+        let loss = logits_flat.cross_entropy_for_logits(&targets_flat);
+
+        // --- 逆伝播と最適化 ---
+        opt.zero_grad();
+        loss.backward();
+
+        // 勾配クリッピング (Gradient Clipping)
+        vs.clip_grad_norm(max_grad_norm);
+
+        opt.step();
+
+        // ロス出力
+        let loss_val: f64 = loss.double_value();
+        println!("Epoch: {:2}/{} | Loss: {:.4}", epoch, epochs, loss_val);
+    }
+
+    println!("Training completed.");
+    
+    // 5. 学習済みチェックポイントの保存
+    vs.save("qwen2_model.ot")?;
+    println!("Model saved to qwen2_model.ot");
+
+    Ok(())
+}

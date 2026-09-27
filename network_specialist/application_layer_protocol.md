@@ -1,5 +1,11 @@
-
-
+---
+title: "ネットワーク層でパケットループが生じる理由"
+emoji: "😾"
+type: "tech" # tech: 技術記事 / idea: アイデア記事
+topics: ["networking"]
+published: true
+---
+## 概要
 ALPN（Application-Layer Protocol Negotiation）は、TLS/SSLの暗号化ハンドシェイクの中で、**クライアントとサーバーがどのアプリケーション層プロトコル（HTTP/1.1、HTTP/2、HTTP/3など）を使って通信するかをあらかじめネゴシエーション（事前交渉）するためのTLS拡張プロトコル**です（RFC 7301）。
 
 
@@ -60,4 +66,111 @@ ALPN（Application-Layer Protocol Negotiation）は、「1つの通信ポート�
 * Nginx、Envoy、HAProxy、AWS ALB（Application Load Balancer）などのプロキシ/ロードバランサー機器で利用されます。
 * クライアントから到達したTLS接続のALPN識別子（`h2` なのか `http/1.1` なのか）を読み取り、後方のバックエンドサーバーへ適切なプロトコルで振り分ける際に活用されます。
 
+## 仕組み
 
+ALPNは**TLSのClientHelloとServerHelloの中にプロトコルリストを埋め込む**ことで動作します。
+
+### ステップ1：クライアントが「希望リスト」を送る（ClientHello）
+
+クライアントがサーバーに接続を開始すると、**TLSのClientHelloメッセージ**の中に**「自分が対応しているアプリケーションプロトコル一覧」**を入れて送信します。
+
+```
+【ClientHelloの構造（ALPN関連部分）】
+ClientHello {
+  ...
+  Extensions[] {
+    ...
+    Extension: application_layer_protocol_negotiation (ALPN) {
+      ProtocolNameList {
+        ProtocolName: "h2"        ← HTTP/2を希望（優先度高）
+        ProtocolName: "http/1.1"   ← ダメならHTTP/1.1でも可
+      }
+    }
+  }
+}
+```
+
+> クライアントは**「優先順位順」**にプロトコルリストを送ります。
+
+### ステップ2：サーバーが「選んだプロトコル」を返す（ServerHello）
+
+サーバーはクライアントのリストを見て、**自分も対応しているプロトコルの中から最も優先度の高いものを1つ選び**、**ServerHello**の中に返します。
+
+```
+【ServerHelloの構造（ALPN関連部分）】
+ServerHello {
+  ...
+  Extensions[] {
+    ...
+    Extension: application_layer_protocol_negotiation (ALPN) {
+      SelectedProtocol: "h2"    ← 「HTTP/2で行きましょう」と合意
+    }
+  }
+}
+```
+
+- サーバーは**必ず1つだけ**選んで返します
+- サーバーがクライアントのリストのいずれにも対応していない場合は、**TLSハンドシェイクを中断**（致命的アラート：`no_application_protocol`）します
+
+### ステップ3：TLSハンドシェイク完了後、アプリケーションプロトコルで通信
+
+ALPNで合意されたプロトコルに従って、**TLS暗号化通信の上でアプリケーションデータ**をやり取りします。
+
+```
+【全体の流れ】
+[クライアント] ──TCP SYN──→ [サーバー]
+[クライアント] ←─SYN-ACK── [サーバー]
+[クライアント] ──ClientHello(ALPN: ["h2", "http/1.1"])──→ [サーバー]
+[クライアント] ←─ServerHello(ALPN: "h2")────────────────── [サーバー]
+[クライアント] ←→ TLSハンドシェイク続行（証明書交換など）←→ [サーバー]
+[クライアント] ←→ HTTP/2の通信開始（TLS暗号化上） ←→ [サーバー]
+```
+
+### 具体的な例：ブラウザがHTTPSサイトにアクセス
+
+```
+【実際の例】
+
+ブラウザ（クライアント）:
+「https://example.com にアクセスしたい。
+  私は h2（HTTP/2）と http/1.1 の両方に対応している。
+  h2の方が好ましい。」
+
+       ↓ ClientHello（ALPN: ["h2", "http/1.1"]）
+
+Webサーバー（Nginx/Apacheなど）:
+「私も h2 に対応しているので、h2 で合意しよう。」
+
+       ↓ ServerHello（ALPN: "h2"）
+
+結果:
+このTLS接続の上では、HTTP/2のフレーム形式で通信される。
+```
+
+もしサーバーがHTTP/2に対応していなければ：
+
+```
+サーバー:
+「h2は知らないが、http/1.1なら対応している。」
+
+       ↓ ServerHello（ALPN: "http/1.1"）
+
+結果:
+このTLS接続の上では、HTTP/1.1のテキスト形式で通信される。
+```
+
+## ALPNの前の技術：NPNとの違い
+
+ALPNの前に**NPN（Next Protocol Negotiation）**という類似の仕組みがありました。
+
+| 項目 | NPN（旧） | ALPN（現在） |
+|------|----------|-------------|
+| **交渉のタイミング** | サーバーが「提案」、クライアントが「選ぶ」 | クライアントが「希望リスト」、サーバーが「選定」 |
+| **標準化** | Google独自（SPDY時代） | IETF標準（RFC 7301） |
+| **現在の地位** | 廃止 | TLS 1.2・1.3で標準 |
+
+ALPNは**「クライアントが優先リストを出し、サーバーが最終決定する」**という、より論理的な流れになっています。
+
+## まとめ
+
+> **ALPN（Application-Layer Protocol Negotiation）は、TLSハンドシェイクのClientHello・ServerHelloメッセージの拡張フィールドを使って、クライアントとサーバーが「このTLS接続でどのアプリケーションプロトコルを使うか」を事前に交渉する仕組みです。クライアントが対応プロトコルの優先リストをClientHelloに入れて送信し、サーバーがその中から1つを選んでServerHelloで返します。これにより、同じ443ポートでHTTP/1.1とHTTP/2を使い分けるなど、TLS上のプロトコル選択が暗号化通信開始前に確実に合意されます。**

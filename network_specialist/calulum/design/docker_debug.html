@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Docker&#x306e;Cmake&#x306e;&#x30b3;&#x30f3;&#x30d1;&#x30a4;&#x30eb;&#x30a8;&#x30e9;&#x30fc;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>Dockerの中でさるレポジトリからコードをDLしてCmakeによりコンパイルするという処理を記載していました。
+ですが、コンパイルでこけていましたが、通常のCmakeに対してDockerの場合どんな点が火種になるか知りたいと思いました。</p>
+<p>本日はそんなコンパイルエラーについて語ります。</p>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="dockerのcmakeのコンパイルエラー">DockerのCmakeのコンパイルエラー</h2>
+<p>Dockerコンテナ内でのCMakeコンパイルエラーには、いくつかの典型的な原因が考えられます。エラーメッセージの内容によって原因は異なりますが、よくあるケースを以下にまとめました。</p>
+<h3 id="1-必要なパッケージやライブラリが不足している">1. 必要なパッケージやライブラリが不足している</h3>
+<p>Dockerイメージは最小構成であることが多いため、コンパイルに必要なツールやライブラリが入っていないことがあります。</p>
+<ul>
+<li><code>build-essential</code>（gcc, g++, make など）</li>
+<li><code>cmake</code> 自体のバージョンが古い</li>
+<li>依存する開発用ライブラリ（<code>libssl-dev</code>, <code>libboost-all-dev</code> など）</li>
+<li><code>ninja-build</code> や他のビルドツール</li>
+</ul>
+<p><strong>対策例:</strong></p>
+<pre><code class="language-dockerfile"><span class="hljs-keyword">RUN</span><span class="language-bash"> apt-get update &amp;&amp; apt-get install -y \
+    build-essential \
+    cmake \
+    lib&lt;依存ライブラリ&gt;-dev</span>
+</code></pre>
+<h3 id="2-cmakeのバージョンが要件を満たしていない">2. CMakeのバージョンが要件を満たしていない</h3>
+<p><code>CMakeLists.txt</code> で <code>cmake_minimum_required(VERSION 3.x)</code> と指定されているのに、コンテナ内のCMakeが古い場合、エラーが発生します。</p>
+<p><strong>対策例:</strong></p>
+<pre><code class="language-dockerfile"><span class="hljs-comment"># 公式のバイナリを取得するなどして新しいバージョンを入れる</span>
+<span class="hljs-keyword">RUN</span><span class="language-bash"> pip install --upgrade cmake</span>
+</code></pre>
+<h3 id="3-ソースコードやファイルのパーミッション問題">3. ソースコードやファイルのパーミッション問題</h3>
+<p>Docker内でファイルをマウントした場合、コンテナ内のユーザーとホスト側のユーザーが異なり、書き込み権限がないことがあります。</p>
+<p><strong>対策例:</strong></p>
+<pre><code class="language-bash"><span class="hljs-comment"># コンテナ内で</span>
+<span class="hljs-built_in">chmod</span> -R 777 /workspace
+<span class="hljs-comment"># または、適切なUID/GIDでコンテナを実行する</span>
+docker run --user $(<span class="hljs-built_in">id</span> -u):$(<span class="hljs-built_in">id</span> -g) ...
+</code></pre>
+<h3 id="4-ビルドディレクトリの問題">4. ビルドディレクトリの問題</h3>
+<p>CMakeは「out-of-source build」を推奨しますが、ソースディレクトリ内で直接ビルドしようとすると、キャッシュの競合などでエラーが起きることがあります。</p>
+<p><strong>対策例:</strong></p>
+<pre><code class="language-bash"><span class="hljs-built_in">mkdir</span> build &amp;&amp; <span class="hljs-built_in">cd</span> build
+cmake ..
+make
+</code></pre>
+<h3 id="5-コンパイラのバージョンや互換性">5. コンパイラのバージョンや互換性</h3>
+<p>C++の標準規格（C++17, C++20など）を要求するコードに対して、古いGCC/Clangではコンパイルエラーになります。</p>
+<p><strong>対策例:</strong></p>
+<pre><code class="language-dockerfile"><span class="hljs-keyword">RUN</span><span class="language-bash"> apt-get install -y gcc-11 g++-11</span>
+<span class="hljs-keyword">ENV</span> CC=gcc-<span class="hljs-number">11</span> CXX=g++-<span class="hljs-number">11</span>
+</code></pre>
+<h3 id="6-メモリ不足">6. メモリ不足</h3>
+<p>コンテナに割り当てられているメモリが少なく、大規模なコンパイル（特にテンプレートを多用するC++コード）でOOM（Out of Memory）が発生することがあります。</p>
+<p><strong>対策例:</strong></p>
+<pre><code class="language-bash"><span class="hljs-comment"># Docker Desktopの設定などでメモリ上限を増やす</span>
+docker run -m 4g ...
+</code></pre>
+<h3 id="7-ネットワーク関連外部リソースの取得">7. ネットワーク関連（外部リソースの取得）</h3>
+<p>CMakeが外部のGitリポジトリやファイルを <code>FetchContent</code> / <code>ExternalProject</code> で取得しようとした際、コンテナ内にGitがない、またはネットワークが不通である場合に失敗します。</p>
+<h2 id="見分けるポイント">見分けるポイント</h2>
+<p>Dockerコンテナ内でのCMakeコンパイルエラーを見分けるポイントは、<strong>エラーメッセージの「キーワード」</strong> と <strong>「どの段階で失敗したか」</strong> にあります。</p>
+<p>以下、エラーの症状別に見分けるポイントをまとめました。</p>
+<h3 id="1-必要なパッケージライブラリ不足">1. 必要なパッケージ・ライブラリ不足</h3>
+<p><strong>見分けるポイント</strong></p>
+<ul>
+<li><code>cmake</code> 実行時に <code>Could not find &lt;パッケージ名&gt;</code> と出る</li>
+<li><code>package '&lt;名前&gt;' not found</code> という <code>pkg-config</code> 関連のエラー</li>
+<li><code>fatal error: &lt;ヘッダーファイル名&gt;: No such file or directory</code>（コンパイル中）</li>
+</ul>
+<p><strong>確認方法</strong></p>
+<pre><code class="language-bash"><span class="hljs-comment"># どのパッケージが不足しているか調べる</span>
+cmake .. 2&gt;&amp;1 | grep -i <span class="hljs-string">&quot;could not find\|not found&quot;</span>
+
+<span class="hljs-comment"># インストール済みパッケージの確認例</span>
+dpkg -l | grep libssl
+</code></pre>
+<h3 id="2-cmakeのバージョン不足">2. CMakeのバージョン不足</h3>
+<p><strong>見分けるポイント</strong></p>
+<ul>
+<li>エラーの<strong>最初の方</strong>に <code>CMake &lt;バージョン&gt; or higher is required.</code> と明確に出る</li>
+<li><code>cmake_minimum_required</code> で指定されたバージョンより古いCMakeが入っている</li>
+</ul>
+<p><strong>確認方法</strong></p>
+<pre><code class="language-bash">cmake --version
+<span class="hljs-comment"># コンテナ内とホストで比較する</span>
+</code></pre>
+<h3 id="3-パーミッション問題">3. パーミッション問題</h3>
+<p><strong>見分けるポイント</strong></p>
+<ul>
+<li><code>Permission denied</code> が出る</li>
+<li><code>cmake</code> 自体は通るが、<code>make</code> 時にオブジェクトファイル（<code>.o</code>）の書き込みで失敗する</li>
+<li>ビルドディレクトリの作成に失敗する（<code>mkdir: cannot create directory</code>)</li>
+</ul>
+<p><strong>確認方法</strong></p>
+<pre><code class="language-bash"><span class="hljs-comment"># コンテナ内のユーザー確認</span>
+<span class="hljs-built_in">whoami</span>
+<span class="hljs-built_in">id</span>
+
+<span class="hljs-comment"># ビルドディレクトリの書き込み権限確認</span>
+<span class="hljs-built_in">touch</span> /workspace/test_write &amp;&amp; <span class="hljs-built_in">rm</span> /workspace/test_write
+</code></pre>
+<h3 id="4-ビルドディレクトリin-source-buildの問題">4. ビルドディレクトリ（in-source build）の問題</h3>
+<p><strong>見分けるポイント</strong></p>
+<ul>
+<li><code>CMakeLists.txt</code> があるディレクトリで直接 <code>cmake .</code> として実行している</li>
+<li><code>CMake Error: The current CMakeCache.txt directory ... is different than</code> というメッセージ</li>
+<li>過去のキャッシュが残っている旨の警告</li>
+</ul>
+<p><strong>確認方法</strong></p>
+<pre><code class="language-bash"><span class="hljs-comment"># カレントディレクトリに CMakeCache.txt が存在するか確認</span>
+<span class="hljs-built_in">ls</span> CMakeCache.txt 2&gt;/dev/null &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;in-source build している可能性あり&quot;</span>
+</code></pre>
+<h3 id="5-コンパイラのバージョン互換性問題">5. コンパイラのバージョン・互換性問題</h3>
+<p><strong>見分けるポイント</strong></p>
+<ul>
+<li><code>error: 'xxx' is not a member of 'std'</code>（C++17/20の機能が使えない）</li>
+<li><code>error: expected ')' before 'const'</code> など、構文エラーっぽいが実は規格対応の問題</li>
+<li><code>This file requires compiler and library support for the ISO C++ 2011 standard</code></li>
+</ul>
+<p><strong>確認方法</strong></p>
+<pre><code class="language-bash"><span class="hljs-comment"># コンパイラのバージョン確認</span>
+gcc --version
+g++ --version
+
+<span class="hljs-comment"># C++規格のサポート確認</span>
+g++ -std=c++17 -dM -E -x c++ /dev/null | grep __cplusplus
+</code></pre>
+<h3 id="6-メモリ不足oom">6. メモリ不足（OOM）</h3>
+<p><strong>見分けるポイント</strong></p>
+<ul>
+<li>エラーが<strong>特定の大きなソースファイル</strong>をコンパイルしている途中で発生</li>
+<li><code>g++: internal compiler error: Killed (program cc1plus)</code> と出る</li>
+<li><code>make[2]: *** [xxx.o] Error 4</code> や <code>Error 137</code>（SIGKILLを受けた印）</li>
+</ul>
+<p><strong>確認方法</strong></p>
+<pre><code class="language-bash"><span class="hljs-comment"># コンテナ内のメモリ確認</span>
+free -h
+<span class="hljs-built_in">cat</span> /proc/meminfo | grep MemTotal
+
+<span class="hljs-comment"># Dockerのメモリ制限確認（ホスト側で）</span>
+docker stats --no-stream &lt;コンテナ名&gt;
+</code></pre>
+<h3 id="7-ネットワーク関連外部リソース取得">7. ネットワーク関連（外部リソース取得）</h3>
+<p><strong>見分けるポイント</strong></p>
+<ul>
+<li><code>FetchContent</code> や <code>ExternalProject_Add</code> を使っている箇所で止まる</li>
+<li><code>git clone</code> や <code>download</code> でタイムアウト・接続拒否</li>
+<li><code>Could not resolve host: github.com</code> などのDNSエラー</li>
+</ul>
+<p><strong>確認方法</strong></p>
+<pre><code class="language-bash"><span class="hljs-comment"># コンテナ内からネットワーク疎通確認</span>
+ping -c 1 github.com
+curl -I https://github.com
+
+<span class="hljs-comment"># gitが入っているか確認</span>
+<span class="hljs-built_in">which</span> git
+git --version
+</code></pre>
+<h3 id="調査の優先順位おすすめの手順">調査の優先順位（おすすめの手順）</h3>
+<p>エラーが発生したら、以下の順序でログを確認すると効率的です。</p>
+<ol>
+<li><strong>エラーメッセージの最初の10行を読む</strong>（CMakeバージョン不足やパッケージ不足はここに出る）</li>
+<li><strong>失敗したコマンドを確認する</strong>（<code>cmake</code> 段階か <code>make</code> 段階か）</li>
+<li><strong>コンテナ内の環境を確認する</strong>（<code>cmake --version</code>, <code>gcc --version</code>, <code>free -h</code>）</li>
+<li><strong>ビルドディレクトリを作り直す</strong>（<code>rm -rf build &amp;&amp; mkdir build &amp;&amp; cd build</code>）</li>
+</ol>
+<h2 id="総括">総括</h2>
+<p>Docker内でCMakeコンパイルを安定させるためのコツは、以下の通りです。</p>
+<p><strong>1. ベースイメージを「最小構成」にしない</strong></p>
+<p><code>ubuntu</code> や <code>debian</code> の slim イメージだけでなく、コンパイル前提のパッケージを最初から入れておきます。</p>
+<pre><code class="language-dockerfile"><span class="hljs-keyword">RUN</span><span class="language-bash"> apt-get update &amp;&amp; apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    &amp;&amp; <span class="hljs-built_in">rm</span> -rf /var/lib/apt/lists/*</span>
+</code></pre>
+<p><strong>2. 依存ライブラリは明示的にインストールする</strong></p>
+<p><code>CMakeLists.txt</code> の <code>find_package</code> で探しているものを、事前に <code>-dev</code> パッケージとして入れます。</p>
+<p><strong>3. ビルドは必ず専用ディレクトリで行う</strong></p>
+<p>ソースディレクトリを汚さず、キャッシュの混乱を防ぎます。</p>
+<pre><code class="language-bash"><span class="hljs-built_in">mkdir</span> build &amp;&amp; <span class="hljs-built_in">cd</span> build
+cmake ..
+cmake --build .
+</code></pre>
+<p><strong>4. バージョンを最初に確認する仕組みを入れる</strong></p>
+<p>Dockerfile の冒頭でツールのバージョンを出力し、想定外の環境にすぐ気づけるようにします。</p>
+<pre><code class="language-dockerfile"><span class="hljs-keyword">RUN</span><span class="language-bash"> cmake --version &amp;&amp; gcc --version</span>
+</code></pre>
+<p><strong>5. マウントする際はUID/GIDを合わせる</strong></p>
+<p>パーミッションエラーを防ぐため、コンテナ内のユーザーとホスト側を一致させるか、書き込み可能なディレクトリを明示します。</p>
+<pre><code class="language-bash">docker run --user $(<span class="hljs-built_in">id</span> -u):$(<span class="hljs-built_in">id</span> -g) -v $(<span class="hljs-built_in">pwd</span>):/workspace ...
+</code></pre>
+<p><strong>6. メモリ上限に余裕を持たせる</strong></p>
+<p>大規模なC++コンパイルでは、Dockerのメモリ制限（デフォルト2GBなど）を超えることがあります。必要に応じて4GB以上確保します。</p>
+<pre><code class="language-bash">docker run -m 4g ...
+</code></pre>
+<p><strong>7. ネットワーク依存のビルドは分離する</strong></p>
+<p><code>FetchContent</code> などで外部リソースを取得する場合、ビルドステージと実行ステージを分け、必要なものは事前に揃えておきます。</p>
+<p><strong>8. エラーログの「最初の10行」を最初に読む</strong></p>
+<p>原因の9割はエラーログの先頭に書かれています。<code>CMake Error</code> の直後のメッセージを確認する習慣をつけます。</p>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/LAmZrJFe9cw?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+
+        </body>
+        </html>

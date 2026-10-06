@@ -494,3 +494,186 @@ async fn main() -> Result<()> {
 
     Ok(())
 }
+
+use anyhow::{anyhow, Result};
+use petgraph::dot::{Config, Dot};
+use petgraph::graph::{NodeIndex, UnGraph};
+use std::collections::HashMap;
+use std::fs::File;
+use std::io::Write;
+use std::process::Command;
+
+// -----------------------------------------------------------------------------
+// データ構造の定義
+// -----------------------------------------------------------------------------
+
+#[derive(Debug, Clone)]
+pub enum DeviceRole {
+    CoreRouter,
+    Switch,
+    Server,
+}
+
+#[derive(Debug, Clone)]
+pub struct DeviceNode {
+    pub ip: String,
+    pub name: String,
+    pub role: DeviceRole,
+}
+
+#[derive(Debug, Clone)]
+pub struct LinkEdge {
+    pub bandwidth_gbps: f64,
+    pub traffic_load: f64, // 負荷率 (0.0 ～ 1.0)
+}
+
+pub struct VisualizableNetworkGraph {
+    pub graph: UnGraph<DeviceNode, LinkEdge>,
+    pub ip_to_node: HashMap<String, NodeIndex>,
+}
+
+impl VisualizableNetworkGraph {
+    pub fn new() -> Self {
+        Self {
+            graph: UnGraph::new_undirected(),
+            ip_to_node: HashMap::new(),
+        }
+    }
+
+    pub fn add_device(&mut self, ip: &str, name: &str, role: DeviceRole) -> NodeIndex {
+        let idx = self.graph.add_node(DeviceNode {
+            ip: ip.to_string(),
+            name: name.to_string(),
+            role,
+        });
+        self.ip_to_node.insert(ip.to_string(), idx);
+        idx
+    }
+
+    pub fn add_link(&mut self, ip_a: &str, ip_b: &str, bandwidth_gbps: f64, load: f64) -> Result<()> {
+        let idx_a = *self.ip_to_node.get(ip_a).ok_or_else(|| anyhow!("Node not found: {}", ip_a))?;
+        let idx_b = *self.ip_to_node.get(ip_b).ok_or_else(|| anyhow!("Node not found: {}", ip_b))?;
+
+        self.graph.add_edge(idx_a, idx_b, LinkEdge { bandwidth_gbps, traffic_load: load });
+        Ok(())
+    }
+
+    // -------------------------------------------------------------------------
+    // DOT 言語によるカスタマイズ可視化エクスポート
+    // -------------------------------------------------------------------------
+
+    /// Graphviz形式のDOT文字列を生成（属性や装飾をカスタマイズ）
+    pub fn export_dot(&self) -> String {
+        // petgraph の標準 Dot 出力にカスタム描画設定を適用
+        let raw_dot = format!(
+            "{:?}",
+            Dot::with_attr_getters(
+                &self.graph,
+                &[Config::NodeNoLabel, Config::EdgeNoLabel],
+                &|_g, edge_ref| {
+                    let weight = edge_ref.weight();
+                    let load_pct = weight.traffic_load * 100.0;
+                    
+                    // トラフィック負荷率に応じて線の色と太さを強調
+                    if weight.traffic_load >= 0.85 {
+                        format!("label=\" {:.0}% ({:.0}G)\" color=\"red\" penwidth=3.0 fontcolor=\"red\"", load_pct, weight.bandwidth_gbps)
+                    } else if weight.traffic_load >= 0.60 {
+                        format!("label=\" {:.0}% ({:.0}G)\" color=\"orange\" penwidth=2.0 fontcolor=\"orange\"", load_pct, weight.bandwidth_gbps)
+                    } else {
+                        format!("label=\" {:.0}% ({:.0}G)\" color=\"#4A5568\" penwidth=1.0", load_pct, weight.bandwidth_gbps)
+                    }
+                },
+                &|_g, node_ref| {
+                    let node = node_ref.1;
+                    // デバイス種別ごとに形状とカラーリングを設定
+                    match node.role {
+                        DeviceRole::CoreRouter => format!(
+                            "label=\"{} \\n({})\" shape=diamond style=filled fillcolor=\"#FCA5A5\" color=\"#DC2626\"",
+                            node.name, node.ip
+                        ),
+                        DeviceRole::Switch => format!(
+                            "label=\"{} \\n({})\" shape=box style=filled fillcolor=\"#93C5FD\" color=\"#2563EB\"",
+                            node.name, node.ip
+                        ),
+                        DeviceRole::Server => format!(
+                            "label=\"{} \\n({})\" shape=ellipse style=filled fillcolor=\"#86EFAC\" color=\"#16A34A\"",
+                            node.name, node.ip
+                        ),
+                    }
+                }
+            )
+        );
+
+        // レイアウトを美しく見せる全般設定を挿入
+        let global_styles = r#"
+    graph [overlap=false, splines=true, nodesep=0.8, ranksep=1.0];
+    node [fontname="Helvetica", fontsize=10];
+    edge [fontname="Helvetica", fontsize=9];
+"#;
+
+        raw_dot.replacen('{', &format!("{{{}", global_styles), 1)
+    }
+
+    /// DOTファイルを保存し、`dot` コマンドで画像化（PNG / SVG）
+    pub fn render_to_file(&self, dot_filename: &str, output_image_filename: &str) -> Result<()> {
+        let dot_data = self.export_dot();
+
+        // 1. .dot ファイルの書き出し
+        let mut file = File::create(dot_filename)?;
+        file.write_all(dot_data.as_bytes())?;
+        println!("DOTファイルを保存しました: {}", dot_filename);
+
+        // 2. Graphviz (dot コマンド) を呼び出して PNG/SVG にレンダリング
+        let output = Command::new("dot")
+            .arg("-Tpng")
+            .arg(dot_filename)
+            .arg("-o")
+            .arg(output_image_filename)
+            .output();
+
+        match output {
+            Ok(res) if res.status.success() => {
+                println!("画像レンダリング成功: {}", output_image_filename);
+            }
+            Ok(res) => {
+                let err_msg = String::from_utf8_lossy(&res.stderr);
+                eprintln!("Graphviz エラー: {}", err_msg);
+            }
+            Err(_) => {
+                println!("\n[注意] 'dot' コマンドが見つかりません。");
+                println!("生成された '{}' は Graphviz または Online Graphviz Visualizer 等で画像化可能です。", dot_filename);
+            }
+        }
+
+        Ok(())
+    }
+}
+
+// -----------------------------------------------------------------------------
+// メインルーチン
+// -----------------------------------------------------------------------------
+
+fn main() -> Result<()> {
+    let mut network = VisualizableNetworkGraph::new();
+
+    // デバイス追加
+    network.add_device("10.0.0.1", "Core-Router", DeviceRole::CoreRouter);
+    network.add_device("10.0.0.2", "Dist-Switch-A", DeviceRole::Switch);
+    network.add_device("10.0.0.3", "Dist-Switch-B", DeviceRole::Switch);
+    network.add_device("10.0.0.10", "Web-Server-01", DeviceRole::Server);
+    network.add_device("10.0.0.11", "Web-Server-02", DeviceRole::Server);
+    network.add_device("10.0.0.20", "DB-Server-Primary", DeviceRole::Server);
+
+    // リンクおよび最新の負荷率を設定
+    network.add_link("10.0.0.1", "10.0.0.2", 10.0, 0.90)?; // 赤色表示（高負荷）
+    network.add_link("10.0.0.1", "10.0.0.3", 10.0, 0.20)?;
+    network.add_link("10.0.0.2", "10.0.0.10", 1.0, 0.70)?; // オレンジ色表示
+    network.add_link("10.0.0.2", "10.0.0.11", 1.0, 0.15)?;
+    network.add_link("10.0.0.3", "10.0.0.20", 1.0, 0.40)?;
+    network.add_link("10.0.0.2", "10.0.0.3", 10.0, 0.05)?;
+
+    // レンダリングの実行
+    network.render_to_file("network_topology.dot", "network_topology.png")?;
+
+    Ok(())
+}

@@ -1,9 +1,20 @@
-//! Rendering utilities for the physics simulation using egui primitives.
+//! High-performance rendering using egui primitives with render interpolation.
 
-use crate::physics::{Bounds, Particle, PhysicsWorld, Vec2};
+use crate::physics::{Bounds, ParticleSoA, PhysicsWorld};
 
-pub fn draw_world(ui: &mut egui::Ui, world: &PhysicsWorld, scale: f32) {
-    let available = ui.available_size();
+pub struct RenderState {
+    pub mesh: egui::Mesh,
+}
+
+impl RenderState {
+    pub fn new() -> Self {
+        Self {
+            mesh: egui::Mesh::default(),
+        }
+    }
+}
+
+pub fn draw_world(ui: &mut egui::Ui, world: &PhysicsWorld, render_state: &mut RenderState, alpha: f32) {
     let desired = egui::vec2(
         world.config.bounds.width() as f32,
         world.config.bounds.height() as f32,
@@ -12,18 +23,17 @@ pub fn draw_world(ui: &mut egui::Ui, world: &PhysicsWorld, scale: f32) {
     let painter = ui.painter_at(rect);
 
     // Background
-    painter.rect_filled(rect, 0.0, egui::Color32::from_rgb(20, 20, 30));
+    painter.rect_filled(rect, 0.0, egui::Color32::from_rgb(15, 15, 22));
+    // Border
+    painter.rect_stroke(rect, 0.0, egui::Stroke::new(2.0, egui::Color32::from_rgb(120, 120, 150)));
 
-    // Bounds border
-    painter.rect_stroke(rect, 0.0, egui::Stroke::new(2.0, egui::Color32::from_rgb(150, 150, 180)));
-
-    // Grid lines
-    let grid_step = 50.0f32;
+    // Grid (sparse for performance)
+    let grid_step = 100.0f32;
     let mut x = rect.min.x;
     while x < rect.max.x {
         painter.line_segment(
             [egui::pos2(x, rect.min.y), egui::pos2(x, rect.max.y)],
-            egui::Stroke::new(0.5, egui::Color32::from_rgb(50, 50, 70)),
+            egui::Stroke::new(0.5, egui::Color32::from_rgb(40, 40, 55)),
         );
         x += grid_step;
     }
@@ -31,45 +41,49 @@ pub fn draw_world(ui: &mut egui::Ui, world: &PhysicsWorld, scale: f32) {
     while y < rect.max.y {
         painter.line_segment(
             [egui::pos2(rect.min.x, y), egui::pos2(rect.max.x, y)],
-            egui::Stroke::new(0.5, egui::Color32::from_rgb(50, 50, 70)),
+            egui::Stroke::new(0.5, egui::Color32::from_rgb(40, 40, 55)),
         );
         y += grid_step;
     }
 
-    // Particles
-    for p in &world.particles {
-        let center = world_to_screen(rect, &world.config.bounds, p.pos);
-        let r = (p.radius as f32).max(2.0) * scale;
-        let color = egui::Color32::from_rgb(p.color.0, p.color.1, p.color.2);
-        painter.circle_filled(center, r, color);
-        // Velocity indicator
-        let vel = p.velocity(1.0 / 60.0);
-        if vel.length() > 10.0 {
-            let tip = world_to_screen(rect, &world.config.bounds, p.pos.add(Vec2::new(vel.x * 0.01, vel.y * 0.01)));
+    // Particles with render interpolation
+    let particles = &world.particles;
+    let b = world.config.bounds;
+    let scale_x = rect.width() / b.width() as f32;
+    let scale_y = rect.height() / b.height() as f32;
+
+    for i in 0..particles.count {
+        // Interpolate between old and current position using alpha
+        let vx = (particles.pos_x[i] - particles.old_x[i]) as f32;
+        let vy = (particles.pos_y[i] - particles.old_y[i]) as f32;
+        let render_x = particles.pos_x[i] as f32 + vx * alpha;
+        let render_y = particles.pos_y[i] as f32 + vy * alpha;
+
+        let sx = rect.min.x + (render_x - b.min_x as f32) * scale_x;
+        let sy = rect.min.y + (render_y - b.min_y as f32) * scale_y;
+        let r = (particles.radius[i] as f32).max(2.0);
+        let color = egui::Color32::from_rgb(particles.color_r[i], particles.color_g[i], particles.color_b[i]);
+
+        painter.circle_filled(egui::pos2(sx, sy), r, color);
+    }
+
+    // Velocity indicators
+    for i in 0..particles.count {
+        let vx = (particles.pos_x[i] - particles.old_x[i]) as f32 * 10.0;
+        let vy = (particles.pos_y[i] - particles.old_y[i]) as f32 * 10.0;
+        if vx * vx + vy * vy > 2.0 {
+            let sx = rect.min.x + (particles.pos_x[i] as f32 - b.min_x as f32) * scale_x;
+            let sy = rect.min.y + (particles.pos_y[i] as f32 - b.min_y as f32) * scale_y;
             painter.line_segment(
-                [center, tip],
-                egui::Stroke::new(1.0, egui::Color32::from_rgba_premultiplied(255, 255, 255, 120)),
+                [egui::pos2(sx, sy), egui::pos2(sx + vx, sy + vy)],
+                egui::Stroke::new(1.0, egui::Color32::from_rgba_premultiplied(255, 255, 255, 80)),
             );
         }
     }
-
-    // Interaction: spawn on click
-    if response.clicked() {
-        if let Some(pos) = response.interact_pointer_pos() {
-            let world_pos = screen_to_world(rect, &world.config.bounds, pos);
-            // Store in app via external handling (see app.rs)
-        }
-    }
 }
 
-fn world_to_screen(rect: egui::Rect, bounds: &Bounds, pos: Vec2) -> egui::Pos2 {
-    let sx = rect.min.x + ((pos.x - bounds.min_x) / bounds.width()) as f32 * rect.width();
-    let sy = rect.min.y + ((pos.y - bounds.min_y) / bounds.height()) as f32 * rect.height();
-    egui::pos2(sx, sy)
-}
-
-fn screen_to_world(rect: egui::Rect, bounds: &Bounds, pos: egui::Pos2) -> Vec2 {
+pub fn screen_to_world(rect: egui::Rect, bounds: &Bounds, pos: egui::Pos2) -> (f64, f64) {
     let wx = bounds.min_x + ((pos.x - rect.min.x) / rect.width()) as f64 * bounds.width();
     let wy = bounds.min_y + ((pos.y - rect.min.y) / rect.height()) as f64 * bounds.height();
-    Vec2::new(wx, wy)
+    (wx, wy)
 }

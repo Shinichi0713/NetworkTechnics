@@ -110,7 +110,6 @@ df = pd.DataFrame({
 
 何か特定の文脈（例えば「PandasのDataFrameとイーサネットフレームの関係」や「PPPフレームとの詳細な比較」など）についてさらに詳しく知りたい点はございますか？
 
-
 L2データフレームを別拠点に同じLANとして転送する技術は、**「Layer 2 over Layer 3（L2oL3）」**や**「Data Center Interconnect（DCI）」**の文脈でいくつも存在します。
 
 以下に、主要な技術をカテゴリ別に整理して説明いたします。
@@ -119,16 +118,16 @@ L2データフレームを別拠点に同じLANとして転送する技術は、
 
 ## 1. 技術の全体マップ
 
-| カテゴリ | 技術名 | 特徴 |
-|----------|--------|------|
-| **IETF標準・UDPベース** | **VXLAN** | 事実上の標準。UDP/4789でMAC-in-UDPカプセル化 |
-| | **GENEVE** | VXLANの後継を目指す、より拡張性の高いフレームワーク |
-| | **NVGRE** | Microsoft提唱。GREキーフィールドで識別。IPマルチキャスト必須 |
-| **IETF標準・L2TPベース** | **L2TPv3** | PPPの後継。様々なL2プロトコルをIPネットワーク上で転送 |
-| **MPLSベース** | **VPWS（EoMPLS）** | 点対点の擬似ワイヤ。1本の回線を伸ばす感覚 |
-| | **VPLS** | 点対多点の擬似LAN。MPLS上にLANセグメントを構築 |
-| **Cisco独自** | **OTV（Overlay Transport Virtualization）** | IS-IS制御面を使ったL2 DCI専用技術。ループ防止機能あり |
-| **汎用カプセル化** | **GRE** | L2 over GREも可能。汎用だがエントロピー不足の課題 |
+| カテゴリ                       | 技術名                                            | 特徴                                                         |
+| ------------------------------ | ------------------------------------------------- | ------------------------------------------------------------ |
+| **IETF標準・UDPベース**  | **VXLAN**                                   | 事実上の標準。UDP/4789でMAC-in-UDPカプセル化                 |
+|                                | **GENEVE**                                  | VXLANの後継を目指す、より拡張性の高いフレームワーク          |
+|                                | **NVGRE**                                   | Microsoft提唱。GREキーフィールドで識別。IPマルチキャスト必須 |
+| **IETF標準・L2TPベース** | **L2TPv3**                                  | PPPの後継。様々なL2プロトコルをIPネットワーク上で転送        |
+| **MPLSベース**           | **VPWS（EoMPLS）**                          | 点対点の擬似ワイヤ。1本の回線を伸ばす感覚                    |
+|                                | **VPLS**                                    | 点対多点の擬似LAN。MPLS上にLANセグメントを構築               |
+| **Cisco独自**            | **OTV（Overlay Transport Virtualization）** | IS-IS制御面を使ったL2 DCI専用技術。ループ防止機能あり        |
+| **汎用カプセル化**       | **GRE**                                     | L2 over GREも可能。汎用だがエントロピー不足の課題            |
 
 ---
 
@@ -159,7 +158,7 @@ L2データフレームを別拠点に同じLANとして転送する技術は、
 [拠点A]--[L2TPv3ルーター]--【IPネットワーク】--[L2TPv3ルーター]--[拠点B]
 ```
 
-**VXLANとの違い**: L2TPv3は「VPN技術」としての側面が強く、VNIのような大規模セグメント識別の概念はありません。主に**1本の回線を伸ばす**用途に向いています。<source-chip title="Cisco Community" url="https://community.cisco.com/t5/other-network-architecture-subjects/l2-connection-over-l3-l2tp-or-vxlan/td-p/5125964" />
+**VXLANとの違い**: L2TPv3は「VPN技術」としての側面が強く、VNIのような大規模セグメント識別の概念はありません。主に**1本の回線を伸ばす**用途に向いています。`<source-chip title="Cisco Community" url="https://community.cisco.com/t5/other-network-architecture-subjects/l2-connection-over-l3-l2tp-or-vxlan/td-p/5125964" />`
 
 ---
 
@@ -168,17 +167,19 @@ L2データフレームを別拠点に同じLANとして転送する技術は、
 **MPLS（Multi-Protocol Label Switching）**ネットワーク上でL2を転送する技術群です。
 
 #### VPWS（Virtual Private Wire Service）/ EoMPLS
+
 - **点対点**の擬似ワイヤ
 - 2拠点間をまるで1本の専用線のように接続
 - シンプルだが、複数拠点のフルメッシュには拠点数分の回線が必要
 
 #### VPLS（Virtual Private LAN Service）
+
 - **点対多点**の擬似LAN
 - MPLS上にブロードキャストドメイン（LANセグメント）を構築
 - 複数拠点を同じLANに参加させられる
 - ただし、全拠点間でフルメッシュの擬似ワイヤが必要で**スケールに課題**があり、STPのようなループ防止が必要
 
-**用途**: 通信事業者のL2VPNサービス、企業の多拠点L2接続。<source-chip title="ManageEngine" url="https://www.manageengine.com/it-operations-management/layer-2-extension-technologies.html" />
+**用途**: 通信事業者のL2VPNサービス、企業の多拠点L2接続。`<source-chip title="ManageEngine" url="https://www.manageengine.com/it-operations-management/layer-2-extension-technologies.html" />`
 
 ---
 
@@ -198,7 +199,7 @@ L2データフレームを別拠点に同じLANとして転送する技術は、
 （STPはここで止まる。OTVがMACルーティングを担当）
 ```
 
-**VXLANとの違い**: OTVは「L2 DCI専用の最適化技術」であり、VLANの拡張とループ防止に特化。VXLANはより汎用的でクラウド・マルチテナント向け。<source-chip title="Cisco" url="https://www.cisco.com/c/en/us/td/docs/solutions/Enterprise/Data_Center/DCI/whitepaper/DCI3_OTV_Intro/DCI_1.html" />
+**VXLANとの違い**: OTVは「L2 DCI専用の最適化技術」であり、VLANの拡張とループ防止に特化。VXLANはより汎用的でクラウド・マルチテナント向け。`<source-chip title="Cisco" url="https://www.cisco.com/c/en/us/td/docs/solutions/Enterprise/Data_Center/DCI/whitepaper/DCI3_OTV_Intro/DCI_1.html" />`
 
 ---
 
@@ -230,14 +231,14 @@ L2データフレームを別拠点に同じLANとして転送する技術は、
 
 ## 3. 技術選定の指針
 
-| 要件 | 推奨技術 |
-|------|----------|
-| **クラウド・大規模DC間のL2拡張** | VXLAN, GENEVE |
-| **Cisco環境でのDCI・ループ防止重視** | OTV |
-| **通信事業者のL2VPNサービス** | VPLS, VPWS（MPLS） |
-| **企業の拠点間で1本のL2回線を伸ばす** | L2TPv3, VPWS |
-| **汎用的なL2 over IP（シンプル）** | L2TPv3, GRE |
-| **マルチテナント・大量セグメント** | VXLAN, GENEVE |
+| 要件                                        | 推奨技術           |
+| ------------------------------------------- | ------------------ |
+| **クラウド・大規模DC間のL2拡張**      | VXLAN, GENEVE      |
+| **Cisco環境でのDCI・ループ防止重視**  | OTV                |
+| **通信事業者のL2VPNサービス**         | VPLS, VPWS（MPLS） |
+| **企業の拠点間で1本のL2回線を伸ばす** | L2TPv3, VPWS       |
+| **汎用的なL2 over IP（シンプル）**    | L2TPv3, GRE        |
+| **マルチテナント・大量セグメント**    | VXLAN, GENEVE      |
 
 ---
 
@@ -252,8 +253,6 @@ L2データフレームを別拠点に同じLANとして転送する技術は、
 一言で言えば、**「どのL3ネットワークを使うか」「何拠点を接続するか」「ループ防止が必要か」**によって選ぶ技術が変わります。
 
 何か特定の技術（例えば「L2TPv3の設定」や「OTVとVXLANの詳細な比較」など）についてさらに詳しく知りたい点はございますか？
-
-
 
 Layer 2 over Layer 3（L2oL3）は、一言で言えば**「Layer 2のイーサネットフレームをLayer 3のパケット（IPなど）の中に包んで転送する」**技術です。
 
@@ -355,6 +354,7 @@ L2oL3の最大の課題は、**リモートのMACアドレスがどのトンネ�
 - BGP、IS-IS、LDPなどを使用
 
 **代表技術**:
+
 - **BGP EVPN**（VXLANと組み合わせて使用）：MAC/IPルートをBGPで広報
 - **OTVのIS-IS**：MACルートをIS-ISで交換
 - **LDP signaling**（VPLS）：ラベルとMACの対応をLDPで配布
@@ -366,14 +366,14 @@ L2oL3の最大の課題は、**リモートのMACアドレスがどのトンネ�
 
 ## 4. 主要な実装方式ごとのカプセル化の違い
 
-| 技術 | カプセル化方式 | 外側ヘッダー | 識別子 |
-|------|--------------|------------|--------|
-| **VXLAN** | MAC-in-UDP | UDP/IP + VXLAN Header | VNI（24ビット） |
-| **L2TPv3** | L2-in-L2TPv3 | IP + L2TPv3 Header | Session ID |
-| **GRE** | MAC-in-GRE | IP + GRE Header | Keyフィールド（24ビット） |
-| **NVGRE** | MAC-in-GRE | IP + GRE Header | GRE Key（24ビット） |
-| **VPLS** | MAC-in-MPLS | MPLSラベルスタック | VC Label + Transport Label |
-| **EoMPLS** | MAC-in-MPLS | MPLSラベルスタック | VC Label + Transport Label |
+| 技術             | カプセル化方式 | 外側ヘッダー          | 識別子                     |
+| ---------------- | -------------- | --------------------- | -------------------------- |
+| **VXLAN**  | MAC-in-UDP     | UDP/IP + VXLAN Header | VNI（24ビット）            |
+| **L2TPv3** | L2-in-L2TPv3   | IP + L2TPv3 Header    | Session ID                 |
+| **GRE**    | MAC-in-GRE     | IP + GRE Header       | Keyフィールド（24ビット）  |
+| **NVGRE**  | MAC-in-GRE     | IP + GRE Header       | GRE Key（24ビット）        |
+| **VPLS**   | MAC-in-MPLS    | MPLSラベルスタック    | VC Label + Transport Label |
+| **EoMPLS** | MAC-in-MPLS    | MPLSラベルスタック    | VC Label + Transport Label |
 
 どの方式も「元のL2フレームを外側ヘッダーで包む」という原理は共通です。違いは**「何で包むか（UDP/GRE/L2TP/MPLS）」**と**「どう識別するか（VNI/Session ID/ラベル）」**です。
 
@@ -385,31 +385,31 @@ L2oL3の最大の課題は、**リモートのMACアドレスがどのトンネ�
 
 カプセル化により、パケットサイズが大きくなります（VXLANなら約50〜70バイト増）。
 
-| 対策 | 内容 |
-|------|------|
-| MTUの増加 | 物理ネットワークを1,550〜1,600バイト以上に設定 |
-| PMTU Discovery | パスMTU発見で適切なサイズを検出 |
-| TCP MSS Clamping | TCPセッションの最大セグメントサイズを調整 |
+| 対策             | 内容                                           |
+| ---------------- | ---------------------------------------------- |
+| MTUの増加        | 物理ネットワークを1,550〜1,600バイト以上に設定 |
+| PMTU Discovery   | パスMTU発見で適切なサイズを検出                |
+| TCP MSS Clamping | TCPセッションの最大セグメントサイズを調整      |
 
 ### 課題2：ブロードキャスト・マルチキャスト（ARPなど）
 
 L2ではARPがブロードキャストで流れますが、L3ネットワークではブロードキャストが通らない場合が多いです。
 
-| 対策 | 内容 |
-|------|------|
-| IPマルチキャストへのマッピング | VXLANのようにVNIごとにマルチキャストグループを割り当て |
-| コントロールプレーンでのARP抑制 | BGP EVPNでMAC/IP情報を事前配布し、ARP Proxyで応答 |
-| 未知ユニキャストのflooding抑制 | 学習済みMACのみユニキャスト、未知は捨てる設定も可能 |
+| 対策                            | 内容                                                   |
+| ------------------------------- | ------------------------------------------------------ |
+| IPマルチキャストへのマッピング  | VXLANのようにVNIごとにマルチキャストグループを割り当て |
+| コントロールプレーンでのARP抑制 | BGP EVPNでMAC/IP情報を事前配布し、ARP Proxyで応答      |
+| 未知ユニキャストのflooding抑制  | 学習済みMACのみユニキャスト、未知は捨てる設定も可能    |
 
 ### 課題3：ループ防止
 
 L2を遠距離まで伸ばすと、拠点間でSTP（スパニングツリー）のループが発生する危険性があります。
 
-| 対策 | 内容 |
-|------|------|
-| STP BPDUの分離 | OTVのようにWAN側にBPDUを転送しない |
-| スプリットホライゾン | 同じフレームが同じインターフェースから戻ってこないよう制御 |
-| ルートガード・BPDUフィルタ | 物理的なL2境界でのBPDU制御 |
+| 対策                       | 内容                                                       |
+| -------------------------- | ---------------------------------------------------------- |
+| STP BPDUの分離             | OTVのようにWAN側にBPDUを転送しない                         |
+| スプリットホライゾン       | 同じフレームが同じインターフェースから戻ってこないよう制御 |
+| ルートガード・BPDUフィルタ | 物理的なL2境界でのBPDU制御                                 |
 
 ---
 
@@ -428,6 +428,3 @@ Layer 2 over Layer 3の実現メカニズムを一言で表すと：
 これらが組み合わさることで、**物理的に離れた拠点同士が、まるで同じスイッチに接続されているかのように振る舞う**のです。
 
 何か特定の部分（例えば「BGP EVPNの具体的な動作」や「Linux上でVXLANを手動設定する方法」など）についてさらに詳しく知りたい点はございますか？
-
-
-

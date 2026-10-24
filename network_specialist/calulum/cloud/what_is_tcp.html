@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>TCP&#x3068;&#x306f;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+            <h2 id="tcpとは">TCPとは</h2>
+<p>TCP（Transmission Control Protocol）とは、インターネット上でデータを「確実に」「順番通りに」届けるための約束事（プロトコル）です。</p>
+<h3 id="1-基本的な概念">1. 基本的な概念</h3>
+<p>TCPは、送信者と受信者がお互いの状態を確認しながらデータを送り合うことで、<strong>「届かなかったら届くまで再送する」</strong> という仕組みを持っています。だから、Webページの表示やファイルのダウンロードなど、「欠けや順番の入れ替わりが許されない」通信に使われます。</p>
+<h3 id="2-直感的な例え宅配便の配達">2. 直感的な例え：宅配便の配達</h3>
+<p>TCPを宅配便に例えるとこうなります。</p>
+<ul>
+<li><strong>宛名と送り状がある</strong>：どこからどこへ届けるかが明確</li>
+<li><strong>配達証明がある</strong>：受け取ったら「受け取りました」と返事をする</li>
+<li><strong>順番に届ける</strong>：箱に「1番」「2番」と書いておき、順番が乱れていたら元通りに並べる</li>
+<li><strong>紛失したら再送</strong>：「2番が来ていません」と伝えたら、再度送ってくれる</li>
+</ul>
+<p>このように、TCPは「確実・順序正確」を重視します。</p>
+<h3 id="3-仕組みどうやって確実に届けるのか">3. 仕組み：どうやって確実に届けるのか</h3>
+<p>TCPには、以下のような重要な仕組みがあります。</p>
+<p><strong>① 3ウェイ・ハンドシェイク（接続の確立）</strong></p>
+<p>通信を始める前に、送受信者が3回やり取りをして「準備OKです」と確認します。</p>
+<ol>
+<li>「通信していいですか？」（SYN）</li>
+<li>「いいですよ、こちらも準備OKです」（SYN-ACK）</li>
+<li>「では、始めます」（ACK）</li>
+</ol>
+<p><strong>② シーケンス番号と確認応答（ACK）</strong></p>
+<p>送るデータに「1番から1000バイト目」といった番号（シーケンス番号）を付けます。受信者は「1000バイト目まで受け取りました」（ACK）と返します。これで「確実に届いたか」が分かります。</p>
+<p><strong>③ 再送制御</strong></p>
+<p>一定時間内にACKが返ってこなければ、「届いていない」と判断して同じデータを再度送ります。</p>
+<p><strong>④ フロー制御（受信側の処理能力に合わせる）</strong></p>
+<p>受信者が「今はこれ以上受け取れません」と伝え、送信者はその量を調整します。これで受信者がパンクするのを防ぎます。</p>
+<p><strong>⑤ 輻輳制御（ネットワークの混雑に合わせる）</strong></p>
+<p>ネットワークが混雑していれば、送信速度を落とします。道路の渋滞を避けるように、通信量を調整します。</p>
+<h3 id="4-境界udpとの違い">4. 境界：UDPとの違い</h3>
+<p>TCPは「確実・順序重視」ですが、必ずしもすべての通信に最適とは限りません。UDP（User Datagram Protocol）という別のプロトコルと比べると、違いが明確です。</p>
+<table>
+<thead>
+<tr>
+<th>特徴</th>
+<th>TCP</th>
+<th>UDP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>接続の確立</td>
+<td>ある（3ウェイ・ハンドシェイク）</td>
+<td>ない</td>
+</tr>
+<tr>
+<td>信頼性</td>
+<td>高い（再送・順序制御あり）</td>
+<td>低い（ベストエフォート）</td>
+</tr>
+<tr>
+<td>順序保証</td>
+<td>ある</td>
+<td>ない</td>
+</tr>
+<tr>
+<td>速度</td>
+<td>やや遅い（制御のオーバーヘッド）</td>
+<td>速い</td>
+</tr>
+<tr>
+<td>用途</td>
+<td>Web（HTTP/HTTPS）、メール、ファイル転送</td>
+<td>動画配信、DNS、オンラインゲーム</td>
+</tr>
+</tbody>
+</table>
+<p>動画配信やオンラインゲームなど、「少しの欠落は許容できるけど、遅延は許容できない」場合はUDPが使われることもあります。</p>
+<h2 id="通信の手続き">通信の手続き</h2>
+<p>TCPの通信は、主に<strong>3つの段階</strong>で進みます。</p>
+<ol>
+<li><strong>接続を確立する</strong>（3ウェイ・ハンドシェイク）</li>
+<li><strong>データを送り合う</strong>（実際の通信）</li>
+<li><strong>接続を終了する</strong>（4ウェイ・ハンドシェイク）</li>
+</ol>
+<p>それぞれを具体的に見ていきましょう。</p>
+<h3 id="1-接続の確立3ウェイハンドシェイク">1. 接続の確立：3ウェイ・ハンドシェイク</h3>
+<p>TCPでは、データを送る前に「お互いの準備ができているか」を確認します。これを<strong>3ウェイ・ハンドシェイク</strong>と呼びます。</p>
+<p><strong>例え：電話をかけるとき</strong></p>
+<ol>
+<li><strong>あなた</strong> → 「もしもし、田中です」（相手に話しかける）</li>
+<li><strong>田中さん</strong> → 「はい、田中です。どうぞ」（受け取った＆こちらも準備OK）</li>
+<li><strong>あなた</strong> → 「実は…」（本題を始める）</li>
+</ol>
+<p><strong>TCPの実際のやり取り</strong></p>
+<table>
+<thead>
+<tr>
+<th>ステップ</th>
+<th>送信者</th>
+<th>内容</th>
+<th>フラグ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td>クライアント → サーバー</td>
+<td>「通信を始めたいです」</td>
+<td>SYN</td>
+</tr>
+<tr>
+<td>②</td>
+<td>サーバー → クライアント</td>
+<td>「OKです。こちらも準備できました」</td>
+<td>SYN + ACK</td>
+</tr>
+<tr>
+<td>③</td>
+<td>クライアント → サーバー</td>
+<td>「では、始めます」</td>
+<td>ACK</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>SYN</strong>（Synchronize）：同期要求。通信を始めたい合図。</li>
+<li><strong>ACK</strong>（Acknowledgment）：確認応答。相手の要求を受け取った合図。</li>
+</ul>
+<p>これで「両方とも送受信の準備ができた」ことが確認でき、通信が始まります。</p>
+<h3 id="2-データ転送確実に順番通りに届ける">2. データ転送：確実に・順番通りに届ける</h3>
+<p>接続が確立したら、実際にデータを送ります。TCPがここで行う主な仕事は4つです。</p>
+<p><strong>① シーケンス番号で「順番」を管理する</strong></p>
+<p>データは小さな塊（セグメント）に分けて送られます。各セグメントには<strong>シーケンス番号</strong>という「通し番号」が付きます。</p>
+<pre><code>送信データ：「ABCDEFGHIJ」（10バイト）
+
+セグメント1：ABC（シーケンス番号：1）
+セグメント2：DEF（シーケンス番号：4）
+セグメント3：GHI（シーケンス番号：7）
+セグメント4：J（シーケンス番号：10）
+</code></pre>
+<p>受信者はこの番号を見て、順番が入れ替わっていても元通りに並べ直せます。</p>
+<p><strong>② ACKで「届いたか」を確認する</strong></p>
+<p>受信者はデータを受け取るたびに、<strong>次に欲しいデータの番号</strong>を伝えます。これが**ACK（確認応答）**です。</p>
+<pre><code>サーバー → クライアント：「ABC」を送信（シーケンス番号：1）
+クライアント → サーバー：「4番まで届きました。次は4番をください」（ACK = 4）
+サーバー → クライアント：「DEF」を送信（シーケンス番号：4）
+クライアント → サーバー：「7番まで届きました。次は7番をください」（ACK = 7）
+</code></pre>
+<p><strong>③ 再送制御：届かなければ送り直す</strong></p>
+<p>サーバーはデータを送ったら、一定時間内にACKが返ってくるのを待ちます。もし時間切れになってもACKが来なければ、「途中で消えたか、届いていない」と判断して<strong>同じデータを再度送信</strong>します。</p>
+<pre><code>サーバー → クライアント：「GHI」を送信
+（ACKが5秒待っても来ない…）
+サーバー → クライアント：「GHI」を再度送信
+クライアント → サーバー：「10番まで届きました」（ACK = 10）← 今度は届いた！
+</code></pre>
+<p><strong>④ ウィンドウ制御：一度に送る量を調整する</strong></p>
+<p>ACKを1回送るごとに次のデータを送るのでは効率が悪いので、TCPは <strong>「一度に複数のセグメントを送って、まとめてACKを待つ」</strong> 仕組みを持っています。これを<strong>スライディングウィンドウ</strong>と呼びます。</p>
+<pre><code>サーバー：「ABC」「DEF」「GHI」をまとめて送信（ウィンドウサイズ：3）
+クライアント：「10番まで届きました」（ACK = 10）← まとめて1回のACK
+</code></pre>
+<p>受信者の処理能力やネットワークの混雑具合に応じて、このウィンドウサイズを動的に調整します。これが<strong>フロー制御</strong>（受信側に合わせる）と<strong>輻輳制御</strong>（ネットワークに合わせる）です。</p>
+<h3 id="3-接続の終了4ウェイハンドシェイク">3. 接続の終了：4ウェイ・ハンドシェイク</h3>
+<p>通信が終わったら、きちんと「おしまい」と伝えて接続を閉じます。これには<strong>4回</strong>のやり取りが必要です。</p>
+<p><strong>例え：電話を切るとき</strong></p>
+<ol>
+<li><strong>あなた</strong> → 「では、失礼します」（もう話すことはない）</li>
+<li><strong>田中さん</strong> → 「はい、分かりました」（了解）</li>
+<li><strong>田中さん</strong> → 「こちらこそ、失礼します」（こちらも終わりです）</li>
+<li><strong>あなた</strong> → 「はい、失礼しました」（了解）</li>
+</ol>
+<p><strong>TCPの実際のやり取り</strong></p>
+<table>
+<thead>
+<tr>
+<th>ステップ</th>
+<th>送信者</th>
+<th>内容</th>
+<th>フラグ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td>クライアント → サーバー</td>
+<td>「もう送るものはありません」</td>
+<td>FIN</td>
+</tr>
+<tr>
+<td>②</td>
+<td>サーバー → クライアント</td>
+<td>「分かりました」</td>
+<td>ACK</td>
+</tr>
+<tr>
+<td>③</td>
+<td>サーバー → クライアント</td>
+<td>「こちらも送るものはありません」</td>
+<td>FIN</td>
+</tr>
+<tr>
+<td>④</td>
+<td>クライアント → サーバー</td>
+<td>「分かりました」</td>
+<td>ACK</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>FIN</strong>（Finish）：終了要求。もうデータを送らない合図。</li>
+</ul>
+<p>これで、両方向の通信がきちんと終了し、リソースが解放されます。</p>
+<h2 id="開発経緯">開発経緯</h2>
+<p>TCPの開発経緯は、現在のインターネットそのものの誕生と深く関わっています。以下、歴史的な流れを追って説明します。</p>
+<h3 id="1-背景arpanetの誕生と限界">1. 背景：ARPANETの誕生と限界</h3>
+<p>1969年、米国防総省のARPA（Advanced Research Projects Agency）の資金提供で、世界初のパケット通信ネットワークである<strong>ARPANET</strong>が構築されました。
+当初は数台のコンピュータをつなぐだけの小さなネットワークでしたが、1970年代初頭には電子メールなどの利用が急増し、ネットワークの重要性が急速に高まりました。</p>
+<p>しかし、ARPANETには大きな課題がありました。</p>
+<ul>
+<li><strong>異なるネットワーク同士をつなげられない</strong>：ARPANETは一つのネットワークとして機能していましたが、衛星通信網や無線ネットワークなど、異なる技術を使うネットワークとは直接通信できませんでした。</li>
+<li><strong>信頼性が低い</strong>：パケットが途中で失われたり、順番が入れ替わったりしても、アプリケーション側で対処しなければなりませんでした。</li>
+</ul>
+<h3 id="2-開発者vint-cerfとbob-kahn">2. 開発者：Vint CerfとBob Kahn</h3>
+<p>この課題を解決するため、当時ARPAで働いていた<strong>ボブ・カーン（Bob Kahn）</strong> と、スタンフォード大学にいた<strong>ヴィント・サーフ（Vint Cerf）</strong> が協力して新しいプロトコルの設計を始めました。
+彼らの目標は、<strong>「仕組みの異なるネットワーク同士を、ひとつのインターネットとして動かすこと」</strong> でした。これは当時としては画期的な発想でした。</p>
+<p><strong>例：異なる言語を話す国同士の通訳</strong></p>
+<p>ARPANET、衛星ネットワーク、無線ネットワークは、それぞれ「異なる言語」を話していました。CerfとKahnが作ったのは、これらすべてのネットワークが共通して使える「通訳＝共通言語」でした。それがTCP/IPです。</p>
+<h3 id="3-1974年tcpの誕生">3. 1974年：TCPの誕生</h3>
+<p>1973年に設計をまとめ、<strong>1974年5月</strong>にCerfとKahnは論文「A Protocol for Packet Network Intercommunication」を発表し、TCPの概念を世界に示しました。
+当初、TCPは現在の「TCP」と「IP」の役割を<strong>ひとつのプロトコル</strong>で担っていました。つまり、</p>
+<ul>
+<li>パケットの配送（現在のIPの役割）</li>
+<li>信頼性のある通信（現在のTCPの役割）</li>
+</ul>
+<p>をすべてTCPがやっていたのです。後に、この機能が分離されて「TCP」と「IP」という2つのプロトコルになりました。</p>
+<h3 id="4-1983年arpanetのtcpip移行フラグデー">4. 1983年：ARPANETのTCP/IP移行（フラグ・デー）</h3>
+<p>TCP/IPはすぐに普及したわけではありませんでした。ARPANETは長らく従来のプロトコル（NCP：Network Control Program）を使い続けていました。</p>
+<p>そして、<strong>1983年1月1日</strong>、ARPANETは正式にNCPからTCP/IPへ移行しました。この日は <strong>「フラグ・デー（Flag Day）」</strong> と呼ばれ、今日のインターネットの基盤が整った象徴的な日となりました。</p>
+<h3 id="5-なぜtcpが必要だったのか">5. なぜTCPが必要だったのか</h3>
+<p>CerfとKahnがTCPを設計した根本的な動機は、以下の2つでした。</p>
+<table>
+<thead>
+<tr>
+<th>課題</th>
+<th>TCPによる解決</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>異なるネットワーク間の通信ができない</td>
+<td>共通のプロトコルで「インターネット」を実現</td>
+</tr>
+<tr>
+<td>パケットの紛失・順番の乱れに対処できない</td>
+<td>シーケンス番号・ACK・再送制御で信頼性を保証</td>
+</tr>
+<tr>
+<td>アプリケーションが通信の詳細を意識しすぎる</td>
+<td>TCPが通信の複雑さを肩代わりし、開発者を解放</td>
+</tr>
+</tbody>
+</table>
+<p>つまり、TCPは「ネットワークの複雑さを隠して、アプリケーションが簡単に通信できるようにする」ための層として設計されたのです。</p>
+<h2 id="近年の研究">近年の研究</h2>
+<p>TCPに代わるプロトコルとして、近年最も注目されているのは<strong>QUIC（Quick UDP Internet Connections）</strong> です。HTTP/3の基盤として、GoogleやCloudflareなどで既に広く使われています。</p>
+<h3 id="1-quicとは何か">1. QUICとは何か</h3>
+<p>QUICは、<strong>UDPの上に「信頼性のある通信」を再構築した</strong>プロトコルです。TCPがOSのカーネルで動くのに対し、QUICはアプリケーション層（ユーザースペース）で動作し、より柔軟に設計されています。</p>
+<p><strong>直感的な例え：高速道路の車線</strong></p>
+<p>TCPは「1本の道路に1台ずつしか走れない」ようなもので、先頭の車が止まると後続もすべて止まります。QUICは「同じ道路に複数の車線があり、ある車線が渋滞しても他の車線は走り続けられる」ような仕組みです。</p>
+<h3 id="2-tcpではダメだった3つの理由">2. TCPではダメだった3つの理由</h3>
+<p><strong>① ヘッドオブラインブロッキング（先頭の詰まり）</strong></p>
+<p>TCPは「順番通りに届ける」ことを徹底します。しかしHTTP/2で1本のTCP接続に複数のリクエストを並列化（多重化）しても、TCPレベルで1つのパケットが失われると、その後のすべてのリクエストが待たされるのです。</p>
+<pre><code>【TCPの場合】
+リクエストA（画像） ──►
+リクエストB（CSS）  ──►
+リクエストC（JS）   ──►
+        ↓
+パケット1つ失われる → すべてのリクエストが待たされる！
+
+【QUICの場合】
+ストリームA（画像） ──►  パケット失われてもAだけ再送
+ストリームB（CSS）  ──►  Bはそのまま進行
+ストリームC（JS）   ──►  Cもそのまま進行
+</code></pre>
+<p>QUICでは、各ストリームが独立して動作するため、あるストリームのパケットロスが他のストリームに影響しません。</p>
+<p><strong>② 接続確立が遅い</strong></p>
+<p>TCPでは通信前に3ウェイ・ハンドシェイク（1.5RTT）が必要で、TLS暗号化を加えるとさらに2RTTかかり、合計で3〜4往復が必要でした。</p>
+<p>QUICでは、接続確立と暗号化のハンドシェイクを<strong>同時に行い</strong>、初回接続でも<strong>1RTT</strong>、以前接続したことがあれば<strong>0RTT</strong>で通信を開始できます。</p>
+<table>
+<thead>
+<tr>
+<th>プロトコル</th>
+<th>接続確立にかかる往復回数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP + TLS 1.2</td>
+<td>3〜4 RTT</td>
+</tr>
+<tr>
+<td>TCP + TLS 1.3</td>
+<td>2 RTT</td>
+</tr>
+<tr>
+<td>QUIC（初回）</td>
+<td>1 RTT</td>
+</tr>
+<tr>
+<td>QUIC（再開時）</td>
+<td>0 RTT</td>
+</tr>
+</tbody>
+</table>
+<p><strong>③ モバイル環境での接続切れ</strong></p>
+<p>TCPは「送信元IPアドレス＋ポート番号」で接続を識別します。スマートフォンがWi-Fiから4G/5Gに切り替わるとIPアドレスが変わり、<strong>接続が切れてしまいます</strong>。</p>
+<p>QUICは<strong>Connection ID</strong>という固有の識別子を使うため、IPアドレスが変わっても接続を維持できます。</p>
+<h3 id="3-quicの用途">3. QUICの用途</h3>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Webサイト表示（HTTP/3）</strong></td>
+<td>ページ読み込み速度の向上</td>
+</tr>
+<tr>
+<td><strong>動画ストリーミング</strong></td>
+<td>途切れにくい、スムーズな再生</td>
+</tr>
+<tr>
+<td><strong>オンラインゲーム</strong></td>
+<td>低遅延、接続切れに強い</td>
+</tr>
+<tr>
+<td><strong>リアルタイム通信（WebRTCなど）</strong></td>
+<td>高速な接続確立</td>
+</tr>
+</tbody>
+</table>
+<p>Google、YouTube、Facebook、Cloudflareなど、主要なWebサービスの多くが既にQUICに対応しています。</p>
+<h3 id="4-tcpとquicの比較">4. TCPとQUICの比較</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>TCP</th>
+<th>QUIC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基盤プロトコル</td>
+<td>IP直接</td>
+<td>UDP上</td>
+</tr>
+<tr>
+<td>接続確立</td>
+<td>3ウェイ・ハンドシェイク＋TLS別途</td>
+<td>統合ハンドシェイク（1RTT/0RTT）</td>
+</tr>
+<tr>
+<td>ストリーム多重化</td>
+<td>あり（HTTP/2）だがTCPレベルで依存</td>
+<td>独立したストリーム（HoLブロッキングなし）</td>
+</tr>
+<tr>
+<td>IP変更時の接続維持</td>
+<td>不可</td>
+<td>可能（Connection ID）</td>
+</tr>
+<tr>
+<td>暗号化</td>
+<td>オプション（TLS別途）</td>
+<td>必須（TLS 1.3相当が組み込み）</td>
+</tr>
+<tr>
+<td>実装場所</td>
+<td>OSカーネル</td>
+<td>アプリケーション層（ユーザースペース）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-なぜtcpを改良せずudpを選んだのか">5. なぜTCPを改良せず、UDPを選んだのか</h3>
+<p>TCPはOSカーネルの中に深く組み込まれており、世界中のルーターやOSに変更を加えるのは現実的ではありません。UDPは非常にシンプルなプロトコルなので、その上に新しい仕組みを自由に構築でき、既存のインフラに影響を与えずに導入できるのです。</p>
+<h2 id="総括">総括</h2>
+<p>TCPはインターネットでデータを「確実に、順番通りに」届けるための基本プロトコルです。以下、その全体像を簡潔にまとめます。</p>
+<h3 id="1-tcpの核心">1. TCPの核心</h3>
+<p>TCPは送信者と受信者が互いの状態を確認しながら通信し、<strong>パケットが失われれば再送し、順番が乱れれば並べ直す</strong>ことで、信頼性の高いデータ転送を実現します。Webページの表示やファイル転送など、欠けや順序の狂いが許されない通信に使われます。</p>
+<h3 id="2-通信の3段階">2. 通信の3段階</h3>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>接続確立</strong></td>
+<td><strong>3ウェイ・ハンドシェイク</strong>（SYN → SYN+ACK → ACK）で双方の準備を確認</td>
+</tr>
+<tr>
+<td><strong>データ転送</strong></td>
+<td>シーケンス番号で順序管理、ACKで到着確認、タイムアウトで再送、ウィンドウ制御で流量調整</td>
+</tr>
+<tr>
+<td><strong>接続終了</strong></td>
+<td><strong>4ウェイ・ハンドシェイク</strong>（FIN → ACK → FIN → ACK）で双方の送信完了を確認して切断</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-開発の歴史">3. 開発の歴史</h3>
+<ul>
+<li><strong>1969年</strong>：米国防総省のARPAがARPANETを構築。しかし異なるネットワーク間の接続や信頼性に課題が残る。</li>
+<li><strong>1974年</strong>：<strong>Vint Cerf</strong>と<strong>Bob Kahn</strong>が論文を発表し、異なるネットワークを統合するTCPの概念を提示。当初はIPの役割も兼ねていた。</li>
+<li><strong>1983年</strong>：ARPANETが従来のNCPからTCP/IPへ全面移行（<strong>フラグ・デー</strong>）。これが現在のインターネットの基盤となる。</li>
+</ul>
+<h3 id="4-tcpの限界とquicの登場">4. TCPの限界とQUICの登場</h3>
+<p>現代のWeb通信ではTCPの以下の課題が浮上しました。</p>
+<ol>
+<li><strong>ヘッドオブラインブロッキング</strong>：TCP上で多重化しても、1パケットのロスで後続すべてが待たされる。</li>
+<li><strong>接続確立の遅さ</strong>：TCPの3ウェイとTLSのハンドシェイクが別々に必要で、複数往復（RTT）がかかる。</li>
+<li><strong>モバイル環境での接続切れ</strong>：IPアドレス変更で接続が途切れる。</li>
+</ol>
+<p>これを解決するため、<strong>QUIC</strong>（HTTP/3の基盤）が開発されました。UDP上に信頼性制御を再構築し、<strong>0RTT接続・ストリーム単位の独立性・Connection IDによる接続維持</strong>を実現。GoogleやCloudflareなどで既に広く使われています。</p>
+<table>
+<thead>
+<tr>
+<th>比較項目</th>
+<th>TCP</th>
+<th>QUIC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基盤</td>
+<td>IP直接</td>
+<td>UDP上</td>
+</tr>
+<tr>
+<td>接続確立</td>
+<td>3ウェイ＋TLS別途</td>
+<td>統合ハンドシェイク（1RTT/0RTT）</td>
+</tr>
+<tr>
+<td>ストリーム</td>
+<td>TCPレベルで依存</td>
+<td>独立（HoLブロッキングなし）</td>
+</tr>
+<tr>
+<td>IP変更時</td>
+<td>接続切断</td>
+<td>Connection IDで維持</td>
+</tr>
+<tr>
+<td>暗号化</td>
+<td>オプション</td>
+<td>TLS 1.3相当が必須</td>
+</tr>
+</tbody>
+</table>
+<h3 id="まとめ">まとめ</h3>
+<p>TCPは「確実・順序重視」という強みで半世紀以上にわたりインターネットを支えてきました。しかし、モバイル化と高速化が求められる現代では、その設計上の制約が課題となり、UDP上に再構築された<strong>QUIC/HTTP/3</strong>へと進化しています。TCPが「信頼性の土台」を築き、QUICが「速度と柔軟性」を追加した形と言えるでしょう。</p>
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/N5NE7KZUldg?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+            
+        </body>
+        </html>

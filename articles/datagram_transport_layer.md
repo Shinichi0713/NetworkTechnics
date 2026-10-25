@@ -1,5 +1,15 @@
+---
+title: "セキュリティ確保しながらリアルタイム性を確保するDTLS"
+emoji: "😾"
+type: "tech" # tech: 技術記事 / idea: アイデア記事
+topics: ["networking", "real time", "security"]
+published: true
+---
+通信にはトランスポートレイヤーという通信の順序や送達性を制御するレイヤーがあります。
+このレイヤの中ではセキュリティやデータの送達性が重要な場合はTLSが使われ、リアルタイム性が重要な場合はUDPが使われていました。
 
-
+ですがリアルタイム性も、セキュリティやデータの送達性ともに両立したい場面があります。
+そんな場面で使われるトランスポートレイヤーの通信規則がDTLSと呼ばれるプロトコルです。
 
 ## DLTSとは
 **DTLS（Datagram Transport Layer Security）** は、**UDPなどの「データグラム型・非信頼性」通信を暗号化するためのプロトコル**です。
@@ -90,4 +100,19 @@ OpenVPNはUDPモードでDTLSを使用しています。また、**Snowflake**�
 
 IP電話やビデオ通話システム（Asterisk、Cisco、Twilioなど）でも、リアルタイムメディアストリームの暗号化にDTLS-SRTPが使われています。2024年〜2025年にも、これらの実装におけるDTLSハンドシェイクの脆弱性が複数報告されています。[Enable Security](https://www.enablesecurity.com/research/webrtc-hello-race-conditions-paper.pdf) [Enable Security Newsletter](https://www.enablesecurity.com/newsletter/2025-02-rtcsec-news.md)
 
+## 総括
 
+**DTLS（Datagram Transport Layer Security）** は、**UDPなどの非信頼性通信を暗号化するプロトコル**です。[RFC 6347](https://www.rfc-editor.org/rfc/rfc6347.html)
+
+### 核心
+
+| 項目 | 内容 |
+|---|---|
+| **何か** | TLSのデータグラム（UDP）版 |
+| **なぜ作られたか** | リアルタイム通信（VoIP・ゲーム・ビデオ会議）はUDPを使うが、TLSはTCP専用でUDPでは暗号化が破綻したため |
+| **課題の解決** | シーケンス番号で順序乱れに対応、ハンドシェイクをフラグメント化・再送制御で耐障害化、CookieでDoSを防止 |
+| **どこで使われるか** | WebRTC（Zoom/Teamsなど）、IoT、VPN（OpenVPN）、VoIP |
+
+### 一言でまとめると
+
+> **DTLSは「UDPを使うリアルタイム通信でも、TLSと同等の暗号化・改ざん防止を提供する」ために開発されたプロトコルであり、現在はWebRTCやIoT・VPNの裏側で広く使われている。**

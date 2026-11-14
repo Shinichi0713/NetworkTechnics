@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>令和6年度 春期 ネットワークスペシャリスト試験 午後II 解答・解説</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #eef2f7; }
+  .page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 48px 56px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 35px rgba(15, 23, 42, .08);
+  }
+  .article-title {
+    margin: 0 0 28px;
+    padding: 0 0 18px;
+    border-bottom: 3px solid #1e3a8a;
+    color: #0f172a;
+    font-family: 'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Hiragino Sans','BIZ UDPGothic',Meiryo,sans-serif;
+    font-size: 28px;
+    line-height: 1.45;
+    font-weight: 700;
+    letter-spacing: .01em;
+  }
+  @media (max-width: 720px) {
+    .page { margin: 0; padding: 28px 18px; border-radius: 0; }
+    .article-title { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+<h1 class="article-title">令和6年度 春期 ネットワークスペシャリスト試験 午後II 解答・解説</h1>
+<!-- ============================================================
+     はてなブログ「HTML編集」モード用の記事本文
+     生成元: R6_pm2_解答解説.md
+     記事タイトルははてなブログ側のタイトル欄に設定してください
+     インタラクションが動かない場合は、末尾のスクリプト部分を
+     「デザイン > カスタマイズ > 記事下」へ移動してください
+     ============================================================ -->
+<div data-hatena-article="1" style="font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Hiragino Sans','BIZ UDPGothic',Meiryo,sans-serif;font-size:16px;line-height:1.9;color:#1f2937;letter-spacing:.01em;overflow-wrap:break-word;word-wrap:break-word;">
+<div style="margin:0 0 20px;padding:12px 16px;border:1px solid #e2e8f0;border-radius:8px;background-color:#f8fafc;font-size:13.5px;line-height:1.75;color:#475569;"><p style="margin:0;font-size:13.5px;line-height:1.75;color:#475569;white-space:pre-line;">対象：令和6年度（2024年）春期 ネットワークスペシャリスト試験 午後II
+問題：問1「データセンターのネットワークの検討（VXLAN／EVPN）」／問2「電子メールを用いた製品サポート（SPF／DKIM／S/MIME）」</p></div>
+<blockquote style="margin:20px 0;padding:14px 18px;border-left:4px solid #94a3b8;border-radius:0 8px 8px 0;background-color:#f8fafc;color:#475569;font-size:14.5px;line-height:1.85;">
+<p style="margin:0;color:inherit;font-size:inherit;line-height:inherit;">本記事の解答はIPA公表の「解答例」に基づき、解説は問題文・図表・採点講評を踏まえて独自に整理したものです。問題文の全文転載はせず、設問の要点と図表の読み方を中心にまとめています。</p>
+</blockquote>
+<div aria-label="目次" role="navigation" style="margin:0 0 32px;padding:18px 22px;border:1px solid #dbeafe;border-radius:10px;background-color:#f8fafc;font-size:14px;line-height:1.75;"><div style="margin:0 0 10px;padding-left:10px;border-left:4px solid #2563eb;font-size:15px;font-weight:700;color:#1e3a8a;letter-spacing:.04em;">目次</div><ol style="margin:0;padding-left:1.4em;list-style:decimal;"><li style="margin:4px 0;"><a href="#sec-1" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">0. 試験概要と解答早見表</a><ul style="margin:4px 0 8px;padding-left:1.15em;list-style:circle;"><li style="margin:4px 0;"><a href="#sec-2" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">午後IIの形式</a></li><li style="margin:4px 0;"><a href="#sec-3" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">問1の解答早見表</a></li><li style="margin:4px 0;"><a href="#sec-4" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">問2の解答早見表</a></li></ul></li><li style="margin:4px 0;"><a href="#sec-5" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">問1 データセンターのネットワークの検討（VXLAN／EVPN）</a><ul style="margin:4px 0 8px;padding-left:1.15em;list-style:circle;"><li style="margin:4px 0;"><a href="#sec-6" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">1.1 出題の狙い</a></li><li style="margin:4px 0;"><a href="#sec-7" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">1.2 前提知識の整理</a></li><li style="margin:4px 0;"><a href="#sec-12" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">1.3 設問1：VXLANの概要</a></li><li style="margin:4px 0;"><a href="#sec-16" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">1.4 設問2：現行の検証NW（OSPF）</a></li><li style="margin:4px 0;"><a href="#sec-22" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">1.5 設問3：現行NWのVTEPの動作</a></li><li style="margin:4px 0;"><a href="#sec-26" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">1.6 設問4：新検証NW（EVPN）</a></li><li style="margin:4px 0;"><a href="#sec-32" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">1.7 問1のまとめ</a></li></ul></li><li style="margin:4px 0;"><a href="#sec-33" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">問2 電子メールを用いた製品サポート（SPF／DKIM／S/MIME）</a><ul style="margin:4px 0 8px;padding-left:1.15em;list-style:circle;"><li style="margin:4px 0;"><a href="#sec-34" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">2.1 出題の狙い</a></li><li style="margin:4px 0;"><a href="#sec-35" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">2.2 図表の整理（配送経路の復元）</a></li><li style="margin:4px 0;"><a href="#sec-42" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">2.3 設問1：Y社のネットワーク構成とセキュリティ対策の背景</a></li><li style="margin:4px 0;"><a href="#sec-48" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">2.4 設問2：SPF</a></li><li style="margin:4px 0;"><a href="#sec-52" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">2.5 設問3：DKIM</a></li><li style="margin:4px 0;"><a href="#sec-56" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">2.6 設問4：Z社への委託</a></li><li style="margin:4px 0;"><a href="#sec-61" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;color:#b91c1c;font-weight:700;">2.7 設問5：S/MIME（問題不備）</a></li><li style="margin:4px 0;"><a href="#sec-65" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">2.8 問2のまとめ：SPF・DKIM・S/MIMEの比較</a></li></ul></li><li style="margin:4px 0;"><a href="#sec-66" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">3. 学習アドバイス</a><ul style="margin:4px 0 8px;padding-left:1.15em;list-style:circle;"><li style="margin:4px 0;"><a href="#sec-67" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">問1（VXLAN／EVPN）</a></li><li style="margin:4px 0;"><a href="#sec-68" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">問2（メール認証）</a></li></ul></li><li style="margin:4px 0;"><a href="#sec-69" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">付録：公式情報</a></li><li style="margin:4px 0;"><a href="#sec-70" style="color:#1e40af;text-decoration:none;border-bottom:1px dotted #93c5fd;">関連記事</a></li></ol></div><hr style="margin:40px 0;border:0;height:1px;background-color:#e2e8f0;"/>
+<h2 id="sec-1" style="margin:48px 0 22px;padding:12px 18px;border-radius:8px;background-color:#1e3a8a;background-image:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#ffffff;font-size:22px;line-height:1.5;font-weight:700;letter-spacing:.02em;box-shadow:0 2px 6px rgba(30,58,138,.18);scroll-margin-top:80px;">0. 試験概要と解答早見表</h2>
+<h3 id="sec-2" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">午後IIの形式</h3>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">試験時間：120分</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">出題：2問（問1・問2）</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">解答：<strong style="font-weight:700;">2問のうち1問を選択</strong>して解答</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">配点：100点</li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">午後IIは大問を1つ選ぶ形式です。問1はVXLAN／EVPN、問2はメールの送信ドメイン認証がテーマで、いずれも「図表から前提を復元し、技術の仕組みを文章で説明する」力が問われます。</p>
+<h3 id="sec-3" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">問1の解答早見表</h3>
+<div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">設問</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">空欄・下線</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">解答</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">1(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">a</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">24</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">1(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">b</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">3</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">1(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">c</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">UDP</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">1(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">①</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">イーサネットフレーム</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">1(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">②</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VXLANヘッダー</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">1(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">③</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">IPv4ヘッダー</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">1(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">下線④</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">同じレイヤー2のネットワークをもつ全てのリモートVTEPに転送するため</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">2(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">d</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">LSDB</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">2(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">e</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">最短経路</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">2(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線⑤</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">OSPFが動作する各L3SW</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">2(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">下線⑥</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">複数ある経路のそれぞれの経路について、コストの合計値を同じ値にする。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">2(4)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線⑦</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">一つの物理インタフェースに障害があってもVTEPとして動作できるから</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">2(5)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">ア〜カ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">ア×、イ×、ウ×、エ×、オ○、カ×</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">3(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線⑧</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">239.0.0.1</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">3(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">下線⑨</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VM11のMACアドレス、VNI及びL3SW11のVTEPのIPアドレス</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">3(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">キ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">10010</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">3(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">ク</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">10.0.0.31</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">3(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">ケ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">10010</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">3(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">コ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">10.0.0.11</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">4(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">利点</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">iBGPピアの数を減らすことができる。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">4(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">名称</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">クラスターID</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">4(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">f</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">Unknown Unicast</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">4(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">g</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">ESI</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">4(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線⑪</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">二つの回線の帯域を有効に利用できる。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">4(4)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">下線⑫</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">MP-BGPを用いて学習する。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">4(5)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線⑫</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">VLAN IDに対応するVNIをもつ全てのリモートVTEP</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-4" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">問2の解答早見表</h3>
+<div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">設問</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">空欄・下線</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">解答</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">1(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">下線①</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">mail.y-sha.lan</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">1(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線②</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">TTLを60秒と短い値にしている。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">1(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">a</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">Preference</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">1(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">b</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">y-mail2</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">1(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">c</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">逆引き</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">1(4)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">ア</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">200.a.b.1</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">1(4)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">イ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">192.168.0.1</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">1(5)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線③</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">メールサーバのFQDNに、詐称したメールアドレスのドメイン名を登録する。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">2(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">ウ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">200.a.b.1</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">2(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">エ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">200.a.b.2</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">2(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">d</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">SMTP</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">2(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">e</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">MAIL FROM</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">2(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">f</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">y-sha.com</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">2(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線④</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">送信元のメールサーバのIPアドレスが、SPFレコードの中に登録されていること</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">3(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">g</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">ヘッダー</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">3(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">h</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">UDP</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">3(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">i</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">512</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">3(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">アルゴリズム名</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">RSA</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">3(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">オ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">公開鍵</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">3(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線⑤</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">受信したメールが正規のメールサーバから送信されたものかどうかが分かるから</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">4(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">DNSサーバ名</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">外部DNSサーバY（y-ns1）</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">4(1)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">登録する情報</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">メール中継サーバZのIPアドレス（z-mail1のIPアドレス）</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">4(2)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">j</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">y-sha.com</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">4(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">下線⑦</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">メール中継サーバZから鍵が漏えいしても、Y社で実施中のDKIMの処理は影響を受けない。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">4(4)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">下線⑧</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">なりすましメールも、メール中継サーバZから社外に転送されるから</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">5(1)〜(3)</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">—</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;"><strong style="font-weight:700;">問題不備により設問不成立（当該大問の選択者は全員正解扱い）</strong></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote style="margin:20px 0;padding:14px 18px;border-left:4px solid #ef4444;border-radius:0 8px 8px 0;background-color:#fef2f2;color:#991b1b;font-size:14.5px;line-height:1.85;">
+<p style="margin:0;color:inherit;font-size:inherit;line-height:inherit;">問2の設問5は、IPAが2024年6月7日付で「設問の不備」を公表しました。解答例でも「不備により設問5(1)〜(3)は成立しない」とされています。本記事では、試験としての扱いと、学習用に押さえておきたいデジタル署名の仕組みを後述します。</p>
+</blockquote>
+<hr style="margin:40px 0;border:0;height:1px;background-color:#e2e8f0;"/>
+<h2 id="sec-5" style="margin:48px 0 22px;padding:12px 18px;border-radius:8px;background-color:#1e3a8a;background-image:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#ffffff;font-size:22px;line-height:1.5;font-weight:700;letter-spacing:.02em;box-shadow:0 2px 6px rgba(30,58,138,.18);scroll-margin-top:80px;">問1 データセンターのネットワークの検討（VXLAN／EVPN）</h2>
+<h3 id="sec-6" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">1.1 出題の狙い</h3>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">出題趣旨は、データセンター事業者や通信事業者のような大規模ネットワークでは、拡張性やマルチテナント対応が重要であり、その解決策としてVXLANとEVPNが使われる、というものです。VXLANで構成したL2オーバーレイにEVPNを適用する事例を通して、L2／L3の基礎技術の理解を問うています。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">特に問われたのは次の4点です。</p>
+<ol style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">VXLANのカプセル化の構造（VNI、UDP、VTEP）</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">アンダーレイのOSPF（LSDB、SPF、ECMP、ルータID、ループバック）</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">VXLANのデータプレーン学習とBUMフレームのマルチキャスト転送</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">EVPNのコントロールプレーン（MP-BGP、ルートリフレクタ、ESI）による変化</li>
+</ol>
+<h3 id="sec-7" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">1.2 前提知識の整理</h3>
+<h4 id="sec-8" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">VXLANパケットの構造</h4>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">VXLANは「L2フレームをL3ネットワークでトンネリングする」技術です。元のイーサネットフレームをそのまま内側に持ち、外側に次のヘッダーを付けます。</p>
+<pre style="margin:18px 0 24px;padding:16px 18px;border-radius:8px;background-color:#0f172a;color:#e2e8f0;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:13px;line-height:1.7;overflow-x:auto;-webkit-overflow-scrolling:touch;tab-size:4;"><code class="language-text" style="margin:0;padding:0;border:0;background:none;color:inherit;font-family:inherit;font-size:inherit;white-space:pre;">+----------------+----------+--------------+---------------------------+
+| IPv4ヘッダー   | UDPヘッダー | VXLANヘッダー | 元のイーサネットフレーム |
+| （外側）20B    | 8B       | 8B           | （内側）                  |
++----------------+----------+--------------+---------------------------+
+</code></pre>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">VNI（VXLAN Network Identifier）</strong>：VXLANヘッダー内の<strong style="font-weight:700;">24ビット</strong>の識別子。2^24＝16,777,216通り（約1,677万）のL2ネットワークを識別できます。VLAN IDが12ビット（4,096通り）であることとの対比が重要です。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">UDP</strong>：VXLANはUDPでカプセル化します。標準の宛先ポートは<strong style="font-weight:700;">4789</strong>です。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">VTEP</strong>：VXLANトンネルの端点。カプセル化とカプセル化解除を行います。VTEPのIPアドレスは、トンネルの外側のIPv4ヘッダーの送信元・宛先になります。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">オーバーヘッド</strong>：外側IPv4 20B＋UDP 8B＋VXLAN 8B＋内側イーサネットヘッダー14B＝<strong style="font-weight:700;">50B</strong>。MTU設計でよく問われる数字です。</li>
+</ul>
+
+<div data-widget="vxlan-puzzle" style="margin:26px 0 30px;padding:18px 20px;border:1px solid #bfdbfe;border-radius:12px;background-color:#f8fbff;background-image:linear-gradient(180deg,#ffffff 0%,#eff6ff 100%);">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 8px;">
+<span style="display:inline-block;padding:3px 9px;border-radius:999px;background-color:#1e3a8a;color:#ffffff;font-size:10.5px;font-weight:700;letter-spacing:.12em;">MINI QUIZ</span>
+<span style="font-size:14px;font-weight:700;color:#1e3a8a;">VXLANカプセル化の順番</span>
+</div>
+<p style="margin:0 0 12px;font-size:13px;line-height:1.75;color:#334155;">外側（トンネルの入口）から内側へ、4つの層を順番にクリックしてください。</p>
+<div style="display:flex;justify-content:space-between;gap:12px;margin:0 0 6px;font-size:10.5px;font-weight:700;color:#64748b;">
+<span>外側（トンネル入口）</span><span>内側（元のフレーム）</span>
+</div>
+<div aria-label="選択した順番" data-role="slots" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 14px;min-height:38px;"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:92px;min-height:36px;padding:6px 10px;border-radius:8px;border:1px dashed #93c5fd;background-color:#f8fafc;color:#1e3a8a;font-size:12px;font-weight:700;text-align:center;line-height:1.35;">？</span><span aria-hidden="true" style="color:#93c5fd;font-size:12px;font-weight:700;">→</span><span style="display:inline-flex;align-items:center;justify-content:center;min-width:92px;min-height:36px;padding:6px 10px;border-radius:8px;border:1px dashed #93c5fd;background-color:#f8fafc;color:#1e3a8a;font-size:12px;font-weight:700;text-align:center;line-height:1.35;">？</span><span aria-hidden="true" style="color:#93c5fd;font-size:12px;font-weight:700;">→</span><span style="display:inline-flex;align-items:center;justify-content:center;min-width:92px;min-height:36px;padding:6px 10px;border-radius:8px;border:1px dashed #93c5fd;background-color:#f8fafc;color:#1e3a8a;font-size:12px;font-weight:700;text-align:center;line-height:1.35;">？</span><span aria-hidden="true" style="color:#93c5fd;font-size:12px;font-weight:700;">→</span><span style="display:inline-flex;align-items:center;justify-content:center;min-width:92px;min-height:36px;padding:6px 10px;border-radius:8px;border:1px dashed #93c5fd;background-color:#f8fafc;color:#1e3a8a;font-size:12px;font-weight:700;text-align:center;line-height:1.35;">？</span></div>
+<div data-role="chips" style="display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;">
+<button data-order="3" style="appearance:none;border:1px solid #93c5fd;border-radius:999px;padding:8px 14px;background-color:#ffffff;color:#1e3a8a;font-family:inherit;font-size:12.5px;font-weight:700;line-height:1.4;cursor:pointer;transition:transform .12s ease,background .12s ease,opacity .12s ease;" type="button">VXLANヘッダー</button>
+<button data-order="4" style="appearance:none;border:1px solid #93c5fd;border-radius:999px;padding:8px 14px;background-color:#ffffff;color:#1e3a8a;font-family:inherit;font-size:12.5px;font-weight:700;line-height:1.4;cursor:pointer;transition:transform .12s ease,background .12s ease,opacity .12s ease;" type="button">イーサネットフレーム</button>
+<button data-order="1" style="appearance:none;border:1px solid #93c5fd;border-radius:999px;padding:8px 14px;background-color:#ffffff;color:#1e3a8a;font-family:inherit;font-size:12.5px;font-weight:700;line-height:1.4;cursor:pointer;transition:transform .12s ease,background .12s ease,opacity .12s ease;" type="button">IPv4ヘッダー</button>
+<button data-order="2" style="appearance:none;border:1px solid #93c5fd;border-radius:999px;padding:8px 14px;background-color:#ffffff;color:#1e3a8a;font-family:inherit;font-size:12.5px;font-weight:700;line-height:1.4;cursor:pointer;transition:transform .12s ease,background .12s ease,opacity .12s ease;" type="button">UDPヘッダー</button>
+</div>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+<button data-role="reset" style="appearance:none;border:1px solid #cbd5e1;border-radius:8px;padding:5px 12px;background-color:#ffffff;color:#475569;font-family:inherit;font-size:11.5px;font-weight:700;line-height:1.5;cursor:pointer;transition:background .15s ease,color .15s ease;" type="button">やり直す</button>
+<button data-role="hint" style="appearance:none;border:1px solid #cbd5e1;border-radius:8px;padding:5px 12px;background-color:#ffffff;color:#475569;font-family:inherit;font-size:11.5px;font-weight:700;line-height:1.5;cursor:pointer;transition:background .15s ease,color .15s ease;" type="button">ヒント</button>
+<span data-role="hint-text" style="display:none;font-size:11.5px;line-height:1.65;color:#475569;">いちばん外側は「宛先 IP アドレス」を運ぶヘッダー。いちばん内側は、もともと送りたかったフレームです。</span>
+</div>
+<div aria-live="polite" data-role="status" role="status" style="margin:10px 0 0;min-height:1.65em;font-size:12.5px;font-weight:700;line-height:1.65;"></div>
+<noscript><p style="margin:10px 0 0;font-size:11.5px;line-height:1.6;color:#64748b;">このミニクイズは JavaScript を有効にすると遊べます。</p></noscript>
+</div>
+<h4 id="sec-9" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">図4の対応表の読み方</h4>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">現行の検証NWでは、VLANとVNI、マルチキャストグループが次のように対応しています。</p>
+<div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VLAN ID</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VNI</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">BUM用マルチキャストグループ</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">所属するVM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">110</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">10010</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">239.0.0.1</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VM11、VM21、VM31</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">120</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">10020</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">239.0.0.2</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">VM12、VM22、VM32</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">130</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">10030</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">239.0.0.3</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VM13、VM23、VM33</td>
+</tr>
+</tbody>
+</table></div>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">ここが問1の最重要ポイントです。<strong style="font-weight:700;">同じVLAN ID（＝同じVNI）のVM同士だけが同じL2ネットワークに属し、L2通信できます</strong>。VM11・VM21・VM31は物理的に別のL3SW配下にありますが、VNI 10010を共有するため同じL2セグメントとして通信できます。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">VTEPのIPアドレスは各L3SWのループバックインタフェースのIPです。</p>
+<div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">機器</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">ループバック（VTEP）IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">L3SW11</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">10.0.0.11</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">L3SW12</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">10.0.0.12</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">L3SW21</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">10.0.0.21</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">L3SW22</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">10.0.0.22</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">L3SW31</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">10.0.0.31</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">L3SW32</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">10.0.0.32</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="sec-10" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">BUMフレームとマルチキャスト</h4>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">VXLANでは、宛先が分からないフレームを<strong style="font-weight:700;">BUM（Broadcast、Unknown Unicast、Multicast）</strong>として扱い、フラッディングします。現行NWでは、BUMフレームの外側IPv4宛先に<strong style="font-weight:700;">VNIごとのIPマルチキャストグループアドレス</strong>を設定し、同じグループに参加するVTEPへ転送します。</p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">ブロードキャスト（ARP要求など）は、同じL2セグメントの全員に届ける必要がある。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">ただし、無関係なVNI（別テナント）のVTEPにまで届けてはいけない。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">そこで「VNIごとのマルチキャストグループ」を使い、同じVNIを持つVTEPだけに届ける。</li>
+</ul>
+<h4 id="sec-11" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">EVPNの役割</h4>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">EVPNは、VXLANの<strong style="font-weight:700;">コントロールプレーン</strong>を担う技術です（RFC 7432、RFC 8365）。データプレーンはVXLANのままです。</p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">MP-BGP</strong>を使って、リモートVTEPのIPアドレス、VNI、MACアドレス、ESIなどの情報を<strong style="font-weight:700;">あらかじめ</strong>交換します。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">代表的なルートタイプ：</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">Type 2：MAC/IPアドレスルート（VMのMACとVTEPの対応を広告）</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">Type 3：Inclusive Multicast Ethernet Tagルート（BUM転送用のVTEP集合）</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">Type 5：IPプレフィックスルート（L3ルーティング用）</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">これにより、データプレーンの「フラッディングして学習する」処理を減らせます。</li>
+</ul>
+<h3 id="sec-12" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">1.3 設問1：VXLANの概要</h3>
+<h4 id="sec-13" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(1) a・b・c</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：a＝24、b＝3、c＝UDP</strong></p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">a：VNIは24ビット。2^24＝16,777,216で「約1,677万個」という本文の記述と一致します。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">b：VXLANは「レイヤー2のオーバーレイ」を「レイヤー3のIPネットワーク」上に構成します。したがってbは3です。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">c：カプセル化の順序は「IPv4ヘッダー → UDPヘッダー → VXLANヘッダー → イーサネットフレーム」。よってcはUDPです。</li>
+</ul>
+<p style="margin:18px 0;padding:10px 14px;border-left:5px solid #f59e0b;border-radius:0 6px 6px 0;background-color:#fffbeb;color:#78350f;font-size:14px;line-height:1.8;"><strong style="color:#b45309;font-weight:700;">採点講評</strong>では、設問1(1)cの正答率が低かったとされています。VXLANがUDPでカプセル化されること、そしてパケット構造の順序を正確に覚えておきましょう。「TCPではない」ことが問われた基本問題です。</p>
+<h4 id="sec-14" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(2) ①〜③の情報が含まれるヘッダー</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：①イーサネットフレーム、②VXLANヘッダー、③IPv4ヘッダー</strong></p>
+<div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">情報</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">含まれる場所</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">①リモートVTEPに接続されたサーバのMACアドレス</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">イーサネットフレーム</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">元のL2フレームの送信元MACアドレス。VTEPはこれを内側フレームから学習する。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">②VXLANトンネルのVNI</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">VXLANヘッダー</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">VNIはVXLANヘッダー内の24ビットフィールド。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">③リモートVTEPのIPアドレス</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">IPv4ヘッダー</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">トンネルの外側IPヘッダーの送信元／宛先IPアドレス。</td>
+</tr>
+</tbody>
+</table></div>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">「MACアドレス＝イーサネットフレーム」「VNI＝VXLANヘッダー」「VTEPのIP＝外側IPv4ヘッダー」と、カプセル化の階層で整理すると迷いません。</p>
+<h4 id="sec-15" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(3) BUMフレームをマルチキャストで転送する目的</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：同じレイヤー2のネットワークをもつ全てのリモートVTEPに転送するため</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">BUMフレームは、宛先がブロードキャスト・未知のユニキャスト・マルチキャストのいずれかで、通常のユニキャスト転送ができません。しかし、VXLANの外側で<strong style="font-weight:700;">IPブロードキャスト</strong>を使ってしまうと、関係のないVNIのVTEPにも届いてしまいます。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">そこで、VNIごとに対応する<strong style="font-weight:700;">IPマルチキャストグループ</strong>を用意し、そのグループに参加しているVTEP（＝同じVNI＝同じL2ネットワークを持つVTEP）だけに転送します。これが「同じレイヤー2のネットワークをもつ全てのリモートVTEPに転送するため」という答えです。</p>
+<h3 id="sec-16" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">1.4 設問2：現行の検証NW（OSPF）</h3>
+<h4 id="sec-17" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(1) d・e</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：d＝LSDB、e＝最短経路</strong></p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">OSPFはリンクステート型のルーティングプロトコルです。各ルータがLSA（Link State Advertisement）を交換し、それらを集めた<strong style="font-weight:700;">LSDB（Link State Database）</strong>を作ります。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">LSDBを基に、自分を根とする<strong style="font-weight:700;">最短経路ツリー（SPT）</strong>をダイクストラ法（SPF）で計算し、ルーティングテーブルに登録します。</li>
+</ul>
+<p style="margin:18px 0;padding:10px 14px;border-left:5px solid #f59e0b;border-radius:0 6px 6px 0;background-color:#fffbeb;color:#78350f;font-size:14px;line-height:1.8;"><strong style="color:#b45309;font-weight:700;">採点講評</strong>では、設問2(1)eの正答率が低かったとされています。「SPF」と書きたくなるかもしれませんが、空欄は「〜ツリー」なので「最短経路」が適切です。</p>
+<h4 id="sec-18" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(2) ルータIDが識別するもの</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：OSPFが動作する各L3SW</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">OSPFのルータIDは、LSAなどの制御情報に含まれ、<strong style="font-weight:700;">OSPFを動作させるルータ（ここではL3SW）を一意に識別する</strong>ための32ビットの識別子です。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">K社ではループバックインタフェースのIPアドレスをルータIDにしています。ループバックは物理リンクの状態に左右されず安定しているため、ルータIDが変わりにくいという利点があります。</p>
+<h4 id="sec-19" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(3) ECMPを使うための設計</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：複数ある経路のそれぞれの経路について、コストの合計値を同じ値にする。</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">ECMP（Equal-Cost Multipath）は、<strong style="font-weight:700;">同じ宛先に対してコストが等しい複数の経路</strong>がある場合に、それらを同時に使って負荷分散する仕組みです。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">OSPFのコストは、各リンクのコスト（デフォルトでは参照帯域幅÷インタフェース帯域幅）の合計で決まります。複数経路の合計コストが異なると、最小コストの経路だけが選ばれ、ECMPは働きません。したがって、設計段階で<strong style="font-weight:700;">各経路の合計コストを同じ値に揃える</strong>必要があります。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">あわせて、ルータ側でECMPを有効にし、最大パス数を必要な数以上に設定しておくことも実務では重要です。</p>
+<h4 id="sec-20" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(4) VTEPのIPにループバックを使う理由</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：一つの物理インタフェースに障害があってもVTEPとして動作できるから</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">VTEPのIPアドレスは、VXLANパケットの外側の送信元・宛先になります。もし物理インタフェースのIPアドレスをVTEPに使うと、そのリンクがダウンした瞬間にVTEPのIPアドレスが到達不能になり、VXLANトンネルやMAC学習が破綻します。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">ループバックインタフェースは、物理リンクがダウンしてもアップ状態を保ち、OSPFなどの代替経路を通じて到達可能です。そのため、<strong style="font-weight:700;">1本の物理リンクが故障してもVTEPとして動作し続けられる</strong>のです。</p>
+<h4 id="sec-21" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(5) 表1の通信可否</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：ア×、イ×、ウ×、エ×、オ○、カ×</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">判断基準はただ一つ、<strong style="font-weight:700;">同じVNI（同じVLAN）に属しているか</strong>です。VNIが同じなら同じL2ネットワークなので通信可（○）、異なれば通信不可（×）です。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">参考として、VNIごとの全組み合わせを整理すると次のようになります。</p>
+<div style="margin:0 0 6px;font-size:12px;line-height:1.5;color:#94a3b8;text-align:right;">※ 横にスクロールできます</div><div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:12.5px;line-height:1.65;min-width:720px;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">通信元＼通信先</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VM11</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VM12</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VM13</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VM21</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VM22</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VM23</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VM31</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VM32</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VM33</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VM11（VNI 10010）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">—</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">VM12（VNI 10020）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">—</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VM13（VNI 10030）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">—</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">VM21（VNI 10010）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">—</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VM22（VNI 10020）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">—</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">VM23（VNI 10030）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">—</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">○</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VM31（VNI 10010）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">—</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">VM32（VNI 10020）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">—</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">×</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VM33（VNI 10030）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">○</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">×</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">—</td>
+</tr>
+</tbody>
+</table></div>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">表1の空欄ア〜カのうち、同じVNIになるのは<strong style="font-weight:700;">オだけ</strong>なので、オのみ○、他は×です。</p>
+<h3 id="sec-22" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">1.5 設問3：現行NWのVTEPの動作</h3>
+<h4 id="sec-23" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(1) ARP要求のVXLANパケットの宛先IPアドレス</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：239.0.0.1</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">VM11はVLAN 110、VNI 10010に属します。ARP要求はブロードキャスト（BUM）なので、VNI 10010に対応するマルチキャストグループアドレスが外側IPv4の宛先になります。図4の対応表から、VLAN 110／VNI 10010のグループアドレスは<strong style="font-weight:700;">239.0.0.1</strong>です。</p>
+<h4 id="sec-24" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(2) L3SW31が学習する情報</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：VM11のMACアドレス、VNI及びL3SW11のVTEPのIPアドレス</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">L3SW31は、L3SW11からARP要求を含むVXLANパケットを受信します。このとき、内側フレームの送信元MACアドレス、VXLANヘッダーのVNI、外側IPv4ヘッダーの送信元IPアドレスを組み合わせて学習します。</p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">内側フレームの送信元MACアドレス → <strong style="font-weight:700;">VM11のMACアドレス</strong></li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">VXLANヘッダーのVNI → <strong style="font-weight:700;">10010</strong></li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">外側IPv4ヘッダーの送信元IPアドレス → <strong style="font-weight:700;">L3SW11のVTEPのIPアドレス（10.0.0.11）</strong></li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">「VM11のIPアドレス」ではないことに注意してください。VTEPが学習するのはMACアドレスとVNIとリモートVTEPのIPです。</p>
+<h4 id="sec-25" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(3) 表2のキ〜コ</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：キ＝10010、ク＝10.0.0.31、ケ＝10010、コ＝10.0.0.11</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">表2は、ARP通信の完了後にL3SW11とL3SW31が学習した内容です。向きを整理します。</p>
+<div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">機器</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">学習するVMのMAC</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">VNI</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">リモートVTEPのIP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">L3SW11</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">VM31のMACアドレス</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">10010</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">L3SW31のVTEP＝10.0.0.31</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">L3SW31</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">VM11のMACアドレス</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">10010</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">L3SW11のVTEP＝10.0.0.11</td>
+</tr>
+</tbody>
+</table></div>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">L3SW11は、L3SW31から届いたARP応答（VM31のMACを含む）から、VM31のMAC、VNI 10010、リモートVTEP＝L3SW31（10.0.0.31）を学習します。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">L3SW31は、L3SW11から届いたARP要求（VM11のMACを含む）から、VM11のMAC、VNI 10010、リモートVTEP＝L3SW11（10.0.0.11）を学習します。</li>
+</ul>
+<p style="margin:18px 0;padding:10px 14px;border-left:5px solid #f59e0b;border-radius:0 6px 6px 0;background-color:#fffbeb;color:#78350f;font-size:14px;line-height:1.8;"><strong style="color:#b45309;font-weight:700;">採点講評</strong>では、クとコの正答率がやや低く、「クとコが逆」「VMのIPアドレスを書いてしまう」誤答が散見されたとあります。<strong style="color:#b45309;font-weight:700;">「学習する側から見て、相手のVTEPはどちらか」</strong>を必ず確認しましょう。</p>
+<h3 id="sec-26" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">1.6 設問4：新検証NW（EVPN）</h3>
+<h4 id="sec-27" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(1) ルートリフレクタの利点とループ防止ID</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：利点＝iBGPピアの数を減らすことができる。／名称＝クラスターID</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">iBGPは、同一AS内のBGPルータ同士で経路を交換しますが、原則として<strong style="font-weight:700;">フルメッシュ</strong>のピアリングが必要です。ルータ数がn台だと、ピア数はn(n−1)/2と急増します。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">ルートリフレクタ（RR）を置くと、各ルータはRRとだけiBGPピアを張り、RRが経路を反射（リフレクト）します。これにより<strong style="font-weight:700;">iBGPピアの数を大幅に減らせます</strong>。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">RRを冗長化して複数台置く場合、同じ経路が複数のRRから反射されてループする可能性があります。これを防ぐために、同じクラスタに属するRRに同じ<strong style="font-weight:700;">クラスターID</strong>を設定します。RRは経路にクラスターIDを付加し（CLUSTER_LIST）、自分と同じクラスターIDを含む経路は再反射しません。</p>
+<p style="margin:18px 0;padding:10px 14px;border-left:5px solid #f59e0b;border-radius:0 6px 6px 0;background-color:#fffbeb;color:#78350f;font-size:14px;line-height:1.8;"><strong style="color:#b45309;font-weight:700;">採点講評</strong>では設問4(1)の正答率が低く、BGPの理解を深めてほしいとされています。RRの利点は「ピア数削減」、冗長化時のループ防止は「クラスターID」とセットで覚えましょう。</p>
+<h4 id="sec-28" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(2) f・g</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：f＝Unknown Unicast、g＝ESI</strong></p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">f：BUMのうち「U」は<strong style="font-weight:700;">Unknown Unicast</strong>です。EVPNの機能2では、MP-BGPであらかじめMACアドレスとVTEPの対応を学習するため、未知のユニキャスト宛てフレームをフラッディングせず、学習したVTEPへユニキャスト転送できます。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">g：<strong style="font-weight:700;">ESI（Ethernet Segment Identifier）</strong>。同じ物理サーバに接続する複数のVTEPの論理インタフェースに同じESIを設定すると、それらを1つのEthernet Segmentとして扱えます。これにより、サーバと複数VTEPの間でリンクアグリゲーション（マルチホーミング）が可能になります。</li>
+</ul>
+<h4 id="sec-29" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(3) アクティブ／アクティブ構成の利点</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：二つの回線の帯域を有効に利用できる。</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">現行NWのNICはアクティブ／スタンバイ構成で、通常は片方の回線しか使いません。もう片方は待機用なので、帯域が遊んでいます。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">新検証NWでは、EVPNの機能3（ESI）によって複数VTEPとサーバの間でリンクアグリゲーションを組めるため、<strong style="font-weight:700;">アクティブ／アクティブ</strong>で両方の回線を同時に使えます。結果として、<strong style="font-weight:700;">2本の回線の帯域を有効に利用</strong>でき、負荷分散と冗長性を両立できます。</p>
+<h4 id="sec-30" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(4) リモートVTEPのIPアドレスの学習方法</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：MP-BGPを用いて学習する。</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">現行NWでは、VTEPは受信したVXLANパケットの外側IPv4ヘッダーからリモートVTEPのIPアドレスを学習していました（データプレーン学習）。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">新検証NWではEVPNを適用し、<strong style="font-weight:700;">MP-BGP</strong>でリモートVTEPのIPアドレスやVNIをあらかじめ交換します（コントロールプレーン学習）。これにより、最初の通信からユニキャストで転送でき、フラッディングを減らせます。</p>
+<h4 id="sec-31" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(5) ARP要求フレームの転送先</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：VLAN IDに対応するVNIをもつ全てのリモートVTEP</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">新検証NWでは、BUMフレームの転送にIPマルチキャストではなく<strong style="font-weight:700;">IPユニキャスト</strong>を使います。ARP要求を受け取ったVTEPは、フレームのVLAN IDをVNIに変換し、<strong style="font-weight:700;">そのVNIを持つ全てのリモートVTEP</strong>を宛先として、それぞれにユニキャストでVXLANパケットを送ります。</p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">「全てのVTEP」ではない：無関係なVNIのVTEPには送らない。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">「1台のVTEP」でもない：ARP要求は宛先が未知なので、同じL2セグメントの全VTEPに届ける必要がある。</li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">この「VNIごとのVTEP集合をMP-BGPで把握し、ユニキャストで複製送信する」点が、EVPN適用後のBUM転送の特徴です。</p>
+<h3 id="sec-32" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">1.7 問1のまとめ</h3>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">問1は、VXLANの<strong style="font-weight:700;">データプレーン</strong>とEVPNの<strong style="font-weight:700;">コントロールプレーン</strong>を対比させる構成でした。押さえるべき軸は次の4つです。</p>
+<ol style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">カプセル化の階層</strong>：内側イーサネット／VXLAN（VNI）／UDP／外側IPv4。どの情報がどのヘッダーにあるか。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">VNIとL2セグメントの対応</strong>：同じVNI＝同じL2ネットワーク。通信可否もBUMの転送先もこれで決まる。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">アンダーレイの安定性</strong>：OSPFのLSDB・SPF・ECMP、ループバックをVTEPに使う理由。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">EVPNによる変化</strong>：データプレーン学習→MP-BGPによる事前学習、マルチキャスト→ユニキャスト複製、ESIによるマルチホーミング、RRによるiBGPピア削減。</li>
+</ol>
+<hr style="margin:40px 0;border:0;height:1px;background-color:#e2e8f0;"/>
+<h2 id="sec-33" style="margin:48px 0 22px;padding:12px 18px;border-radius:8px;background-color:#1e3a8a;background-image:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#ffffff;font-size:22px;line-height:1.5;font-weight:700;letter-spacing:.02em;box-shadow:0 2px 6px rgba(30,58,138,.18);scroll-margin-top:80px;">問2 電子メールを用いた製品サポート（SPF／DKIM／S/MIME）</h2>
+<h3 id="sec-34" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">2.1 出題の狙い</h3>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">出題趣旨は、標的型メール攻撃が巧妙化し、なりすましメールによる被害が増えていることを背景に、メールによるサポート業務を他社に委託する場面を取り上げ、<strong style="font-weight:700;">送信ドメイン認証（SPF／DKIM）とS/MIME</strong>の導入検討にネットワーク技術を活用できるかを問うものです。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">問2の特徴は、<strong style="font-weight:700;">DNSのゾーン情報とFWのNAT設定からメールの配送経路を復元する</strong>点にあります。技術用語の暗記だけでなく、「どのサーバが、どの名前を解決し、どのIPから送信し、受信側が何を検証するか」を図から追えるかが勝負です。</p>
+<h3 id="sec-35" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">2.2 図表の整理（配送経路の復元）</h3>
+<h4 id="sec-36" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">Y社のネットワーク</h4>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">社内メールサーバY：社内のユーザーが使うメールサーバ。サポート担当者はここから送信する。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">メール中継サーバY1／Y2：DMZにあり、社内と社外のメールを中継する。メールボックスは持たない。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">外部DNSサーバY（y-ns1）：<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">y-sha.com</code>の権威DNS。MX、SPF、DKIMなどの対外情報を管理。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">社内DNSサーバY（y-ns2）：社内ゾーン（<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">y-sha.lan</code>）を管理。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">FW：インターネットからDMZへの通信に静的NATを設定。</li>
+</ul>
+<h4 id="sec-37" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">外部DNSサーバYのゾーン情報（対外）</h4>
+<pre style="margin:18px 0 24px;padding:16px 18px;border-radius:8px;background-color:#0f172a;color:#e2e8f0;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:13px;line-height:1.7;overflow-x:auto;-webkit-overflow-scrolling:touch;tab-size:4;"><code class="language-text" style="margin:0;padding:0;border:0;background:none;color:inherit;font-family:inherit;font-size:inherit;white-space:pre;">$TTL 172800
+y-sha.com.        IN MX 20 y-mail1.y-sha.com.
+y-sha.com.        IN MX  1 y-mail2.y-sha.com.
+y-mail1.y-sha.com. IN A 200.a.b.1
+y-mail2.y-sha.com. IN A 200.a.b.2
+</code></pre>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">MXの<strong style="font-weight:700;">Preference値は小さいほど優先度が高い</strong>。平常時は<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">1</code>の<strong style="font-weight:700;">y-mail2</strong>が選ばれ、障害時は<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">20</code>のy-mail1が使われます。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">y-mail1＝200.a.b.1、y-mail2＝200.a.b.2はグローバルIPアドレスです。</li>
+</ul>
+<h4 id="sec-38" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">社内DNSサーバYのゾーン情報（社内）</h4>
+<pre style="margin:18px 0 24px;padding:16px 18px;border-radius:8px;background-color:#0f172a;color:#e2e8f0;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:13px;line-height:1.7;overflow-x:auto;-webkit-overflow-scrolling:touch;tab-size:4;"><code class="language-text" style="margin:0;padding:0;border:0;background:none;color:inherit;font-family:inherit;font-size:inherit;white-space:pre;">$TTL 172800
+y-mail3.y-sha.lan.  IN A 192.168.1.1
+mail.y-sha.lan. 60  IN A 192.168.0.1
+mail.y-sha.lan. 60  IN A 192.168.0.2
+y-mail1.y-sha.lan.  IN A 192.168.0.1
+y-mail2.y-sha.lan.  IN A 192.168.0.2
+</code></pre>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">mail.y-sha.lan</code>は<strong style="font-weight:700;">Aレコードが2つ</strong>あり、TTLが<strong style="font-weight:700;">60秒</strong>と短く設定されています。これがDNSラウンドロビン用の名前です。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">y-mail1／y-mail2の社内向けAレコードは、DMZの実アドレス（192.168.0.1／192.168.0.2）を指します。</li>
+</ul>
+<h4 id="sec-39" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">FWの静的NAT</h4>
+<div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">宛先ホスト</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">宛先IPアドレス（グローバル）</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">変換後のIPアドレス（DMZ）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">y-mail1.y-sha.com</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">200.a.b.1</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">192.168.0.1</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">y-mail2.y-sha.com</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">200.a.b.2</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">192.168.0.2</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="sec-40" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">メールの流れ</h4>
+<p style="margin:22px 0 10px;padding:7px 12px;border-left:4px solid #60a5fa;border-radius:0 4px 4px 0;background-color:#eff6ff;color:#1e40af;font-size:14.5px;line-height:1.7;"><strong style="font-weight:700;">社内→社外（サポートメールの返信）</strong></p>
+<ol style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">サポート担当者が社内メールサーバYから送信する。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">社内メールサーバYは、社内DNSで<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">mail.y-sha.lan</code>を解決する。Aレコードが2つあるため、DNSラウンドロビンでY1またはY2に振り分けられる。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">Y1／Y2がDKIM署名を付与し、インターネット経由で顧客のメールサーバへ送信する。</li>
+</ol>
+<p style="margin:22px 0 10px;padding:7px 12px;border-left:4px solid #60a5fa;border-radius:0 4px 4px 0;background-color:#eff6ff;color:#1e40af;font-size:14.5px;line-height:1.7;"><strong style="font-weight:700;">社外→社内（顧客からの問い合わせ）</strong></p>
+<ol style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">顧客のメールサーバが<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">y-sha.com</code>のMXを引く。Preferenceが小さいy-mail2（200.a.b.2）が選ばれる。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">FWの静的NATで200.a.b.2→192.168.0.2に変換され、メール中継サーバY2に届く。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">Y2から社内メールサーバYへ転送される。</li>
+</ol>
+<h4 id="sec-41" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">Z社のネットワーク</h4>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">外部DNSサーバZ（z-ns1）：<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">z-sha.co.jp</code>の権威DNS。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">メール中継サーバZ（z-mail1）：Z社から社外へ送信する中継サーバ。グローバルIPは222.c.d.1。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">社内メールサーバZ（z-mail2）：Z社のサポート担当者が使うメールサーバ。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">社内DNSサーバZ（z-ns2）：社内ゾーンを管理。</li>
+</ul>
+<h3 id="sec-42" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">2.3 設問1：Y社のネットワーク構成とセキュリティ対策の背景</h3>
+<h4 id="sec-43" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(1) 転送先のメール中継サーバのFQDN</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：mail.y-sha.lan</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">社内メールサーバYが社外宛てメールを中継サーバY1／Y2へ転送するとき、社内DNSで解決する名前が<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">mail.y-sha.lan</code>です。この名前には192.168.0.1と192.168.0.2の2つのAレコードがあり、DNSラウンドロビンでY1／Y2に振り分けられます。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;"><code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">y-mail1.y-sha.com</code>や<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">y-mail2.y-sha.com</code>は、外部からの受信時にMXレコードが指す名前です。社内からの送信で使う名前と、外部からの受信で使う名前を混同しないことがポイントです。</p>
+<h4 id="sec-44" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(2) 振り分けの偏りを小さくする方策</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：TTLを60秒と短い値にしている。</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">DNSラウンドロビンは、名前解決のたびに複数のAレコードを順番に返すことで負荷分散します。しかし、リゾルバは返された回答を<strong style="font-weight:700;">TTLの間キャッシュ</strong>します。TTLが長いと、同じIPアドレスがキャッシュされ続け、特定の中継サーバに偏ります。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;"><code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">mail.y-sha.lan</code>のTTLを<strong style="font-weight:700;">60秒</strong>と短くすることで、キャッシュの寿命が短くなり、社内メールサーバYは頻繁に再問い合わせします。その結果、ラウンドロビンが機能し、振り分けの偏りが小さくなります。</p>
+<p style="margin:18px 0;padding:10px 14px;border-left:5px solid #f59e0b;border-radius:0 6px 6px 0;background-color:#fffbeb;color:#78350f;font-size:14px;line-height:1.8;"><strong style="color:#b45309;font-weight:700;">採点講評</strong>でも、設問1(2)の正答率が低かったとされています。「送信元が社内メールサーバYだけ」という構成では、短いTTLが特に重要になる、という理由まで理解しておきましょう。</p>
+<h4 id="sec-45" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(3) a・b・c</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：a＝Preference、b＝y-mail2、c＝逆引き</strong></p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">a：MXレコードの優先度は<strong style="font-weight:700;">Preference</strong>（プリファレンス）です。値が小さいほど優先されます。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">b：平常時に選ばれるのはPreferenceが<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">1</code>の<strong style="font-weight:700;">y-mail2</strong>です。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">c：IPアドレスからFQDNを引く名前解決は<strong style="font-weight:700;">逆引き</strong>（PTRレコード）です。</li>
+</ul>
+<h4 id="sec-46" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(4) ア・イ</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：ア＝200.a.b.1、イ＝192.168.0.1</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">表1の1行目はy-mail1のNATです。</p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">宛先IPアドレス（グローバル）：<strong style="font-weight:700;">200.a.b.1</strong></li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">変換後のIPアドレス（DMZの実アドレス）：<strong style="font-weight:700;">192.168.0.1</strong></li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">静的NATは、インターネットからDMZのサーバへ届けるために、グローバルIPをプライベートIPに1対1で変換します。</p>
+<h4 id="sec-47" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(5) 攻撃者がPTRレコードに行う不正な操作</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：メールサーバのFQDNに、詐称したメールアドレスのドメイン名を登録する。</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">逆引きを使った素朴な判定では、送信元メールサーバのIPアドレスからPTRでFQDNを取得し、そのFQDNのドメイン名と送信元メールアドレスのドメイン名が一致するかを見ます。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">攻撃者は、自分が管理するDNSサーバのPTRレコードに、<strong style="font-weight:700;">詐称したいドメイン名を持つFQDN</strong>を登録できます。すると、逆引きの結果が詐称先のドメインに見えてしまい、素朴な判定を通過してしまいます。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">これを防ぐには、PTRで得たFQDNをさらに正引きし、元のIPアドレスと一致するか確認する<strong style="font-weight:700;">FCrDNS（Forward-confirmed reverse DNS）</strong>が有効です。ただし、それでもドメイン認証としては不十分で、SPFやDKIMが必要になります。</p>
+<h3 id="sec-48" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">2.4 設問2：SPF</h3>
+<h4 id="sec-49" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(1) ウ・エ</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：ウ＝200.a.b.1、エ＝200.a.b.2</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">SPFレコードは、そのドメインのメールを送信してよいサーバのIPアドレスを列挙します。Y社の送信元はメール中継サーバY1／Y2なので、それぞれのグローバルIPである<strong style="font-weight:700;">200.a.b.1</strong>と<strong style="font-weight:700;">200.a.b.2</strong>を登録します。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">図4のレコードは次の形です。</p>
+<pre style="margin:18px 0 24px;padding:16px 18px;border-radius:8px;background-color:#0f172a;color:#e2e8f0;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:13px;line-height:1.7;overflow-x:auto;-webkit-overflow-scrolling:touch;tab-size:4;"><code class="language-text" style="margin:0;padding:0;border:0;background:none;color:inherit;font-family:inherit;font-size:inherit;white-space:pre;">y-sha.com. IN TXT "v=spf1 +ip4:200.a.b.1 +ip4:200.a.b.2 -all"
+</code></pre>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">v=spf1</code>：SPFのバージョン。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">+ip4:...</code>：そのIPv4アドレスからの送信を許可（Pass）。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">-all</code>：上記以外の送信元は失敗（Fail）とする。</li>
+</ul>
+<h4 id="sec-50" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(2) d・e・f</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：d＝SMTP、e＝MAIL FROM、f＝y-sha.com</strong></p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">d：メール転送プロトコルは<strong style="font-weight:700;">SMTP</strong>です。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">e：SPFが参照する送信元は、SMTPの<strong style="font-weight:700;">MAIL FROM</strong>コマンドで指定されるエンベロープ送信者アドレスです。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">f：<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">support@y-sha.com</code>のドメイン名は<strong style="font-weight:700;">y-sha.com</strong>です。</li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">ここで重要なのは、<strong style="font-weight:700;">エンベロープのMAIL FROMと、メールヘッダーのFromは別物</strong>という点です。SPFは原則としてMAIL FROM（およびHELO）のドメインと、実際の接続元IPアドレスを照合します。ヘッダーFromの表示名やアドレスを直接保証するものではありません。</p>
+<h4 id="sec-51" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(3) 正当性の確認方法</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：送信元のメールサーバのIPアドレスが、SPFレコードの中に登録されていること</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">受信側のメールサーバは、SMTP接続してきた相手の<strong style="font-weight:700;">実際の送信元IPアドレス</strong>を取得します。次に、MAIL FROMのドメイン（y-sha.com）のSPFレコードをDNSから取得し、その中の<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">ip4</code>などの機構に、実際の送信元IPアドレスが含まれているかを確認します。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">含まれていればPass、含まれていなければFail（<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">-all</code>の場合）となります。SPFは「IPアドレスベース」の認証であり、メールの本文やヘッダーの中身を検証するものではない、という特徴を押さえましょう。</p>
+<h3 id="sec-52" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">2.5 設問3：DKIM</h3>
+<h4 id="sec-53" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(1) g・h・i</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：g＝ヘッダー、h＝UDP、i＝512</strong></p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">g：DKIMの電子署名は、メールの<strong style="font-weight:700;">ヘッダー</strong>（DKIM-Signatureのhタグで指定されたヘッダー群）と本文を基に生成されます。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">h：DNSをトランスポートするプロトコルは、通常<strong style="font-weight:700;">UDP</strong>です。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">i：従来のDNSメッセージの最大長は<strong style="font-weight:700;">512バイト</strong>です（EDNS0を使わない場合）。</li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">DKIMレコードには公開鍵をBase64で格納します。2048ビットのRSA公開鍵は、Base64やDNSのオーバーヘッドを含めても512バイトに収まるため、UDPのDNSで取得できます。これより大きい鍵（例：4096ビット）は512バイトを超え、TCPへのフォールバックや分割が問題になることがあります。</p>
+<h4 id="sec-54" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(2) 暗号化方式のアルゴリズム名と鍵名</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：アルゴリズム名＝RSA、オ＝公開鍵</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">図5のDKIMレコードは次の形です。</p>
+<pre style="margin:18px 0 24px;padding:16px 18px;border-radius:8px;background-color:#0f172a;color:#e2e8f0;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:13px;line-height:1.7;overflow-x:auto;-webkit-overflow-scrolling:touch;tab-size:4;"><code class="language-text" style="margin:0;padding:0;border:0;background:none;color:inherit;font-family:inherit;font-size:inherit;white-space:pre;">sel.ysha._domainkey.y-sha.com. IN TXT "v=DKIM1; k=rsa; t=s; p=（公開鍵）"
+</code></pre>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">k=rsa</code>：鍵の形式は<strong style="font-weight:700;">RSA</strong>。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">p=...</code>：Base64でエンコードされた<strong style="font-weight:700;">公開鍵</strong>。</li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">DKIMは公開鍵暗号を使います。送信側は秘密鍵で署名し、受信側はDNSに公開された公開鍵で署名を検証します。秘密鍵は送信側だけが保持します。</p>
+<h4 id="sec-55" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(3) 電子署名の真正性でなりすましが分かる理由</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：受信したメールが正規のメールサーバから送信されたものかどうかが分かるから</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">DKIMの署名は、正規の送信側だけが持つ<strong style="font-weight:700;">秘密鍵</strong>で生成されます。受信側がDNSから取得した<strong style="font-weight:700;">公開鍵</strong>で署名を検証し、正しく検証できれば、そのメールは秘密鍵を持つ正規のメールサーバ（ここではY社のメール中継サーバY1／Y2）で署名されたことになります。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">つまり、DKIMの検証成功は「<strong style="font-weight:700;">正規のドメインの署名サーバから送られた</strong>」ことの証明になり、なりすましメールではないと判断できます。あわせて、本文やヘッダーが改ざんされていないことも確認できます。</p>
+<p style="margin:18px 0;padding:10px 14px;border-left:5px solid #f59e0b;border-radius:0 6px 6px 0;background-color:#fffbeb;color:#78350f;font-size:14px;line-height:1.8;"><strong style="color:#b45309;font-weight:700;">採点講評</strong>では設問3(3)の正答率が低かったとされています。「改ざんされていない」だけでなく、「<strong style="color:#b45309;font-weight:700;">正規のメールサーバから送信されたことが分かる</strong>」という送信元認証の側面を書くことが重要です。</p>
+<h3 id="sec-56" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">2.6 設問4：Z社への委託</h3>
+<h4 id="sec-57" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(1) 登録するDNSサーバ名と情報</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：DNSサーバ名＝外部DNSサーバY（y-ns1）／登録する情報＝メール中継サーバZのIPアドレス（z-mail1のIPアドレス）</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">Z社から<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">support@y-sha.com</code>として送信する場合でも、SPFの検証対象ドメインは<strong style="font-weight:700;">y-sha.com</strong>です。したがって、y-sha.comのSPFレコードに、Z社の送信元IPアドレスを追加する必要があります。</p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">y-sha.comの権威DNSは<strong style="font-weight:700;">外部DNSサーバY（y-ns1）</strong>です。SPFレコード（TXT）はここに登録します。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">追加する情報は、Z社の送信元である<strong style="font-weight:700;">メール中継サーバZ（z-mail1）のIPアドレス</strong>です。図7からz-mail1は222.c.d.1なので、実際には<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">ip4:222.c.d.1</code>を追加することになります。</li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">社内DNSサーバY（y-ns2）は<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">y-sha.lan</code>の内部ゾーン用であり、対外ドメイン<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">y-sha.com</code>のSPF公開場所ではありません。ここを間違えないようにしましょう。</p>
+<h4 id="sec-58" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(2) j</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：y-sha.com</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">DKIM-Signatureの<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">d=</code>タグは、署名したドメイン名を示します。顧客のメールサーバは、この<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">d=</code>のドメインのDKIMレコードをDNSで引きます。顧客が使う権威DNSは<strong style="font-weight:700;">外部DNSサーバY</strong>なので、<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">d=</code>は<strong style="font-weight:700;">y-sha.com</strong>でなければなりません。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">セレクター名<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">s=</code>は<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">sel.zsha</code>とし、Y社本体が使う<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">sel.ysha</code>とは別の鍵を使います。DKIMレコードの名前は次のようになります。</p>
+<pre style="margin:18px 0 24px;padding:16px 18px;border-radius:8px;background-color:#0f172a;color:#e2e8f0;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:13px;line-height:1.7;overflow-x:auto;-webkit-overflow-scrolling:touch;tab-size:4;"><code class="language-text" style="margin:0;padding:0;border:0;background:none;color:inherit;font-family:inherit;font-size:inherit;white-space:pre;">sel.zsha._domainkey.y-sha.com. IN TXT "v=DKIM1; k=rsa; p=（Z社用の公開鍵）"
+</code></pre>
+<h4 id="sec-59" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(3) 異なる鍵を使うセキュリティ上の利点</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：メール中継サーバZから鍵が漏えいしても、Y社で実施中のDKIMの処理は影響を受けない。</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">Y社本体は<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">sel.ysha</code>、Z社は<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">sel.zsha</code>と、セレクターごとに別の鍵を使います。もしZ社側の秘密鍵が漏えいしても、影響を受けるのは<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">sel.zsha</code>の署名だけです。Y社本体の<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">sel.ysha</code>の秘密鍵は別なので、Y社が送信するメールのDKIM処理は継続できます。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">また、漏えい時には<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">sel.zsha</code>のDKIMレコードを削除・無効化すれば、Z社用の署名だけを失効させられます。<strong style="font-weight:700;">鍵の影響範囲を局所化できる</strong>ことが、セレクターを分ける最大の利点です。</p>
+<h4 id="sec-60" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">(4) 委託先の内部者によるなりすましを検知できない理由</h4>
+<p data-answer="1" style="margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;"><strong style="color:inherit;font-weight:700;">解答：なりすましメールも、メール中継サーバZから社外に転送されるから</strong></p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">Z社のサポートチームY以外の部署の従業員が、送信元メールアドレスを<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">support@y-sha.com</code>に偽装して送信したとします。このメールも、Z社の<strong style="font-weight:700;">メール中継サーバZ</strong>を通って社外に転送されます。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">メール中継サーバZは、<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">support@y-sha.com</code>からのメールに対してDKIM署名（<code style="padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;">sel.zsha</code>）を付与します。また、送信元IPはZ社の中継サーバZなので、SPFもPassします。その結果、顧客のメールサーバでは、SPFもDKIMも「正常」と判定され、なりすましを検知できません。</p>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">つまり、SPF／DKIMは<strong style="font-weight:700;">ドメイン単位・サーバ単位の認証</strong>であり、「そのドメインの正規のメールサーバを通ったか」は分かっても、「送信した個人が本当にサポート担当者か」までは分からないのです。ここを補うのが、個人の電子証明書を使う<strong style="font-weight:700;">S/MIME</strong>です。</p>
+<h3 id="sec-61" style="margin:40px 0 16px;padding:11px 15px;border:1px solid #fecaca;border-left:6px solid #ef4444;border-radius:0 8px 8px 0;background-color:#fef2f2;color:#991b1b;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">2.7 設問5：S/MIME（問題不備）</h3>
+<h4 id="sec-62" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">公式の扱い</h4>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">IPAは2024年6月7日付で「設問5の不備とその対応について」を公表しました。ネットワークスペシャリスト試験の午後II 問2 設問5(1)〜(3)について問題不備が認められ、<strong style="font-weight:700;">当該大問を選択した受験者は設問5を全員正解として扱う</strong>ことになりました。解答例でも「不備により設問5(1)〜(3)は成立しない」とされています。</p>
+<h4 id="sec-63" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">何が問題だったのか</h4>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">問題の表4は、電子署名の手順を次のように説明していました。</p>
+<ol style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">ハッシュ関数hでメール内容のハッシュ値aを生成する。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">ハッシュ値aを基に電子署名データを作成する。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">電子証明書と電子署名付きメールを送信する。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">受信したメールの電子署名データからハッシュ値aを取り出す。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">ハッシュ関数hでメール内容のハッシュ値bを生成する。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">ハッシュ値を比較する。</li>
+</ol>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">この記述には、次の問題があります。</p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">「電子署名データからハッシュ値aを取り出す」はRSA固有の性質</strong>です。ECDSAやEdDSAなどの署名方式では、署名から元のハッシュ値を復元するような処理はありません。S/MIMEはRSA以外の署名方式も扱えるため、一般性がありません。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">S/MIME（CMS）の署名対象は、メール本文そのものではなく、署名対象属性群（signedAttrs）</strong>です。本文のハッシュ値はその属性の1つに過ぎず、署名日時などの属性を含めたデータに対して署名が計算されます。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">そのため、「電子署名データからハッシュ値aを取り出す」という手順は、S/MIMEの仕様に沿った説明ではありません。また、公開鍵を使った署名検証の記述が抜けています。</li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">結果として、本文の記述だけでは解答を一意に導けず、問題として成立しないと判断されました。</p>
+<h4 id="sec-64" style="margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;">学習用：デジタル署名の標準的な理解</h4>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">試験対策として、一般的な教科書的な理解（RSAを前提とした簡略モデル）を整理しておきます。予備校の参考解答も、このモデルに沿っています。</p>
+<div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">設問</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">参考解答</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">(1) 電子署名データの作成方法</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">ハッシュ値aを送信者の秘密鍵で暗号化する。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">(2) ハッシュ値aを取り出す方法</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">送信者の公開鍵で電子署名データを復号する。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">(3) 改ざんされていないと判断できる状態</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">ハッシュ値aとハッシュ値bが一致する。</td>
+</tr>
+</tbody>
+</table></div>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">ただし、これはあくまで<strong style="font-weight:700;">RSAの簡略モデル</strong>です。正確には、デジタル署名は次のような仕組みです。</p>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">署名生成</strong>：メッセージのハッシュ値を計算し、署名アルゴリズム（RSAならRSASP1、ECDSAなら楕円曲線演算など）を<strong style="font-weight:700;">送信者の秘密鍵</strong>で適用して署名値を作る。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">署名検証</strong>：受信側でメッセージのハッシュ値を計算し、署名値を<strong style="font-weight:700;">送信者の公開鍵</strong>で検証アルゴリズム（RSAならRSAVP1など）にかけ、期待されるハッシュ値と一致するか確認する。</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">S/MIMEの実際</strong>：署名対象属性群（signedAttrs）に対して署名を検証し、その中の本文ハッシュと、受信した本文から計算したハッシュが一致することを確認する。</li>
+</ul>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">「秘密鍵で暗号化する」という表現はRSAの内部処理に近い説明で、すべての署名方式に通用するわけではありません。<strong style="font-weight:700;">「秘密鍵で署名し、公開鍵で検証する」</strong>という本質を押さえ、方式ごとの違いがあることを理解しておきましょう。</p>
+<h3 id="sec-65" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">2.8 問2のまとめ：SPF・DKIM・S/MIMEの比較</h3>
+<div style="margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;"><table style="width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;min-width:432px;">
+<thead>
+<tr>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">方式</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">認証する単位</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">主な要素</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">検証する主体</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">守れる範囲</th>
+<th style="padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;">主な限界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">SPF</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">エンベロープのドメイン（MAIL FROM）と送信元IP</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">DNSのTXT（SPFレコード）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">受信側メールサーバ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">送信元サーバの正規性（IPベース）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">転送で壊れやすい。ヘッダーFromは保証しない。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">DKIM</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">署名ドメイン（d=）とメール内容</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">DKIM-Signatureヘッダー、DNSの公開鍵</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">受信側メールサーバ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">ドメインの正規性と改ざん検知</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">個人の識別はしない。鍵管理が必要。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">DMARC</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">FromドメインとSPF／DKIMのアライメント</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">DNSのDMARCレコード、ポリシー</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">受信側メールサーバ</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">なりすまし対策の運用（失敗時の扱い、報告）</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#ffffff;">準拠していない送信者には効果が限定的。</td>
+</tr>
+<tr>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">S/MIME</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">個人（送信者）の電子証明書</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">電子証明書、秘密鍵、MUA</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">受信者のMUA</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">エンドツーエンドの署名・暗号化、個人の識別</td>
+<td style="padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;background-color:#f6f9fc;">証明書配布・管理の手間。全員が対応しているとは限らない。</td>
+</tr>
+</tbody>
+</table></div>
+<p style="margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;">問2の要点は、<strong style="font-weight:700;">「ドメイン認証（SPF／DKIM）」と「個人認証（S/MIME）」の守備範囲の違い</strong>です。SPF／DKIMだけでは、委託先の別部署の従業員によるなりすまし（正規の中継サーバを通るもの）を防げません。そこをS/MIMEの個人証明書で補う、という設計思想を理解しましょう。</p>
+<hr style="margin:40px 0;border:0;height:1px;background-color:#e2e8f0;"/>
+<h2 id="sec-66" style="margin:48px 0 22px;padding:12px 18px;border-radius:8px;background-color:#1e3a8a;background-image:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#ffffff;font-size:22px;line-height:1.5;font-weight:700;letter-spacing:.02em;box-shadow:0 2px 6px rgba(30,58,138,.18);scroll-margin-top:80px;">3. 学習アドバイス</h2>
+<h3 id="sec-67" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">問1（VXLAN／EVPN）</h3>
+<ol style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">
+<p style="margin:0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">カプセル化を図で描けるようにする</strong><br/>
+   「内側イーサネット → VXLAN → UDP → 外側IPv4」の順序と、各ヘッダーに何が入るかを白紙に描いてみましょう。特にVNIが24ビット、UDPの標準ポートが4789、オーバーヘッドが50バイト、という数字は狙われます。</p>
+</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">
+<p style="margin:0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">VNIとL2セグメントの対応表を自分で作る</strong><br/>
+   図4のようなVLAN／VNI／グループアドレスの表から、通信可否やBUMの転送先を導けるようにします。「同じVNI＝同じL2」がすべての基準です。</p>
+</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">
+<p style="margin:0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">データプレーン学習とコントロールプレーン学習を対比する</strong><br/>
+   現行VXLAN：受信パケットからMAC・VNI・VTEP IPを学習。EVPN：MP-BGPで事前学習。この違いが、Unknown Unicastの削減、マルチキャスト→ユニキャスト複製、ESIによるマルチホーミングにつながります。</p>
+</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">
+<p style="margin:0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">OSPFとBGPの基礎を押さえる</strong><br/>
+   LSDB、SPF、ECMP、ルータID、ループバック、iBGPのフルメッシュ、ルートリフレクタ、クラスターID。問1はL2だけではなく、アンダーレイのL3技術も問われます。</p>
+</li>
+</ol>
+<h3 id="sec-68" style="margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;">問2（メール認証）</h3>
+<ol style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">
+<p style="margin:0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">DNSゾーンとNATから配送経路を復元する</strong><br/>
+   「誰が」「どの名前を」「どのDNSで」解決し、「どのIPから」送信するのかを、図を見ながら時系列で追います。MXのPreference、AレコードのTTL、静的NATの対応を正確に読み取ることが第一歩です。</p>
+</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">
+<p style="margin:0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">エンベロープとヘッダーを区別する</strong><br/>
+   SPFはMAIL FROM（エンベロープ）と接続元IPを見ます。ヘッダーFromとは別物です。この区別が、なりすまし検知の限界やDMARCの必要性につながります。</p>
+</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">
+<p style="margin:0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">SPF・DKIM・S/MIMEの守備範囲を整理する</strong><br/>
+   SPF＝IPベースのサーバ認証、DKIM＝ドメインの署名認証、S/MIME＝個人の証明書認証。それぞれ何を守り、何を守れないかを表にして覚えましょう。</p>
+</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">
+<p style="margin:0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">鍵とセレクターの分離を理解する</strong><br/>
+   DKIMのセレクターは、同じドメインで複数の鍵を使い分けるための仕組みです。委託先と自社で鍵を分けることで、鍵漏えい時の影響を局所化できます。</p>
+</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">
+<p style="margin:0;font-size:inherit;line-height:inherit;color:inherit;"><strong style="font-weight:700;">問題不備の設問は「Why」まで確認する</strong><br/>
+   設問5は試験としては不成立でしたが、デジタル署名の仕組みを学ぶ教材としては有用です。「秘密鍵で暗号化」という単純化が、なぜ一般には正しくないのか。RSAとECDSAの違い、S/MIMEの署名対象（signedAttrs）まで踏み込んで理解しておくと、他の午後問題にも応用できます。</p>
+</li>
+</ol>
+<hr style="margin:40px 0;border:0;height:1px;background-color:#e2e8f0;"/>
+<h2 id="sec-69" style="margin:48px 0 22px;padding:12px 18px;border-radius:8px;background-color:#1e3a8a;background-image:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#ffffff;font-size:22px;line-height:1.5;font-weight:700;letter-spacing:.02em;box-shadow:0 2px 6px rgba(30,58,138,.18);scroll-margin-top:80px;">付録：公式情報</h2>
+<ul style="margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;">
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">IPA 令和6年度春期 ネットワークスペシャリスト試験 午後II 問題冊子・解答例・採点講評</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">IPA「設問5の不備とその対応について」（2024年6月7日）</li>
+<li style="margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;">本記事の解答はIPA解答例に準拠しています。設問5のみ、公式には「不備により成立しない」とされているため、参考解答を学習用として併記しました。</li>
+</ul><h2 id="sec-70" style="margin:48px 0 22px;padding:12px 18px;border-radius:8px;background-color:#1e3a8a;background-image:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#ffffff;font-size:22px;line-height:1.5;font-weight:700;letter-spacing:.02em;box-shadow:0 2px 6px rgba(30,58,138,.18);scroll-margin-top:80px;">関連記事</h2><div data-role="related-articles" style="margin:0;padding:0;"><p style="margin:0 0 14px;font-size:13px;line-height:1.8;color:#475569;">この記事と内容が近い過去記事を、ブログ内の記事から自動で選びました。</p><a data-related-card="1" href="https://yoshishinnze.hatenablog.com/entry/2026/11/12/043000" rel="noopener" style="display:block;margin:0 0 12px;padding:14px 16px;border:1px solid #dbeafe;border-left:5px solid #2563eb;border-radius:0 10px 10px 0;background-color:#ffffff;box-shadow:0 1px 2px rgba(15,23,42,.04);text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease,background-color .15s ease;" target="_blank"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;"><span style="display:inline-block;padding:2px 9px;border-radius:999px;background-color:#eff6ff;color:#1e40af;font-size:10.5px;font-weight:700;line-height:1.6;letter-spacing:.06em;">ネットワーク</span><span style="font-size:11px;line-height:1.6;color:#64748b;font-weight:600;letter-spacing:.02em;">2026.11.12</span></div><div style="margin:7px 0 0;font-size:15.5px;line-height:1.55;font-weight:700;color:#1e3a8a;">ネットワーク拡張技術VXLAN<span aria-hidden="true" style="color:#2563eb;font-weight:700;"> →</span></div><p style="margin:5px 0 0;font-size:12.5px;line-height:1.7;color:#475569;">社内のLANの延長をクラウドに求めるようになった際に、クラウドの中にもVLANの延長を作りたいという要求が出てきました。 そんな要求のもとにVLANを更に拡張する技術としてVXLANが開発されました。 今日はそんなVXLANについて説明…</p></a><a data-related-card="1" href="https://yoshishinnze.hatenablog.com/entry/2026/02/05/000000" rel="noopener" style="display:block;margin:0 0 12px;padding:14px 16px;border:1px solid #dbeafe;border-left:5px solid #2563eb;border-radius:0 10px 10px 0;background-color:#ffffff;box-shadow:0 1px 2px rgba(15,23,42,.04);text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease,background-color .15s ease;" target="_blank"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;"><span style="display:inline-block;padding:2px 9px;border-radius:999px;background-color:#eff6ff;color:#1e40af;font-size:10.5px;font-weight:700;line-height:1.6;letter-spacing:.06em;">ネットワーク</span><span style="font-size:11px;line-height:1.6;color:#64748b;font-weight:600;letter-spacing:.02em;">2026.02.05</span></div><div style="margin:7px 0 0;font-size:15.5px;line-height:1.55;font-weight:700;color:#1e3a8a;">通信のカプセル化とは<span aria-hidden="true" style="color:#2563eb;font-weight:700;"> →</span></div><p style="margin:5px 0 0;font-size:12.5px;line-height:1.7;color:#475569;">通信は、通常ネットワークを通過することが出来ないように設定されることが多いです。 そんな通信上の制約の中でも、サーバと会話したいというケースがあります。 そんなときに使われる手法が 「カプセル化」 です。 通信におけるカプセル化は、一言…</p></a><a data-related-card="1" href="https://yoshishinnze.hatenablog.com/entry/2026/10/29/043000" rel="noopener" style="display:block;margin:0 0 12px;padding:14px 16px;border:1px solid #dbeafe;border-left:5px solid #2563eb;border-radius:0 10px 10px 0;background-color:#ffffff;box-shadow:0 1px 2px rgba(15,23,42,.04);text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease,background-color .15s ease;" target="_blank"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;"><span style="display:inline-block;padding:2px 9px;border-radius:999px;background-color:#eff6ff;color:#1e40af;font-size:10.5px;font-weight:700;line-height:1.6;letter-spacing:.06em;">ネットワーク</span><span style="font-size:11px;line-height:1.6;color:#64748b;font-weight:600;letter-spacing:.02em;">2026.10.29</span></div><div style="margin:7px 0 0;font-size:15.5px;line-height:1.55;font-weight:700;color:#1e3a8a;">組織内部ネットワークのルート情報プロトコルOSPF<span aria-hidden="true" style="color:#2563eb;font-weight:700;"> →</span></div><p style="margin:5px 0 0;font-size:12.5px;line-height:1.7;color:#475569;">ASと呼ばれるルータのグループで構成されたネットワークの内部をトポロジーを構築して自律的にネットワーク情報を交換するプロトコルがあります。 その中でも安定感抜群なものがOSPFです。 概要 OSPF（Open Shortest Path…</p></a><a data-related-card="1" href="https://yoshishinnze.hatenablog.com/entry/2026/01/27/000000" rel="noopener" style="display:block;margin:0 0 12px;padding:14px 16px;border:1px solid #dbeafe;border-left:5px solid #2563eb;border-radius:0 10px 10px 0;background-color:#ffffff;box-shadow:0 1px 2px rgba(15,23,42,.04);text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease,background-color .15s ease;" target="_blank"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;"><span style="display:inline-block;padding:2px 9px;border-radius:999px;background-color:#eff6ff;color:#1e40af;font-size:10.5px;font-weight:700;line-height:1.6;letter-spacing:.06em;">ネットワーク</span><span style="font-size:11px;line-height:1.6;color:#64748b;font-weight:600;letter-spacing:.02em;">2026.01.27</span></div><div style="margin:7px 0 0;font-size:15.5px;line-height:1.55;font-weight:700;color:#1e3a8a;">VLANの用途とIEEE802.1Q<span aria-hidden="true" style="color:#2563eb;font-weight:700;"> →</span></div><p style="margin:5px 0 0;font-size:12.5px;line-height:1.7;color:#475569;">今の組織の内部ネットワークはVLANという論理的に独立したLANで構成されています。VLANの中でパケットと呼ばれるデータがやり取りされることになります。このパケットにタグをつけてVLANを構成するフォーマットがIEEE 802.1Q（…</p></a><a data-related-card="1" href="https://yoshishinnze.hatenablog.com/entry/2026/09/24/043000" rel="noopener" style="display:block;margin:0 0 12px;padding:14px 16px;border:1px solid #dbeafe;border-left:5px solid #2563eb;border-radius:0 10px 10px 0;background-color:#ffffff;box-shadow:0 1px 2px rgba(15,23,42,.04);text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease,background-color .15s ease;" target="_blank"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;"><span style="display:inline-block;padding:2px 9px;border-radius:999px;background-color:#eff6ff;color:#1e40af;font-size:10.5px;font-weight:700;line-height:1.6;letter-spacing:.06em;">ネットワーク</span><span style="font-size:11px;line-height:1.6;color:#64748b;font-weight:600;letter-spacing:.02em;">2026.09.24</span></div><div style="margin:7px 0 0;font-size:15.5px;line-height:1.55;font-weight:700;color:#1e3a8a;">組織間のネットワークを接続するプロトコルBGP-4<span aria-hidden="true" style="color:#2563eb;font-weight:700;"> →</span></div><p style="margin:5px 0 0;font-size:12.5px;line-height:1.7;color:#475569;">組織の間にはインターネットでつながっていますが、IPパケットを送達させるためのプロトコルがどうしても必要となります。 そして、現時点での組織を接続する経路を決定するプロトコルはBGP-4（Border Gateway Protocol…</p></a><p style="margin:12px 0 0;font-size:11.5px;line-height:1.65;color:#94a3b8;">※ 本文と過去記事のタイトル・概要の類似度による自動選定です。</p></div>
+</div>
+
+<script>
+/*!
+ * hatena_interactive.js
+ * はてなブログの記事本文に貼り付ける、依存ライブラリなしの軽量インタラクション集。
+ *
+ * - 読了プログレスバー
+ * - 解答のクイズモード（ぼかし → クリックで開示、進捗カウンタ）
+ * - コードブロックのコピー
+ * - 目次のスムーズスクロール＋現在地ハイライト
+ * - 見出しクリックでリンクコピー
+ * - VXLAN カプセル化のミニクイズ
+ * - キーボードショートカット（Q / R / T / ?）
+ *
+ * 記事内のスクリプトが使えない場合は、はてなブログの
+ * 「デザイン > カスタマイズ > 記事下」などにこのファイルの中身を貼り付けてください。
+ */
+(function () {
+  "use strict";
+
+  var root = document.querySelector("[data-hatena-article]");
+  if (!root || root.getAttribute("data-enhanced") === "1") return;
+  root.setAttribute("data-enhanced", "1");
+
+  var reduceMotion = false;
+  try {
+    reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch (err) {}
+
+  var STORAGE_KEY = "hatena-quiz:" + location.pathname;
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function store(key, value) {
+    try {
+      window.localStorage.setItem(key, value);
+    } catch (err) {}
+  }
+
+  function restore(key) {
+    try {
+      return window.localStorage.getItem(key);
+    } catch (err) {
+      return null;
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* トースト                                                           */
+  /* ------------------------------------------------------------------ */
+
+  var toastEl = null;
+  var toastTimer = null;
+
+  function toast(message) {
+    if (!toastEl) {
+      toastEl = document.createElement("div");
+      toastEl.setAttribute("role", "status");
+      toastEl.setAttribute("aria-live", "polite");
+      toastEl.style.cssText =
+        "position:fixed;left:50%;bottom:92px;z-index:10000;" +
+        "transform:translateX(-50%) translateY(10px);" +
+        "max-width:min(88vw,440px);padding:10px 18px;border-radius:999px;" +
+        "background:rgba(15,23,42,.94);color:#fff;font-size:13px;" +
+        "line-height:1.65;text-align:center;font-weight:600;" +
+        "box-shadow:0 10px 30px rgba(15,23,42,.32);opacity:0;" +
+        "pointer-events:none;transition:opacity .2s ease,transform .2s ease;" +
+        "font-family:inherit;";
+      document.body.appendChild(toastEl);
+    }
+
+    toastEl.textContent = message;
+    requestAnimationFrame(function () {
+      toastEl.style.opacity = "1";
+      toastEl.style.transform = "translateX(-50%) translateY(0)";
+    });
+
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(function () {
+      toastEl.style.opacity = "0";
+      toastEl.style.transform = "translateX(-50%) translateY(10px)";
+    }, 2200);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* コピー                                                             */
+  /* ------------------------------------------------------------------ */
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.cssText =
+        "position:fixed;top:-1000px;left:-1000px;opacity:0;";
+      document.body.appendChild(area);
+      area.select();
+      try {
+        var ok = document.execCommand("copy");
+        area.remove();
+        ok ? resolve() : reject(new Error("copy failed"));
+      } catch (err) {
+        area.remove();
+        reject(err);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* 紙吹雪（小さい祝福）                                               */
+  /* ------------------------------------------------------------------ */
+
+  function burst(x, y, count) {
+    if (reduceMotion) return;
+
+    var colors = [
+      "#2563eb",
+      "#22d3ee",
+      "#10b981",
+      "#f59e0b",
+      "#ef4444",
+      "#8b5cf6",
+    ];
+    var layer = document.createElement("div");
+    layer.setAttribute("aria-hidden", "true");
+    layer.style.cssText =
+      "position:fixed;inset:0;z-index:10001;overflow:hidden;" +
+      "pointer-events:none;";
+    document.body.appendChild(layer);
+
+    for (var i = 0; i < (count || 32); i++) {
+      var piece = document.createElement("span");
+      var size = 6 + Math.random() * 7;
+      piece.style.cssText =
+        "position:absolute;left:" +
+        x +
+        "px;top:" +
+        y +
+        "px;width:" +
+        size +
+        "px;height:" +
+        size * 0.55 +
+        "px;border-radius:2px;background:" +
+        colors[i % colors.length] +
+        ";opacity:1;will-change:transform,opacity;";
+      layer.appendChild(piece);
+
+      var angle = Math.random() * Math.PI * 2;
+      var distance = 80 + Math.random() * 230;
+      var dx = Math.cos(angle) * distance;
+      var dy = Math.sin(angle) * distance + 130;
+      var spin = Math.random() * 720 - 360;
+
+      var animation = piece.animate(
+        [
+          { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+          {
+            transform:
+              "translate(" + dx + "px," + dy + "px) rotate(" + spin + "deg)",
+            opacity: 0,
+          },
+        ],
+        {
+          duration: 1100 + Math.random() * 700,
+          easing: "cubic-bezier(.2,.7,.3,1)",
+          fill: "forwards",
+        }
+      );
+      animation.onfinish = function () {
+        this.cancel();
+      };
+    }
+
+    window.setTimeout(function () {
+      layer.remove();
+    }, 2400);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* 読了プログレスバー                                                 */
+  /* ------------------------------------------------------------------ */
+
+  var progressBar = document.createElement("div");
+  progressBar.setAttribute("aria-hidden", "true");
+  progressBar.style.cssText =
+    "position:fixed;top:0;left:0;height:3px;width:0%;z-index:9999;" +
+    "background:linear-gradient(90deg,#1e3a8a,#3b82f6,#22d3ee);" +
+    "box-shadow:0 0 8px rgba(59,130,246,.6);pointer-events:none;" +
+    "transition:width .08s linear;";
+  document.body.appendChild(progressBar);
+
+  function updateProgress() {
+    var rect = root.getBoundingClientRect();
+    var total = rect.height - window.innerHeight;
+    var scrolled = -rect.top;
+    var ratio = total > 0 ? scrolled / total : 1;
+    progressBar.style.width = clamp(ratio, 0, 1) * 100 + "%";
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* フローティング操作パネル                                           */
+  /* ------------------------------------------------------------------ */
+
+  var panel = document.createElement("div");
+  panel.setAttribute("data-role", "controls");
+  panel.style.cssText =
+    "position:fixed;right:14px;bottom:16px;z-index:9998;display:flex;" +
+    "flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px;" +
+    "max-width:calc(100vw - 28px);padding:7px;border-radius:18px;" +
+    "background:rgba(255,255,255,.94);border:1px solid #dbeafe;" +
+    "box-shadow:0 12px 32px rgba(15,23,42,.18);font-family:inherit;";
+  document.body.appendChild(panel);
+
+  var BUTTON_STYLE =
+    "appearance:none;border:0;border-radius:999px;padding:7px 12px;" +
+    "font-size:12.5px;font-weight:700;line-height:1;cursor:pointer;" +
+    "background:#eff6ff;color:#1e40af;font-family:inherit;" +
+    "white-space:nowrap;transition:background .15s ease,color .15s ease," +
+    "transform .12s ease;";
+
+  function makeButton(label, title) {
+    var button = document.createElement("button");
+    button.type = "button";
+    button.textContent = label;
+    if (title) button.title = title;
+    button.style.cssText = BUTTON_STYLE;
+    button.addEventListener("mouseenter", function () {
+      if (button.getAttribute("aria-pressed") === "true") return;
+      button.style.background = "#dbeafe";
+    });
+    button.addEventListener("mouseleave", function () {
+      if (button.getAttribute("aria-pressed") === "true") return;
+      button.style.background = "#eff6ff";
+    });
+    button.addEventListener("pointerdown", function () {
+      button.style.transform = "scale(.96)";
+    });
+    button.addEventListener("pointerup", function () {
+      button.style.transform = "";
+    });
+    button.addEventListener("pointerleave", function () {
+      button.style.transform = "";
+    });
+    panel.appendChild(button);
+    return button;
+  }
+
+  var quizButton = makeButton("クイズ", "解答を隠して自習モードにする（Q）");
+  var revealButton = makeButton("全表示", "解答をすべて表示する（R）");
+  revealButton.style.display = "none";
+  var counter = document.createElement("span");
+  counter.setAttribute("aria-live", "polite");
+  counter.style.cssText =
+    "padding:0 4px;font-size:12px;font-weight:700;color:#64748b;" +
+    "font-variant-numeric:tabular-nums;display:none;";
+  panel.appendChild(counter);
+
+  var topButton = makeButton("↑", "ページの先頭へ（T）");
+
+  /* ------------------------------------------------------------------ */
+  /* クイズモード                                                       */
+  /* ------------------------------------------------------------------ */
+
+  var answers = Array.prototype.slice.call(
+    root.querySelectorAll('p[data-answer="1"]')
+  );
+  if (!answers.length) {
+    answers = Array.prototype.slice.call(root.querySelectorAll("p")).filter(
+      function (p) {
+        return p.textContent.replace(/^\s+/, "").indexOf("解答：") === 0;
+      }
+    );
+    answers.forEach(function (p) {
+      p.setAttribute("data-answer", "1");
+    });
+  }
+
+  var total = answers.length;
+  var revealed = 0;
+  var quizOn = false;
+  var celebrated = false;
+
+  answers.forEach(function (p, index) {
+    p.setAttribute("data-revealed", "0");
+
+    p.addEventListener("click", function () {
+      if (!quizOn) return;
+      revealAnswer(p);
+    });
+
+    p.addEventListener("keydown", function (event) {
+      if (!quizOn) return;
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        revealAnswer(p);
+      }
+    });
+
+    if (index === 0) {
+      p.setAttribute("data-first-answer", "1");
+    }
+  });
+
+  function updateCounter() {
+    counter.textContent = revealed + " / " + total;
+    if (revealed === total && total > 0) {
+      counter.style.color = "#047857";
+    } else {
+      counter.style.color = "#64748b";
+    }
+  }
+
+  function blurAnswer(p) {
+    p.style.filter = "blur(5px)";
+    p.style.cursor = "zoom-in";
+    p.style.userSelect = "none";
+    p.style.transition = "filter .25s ease";
+    p.style.outline = "1px dashed rgba(16,185,129,.45)";
+    p.style.outlineOffset = "2px";
+    p.setAttribute("aria-label", "解答を表示（クリックまたは Enter）");
+  }
+
+  function unblurAnswer(p) {
+    p.style.filter = "";
+    p.style.cursor = "";
+    p.style.userSelect = "";
+    p.style.outline = "";
+    p.style.outlineOffset = "";
+  }
+
+  function revealAnswer(p) {
+    if (p.getAttribute("data-revealed") === "1") return;
+    p.setAttribute("data-revealed", "1");
+    p.style.filter = "none";
+    p.style.cursor = "pointer";
+    p.style.userSelect = "";
+    p.style.outline = "";
+    p.style.outlineOffset = "";
+    p.setAttribute("aria-label", "解答を表示しました");
+    revealed += 1;
+    updateCounter();
+
+    if (!reduceMotion) {
+      p.animate(
+        [
+          { boxShadow: "0 0 0 0 rgba(16,185,129,.55)" },
+          { boxShadow: "0 0 0 10px rgba(16,185,129,0)" },
+        ],
+        { duration: 620, easing: "ease-out" }
+      );
+    }
+
+    if (quizOn && total > 0 && revealed === total && !celebrated) {
+      celebrated = true;
+      toast("全 " + total + " 問、解答を表示しました。おつかれさまでした！");
+      burst(window.innerWidth / 2, window.innerHeight * 0.36, 40);
+    }
+  }
+
+  function setQuiz(enabled, silent) {
+    quizOn = enabled;
+    celebrated = false;
+
+    quizButton.setAttribute("aria-pressed", enabled ? "true" : "false");
+    quizButton.textContent = enabled ? "クイズ中" : "クイズ";
+    quizButton.style.background = enabled ? "#1e3a8a" : "#eff6ff";
+    quizButton.style.color = enabled ? "#ffffff" : "#1e40af";
+    quizButton.style.boxShadow = enabled
+      ? "0 3px 10px rgba(30,58,138,.32)"
+      : "";
+
+    revealButton.style.display = enabled ? "" : "none";
+    counter.style.display = enabled ? "" : "none";
+
+    revealed = 0;
+    celebrated = false;
+
+    answers.forEach(function (p) {
+      p.setAttribute("data-revealed", "0");
+      if (enabled) {
+        p.setAttribute("tabindex", "0");
+        p.setAttribute("role", "button");
+        blurAnswer(p);
+      } else {
+        p.removeAttribute("tabindex");
+        p.removeAttribute("role");
+        p.removeAttribute("aria-label");
+        unblurAnswer(p);
+      }
+    });
+
+    updateCounter();
+    store(STORAGE_KEY, enabled ? "1" : "0");
+
+    if (enabled && !silent) {
+      toast("クイズモード：解答はクリックで表示（Q で解除）");
+    }
+  }
+
+  quizButton.addEventListener("click", function () {
+    setQuiz(!quizOn);
+  });
+
+  revealButton.addEventListener("click", function () {
+    if (!quizOn) return;
+    answers.forEach(revealAnswer);
+  });
+
+  topButton.addEventListener("click", function () {
+    window.scrollTo({
+      top: 0,
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  });
+
+  if (total > 0 && restore(STORAGE_KEY) === "1") {
+    setQuiz(true, true);
+  } else if (total === 0) {
+    quizButton.style.display = "none";
+    revealButton.style.display = "none";
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* コードブロックのコピー                                             */
+  /* ------------------------------------------------------------------ */
+
+  Array.prototype.forEach.call(root.querySelectorAll("pre"), function (pre) {
+    var wrapper = document.createElement("div");
+    wrapper.style.cssText = "position:relative;margin:18px 0 24px;";
+    pre.style.margin = "0";
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+
+    var button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "コピー";
+    button.title = "このコードをコピー";
+    button.style.cssText =
+      "position:absolute;top:8px;right:8px;z-index:2;appearance:none;" +
+      "border:1px solid rgba(148,163,184,.55);border-radius:6px;" +
+      "padding:4px 10px;font-family:inherit;font-size:11.5px;" +
+      "font-weight:700;line-height:1.5;cursor:pointer;" +
+      "color:#e2e8f0;background:rgba(15,23,42,.72);" +
+      "transition:background .15s ease,color .15s ease;";
+    wrapper.appendChild(button);
+
+    button.addEventListener("click", function () {
+      copyText(pre.innerText)
+        .then(function () {
+          button.textContent = "コピー済み";
+          button.style.background = "#10b981";
+          button.style.borderColor = "#10b981";
+          button.style.color = "#ffffff";
+          window.setTimeout(function () {
+            button.textContent = "コピー";
+            button.style.background = "rgba(15,23,42,.72)";
+            button.style.borderColor = "rgba(148,163,184,.55)";
+            button.style.color = "#e2e8f0";
+          }, 1600);
+        })
+        .catch(function () {
+          toast("コピーできませんでした。手動で選択してください。");
+        });
+    });
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* 目次：スムーズスクロール＋現在地ハイライト                         */
+  /* ------------------------------------------------------------------ */
+
+  // 環境によって id が落ちても、目次リンクが動くように補完する
+  Array.prototype.forEach.call(
+    root.querySelectorAll("h2,h3,h4"),
+    function (heading, index) {
+      if (!heading.id) {
+        heading.id = "sec-" + (index + 1);
+      }
+    }
+  );
+
+  var toc = root.querySelector('[aria-label="目次"]');
+  var tocLinks = toc
+    ? Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'))
+    : [];
+
+  tocLinks.forEach(function (link) {
+    link.style.padding = "1px 4px";
+    link.style.margin = "0 -4px";
+    link.style.borderRadius = "4px";
+    link.style.transition = "background .15s ease,color .15s ease";
+
+    link.addEventListener("click", function (event) {
+      var id = link.getAttribute("href").slice(1);
+      var target = document.getElementById(id);
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, "", "#" + id);
+      }
+    });
+  });
+
+  var activeLink = null;
+
+  function updateActiveToc() {
+    if (!tocLinks.length) return;
+
+    var line = window.scrollY + 140;
+    var current = null;
+
+    tocLinks.forEach(function (link) {
+      var id = link.getAttribute("href").slice(1);
+      var heading = document.getElementById(id);
+      if (!heading) return;
+      if (heading.getBoundingClientRect().top + window.scrollY <= line) {
+        current = link;
+      }
+    });
+
+    if (current === activeLink) return;
+
+    if (activeLink) {
+      activeLink.style.background = "";
+      activeLink.style.color = "";
+      activeLink.style.fontWeight = "";
+    }
+
+    activeLink = current;
+
+    if (activeLink) {
+      activeLink.style.background = "#dbeafe";
+      activeLink.style.color = "#1e3a8a";
+      activeLink.style.fontWeight = "700";
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* 見出しクリックでリンクをコピー                                     */
+  /* ------------------------------------------------------------------ */
+
+  Array.prototype.forEach.call(
+    root.querySelectorAll("h2[id],h3[id],h4[id]"),
+    function (heading) {
+      heading.style.cursor = "pointer";
+      heading.title = "クリックでこの見出しの URL をコピー";
+
+      heading.addEventListener("click", function () {
+        var selected = window.getSelection
+          ? String(window.getSelection())
+          : "";
+        if (selected.length > 0) return;
+
+        var url =
+          location.origin +
+          location.pathname +
+          location.search +
+          "#" +
+          heading.id;
+
+        copyText(url)
+          .then(function () {
+            toast("見出しリンクをコピーしました");
+          })
+          .catch(function () {
+            toast("コピーできませんでした");
+          });
+      });
+    }
+  );
+
+  /* ------------------------------------------------------------------ */
+  /* VXLAN カプセル化ミニクイズ                                         */
+  /* ------------------------------------------------------------------ */
+
+  (function initPuzzle() {
+    var box = root.querySelector('[data-widget="vxlan-puzzle"]');
+    if (!box) return;
+
+    var chips = Array.prototype.slice.call(
+      box.querySelectorAll("[data-order]")
+    );
+    var slotRow = box.querySelector('[data-role="slots"]');
+    var status = box.querySelector('[data-role="status"]');
+    var resetButton = box.querySelector('[data-role="reset"]');
+    var hintButton = box.querySelector('[data-role="hint"]');
+    var hintText = box.querySelector('[data-role="hint-text"]');
+    if (!chips.length || !slotRow) return;
+
+    var picked = [];
+    var checked = false;
+
+    function chipBaseStyle(chip) {
+      chip.disabled = false;
+      chip.style.opacity = "";
+      chip.style.cursor = "pointer";
+      chip.style.transform = "";
+      chip.style.background = "#ffffff";
+      chip.style.color = "#1e3a8a";
+    }
+
+    function render() {
+      slotRow.innerHTML = "";
+
+      for (var i = 0; i < 4; i++) {
+        var slot = document.createElement("span");
+        slot.style.cssText =
+          "display:inline-flex;align-items:center;justify-content:center;" +
+          "min-width:92px;min-height:36px;padding:6px 10px;" +
+          "border-radius:8px;border:1px dashed #93c5fd;" +
+          "background:#f8fafc;color:#1e3a8a;font-size:12px;" +
+          "font-weight:700;text-align:center;line-height:1.35;" +
+          "transition:background .15s ease,border-color .15s ease;";
+
+        var chip = picked[i];
+
+        if (chip) {
+          slot.textContent = chip.textContent;
+
+          if (checked) {
+            var good = Number(chip.getAttribute("data-order")) === i + 1;
+            slot.style.borderStyle = "solid";
+            slot.style.borderColor = good ? "#10b981" : "#ef4444";
+            slot.style.background = good ? "#ecfdf5" : "#fef2f2";
+            slot.style.color = good ? "#065f46" : "#991b1b";
+          } else {
+            slot.style.borderStyle = "solid";
+            slot.style.borderColor = "#60a5fa";
+            slot.style.background = "#dbeafe";
+          }
+        } else {
+          slot.textContent = "？";
+        }
+
+        slotRow.appendChild(slot);
+
+        if (i < 3) {
+          var arrow = document.createElement("span");
+          arrow.textContent = "→";
+          arrow.setAttribute("aria-hidden", "true");
+          arrow.style.cssText =
+            "color:#93c5fd;font-size:12px;font-weight:700;";
+          slotRow.appendChild(arrow);
+        }
+      }
+    }
+
+    function check() {
+      checked = true;
+      var ok = picked.every(function (chip, index) {
+        return Number(chip.getAttribute("data-order")) === index + 1;
+      });
+
+      render();
+
+      if (ok) {
+        status.textContent =
+          "正解！外側から IPv4 → UDP → VXLAN → イーサネットフレームの順です。";
+        status.style.color = "#047857";
+        chips.forEach(function (chip) {
+          chip.disabled = true;
+          chip.style.cursor = "default";
+        });
+        var rect = box.getBoundingClientRect();
+        burst(rect.left + rect.width / 2, rect.top + 40, 18);
+      } else {
+        status.textContent =
+          "おしい！外側（トンネルの入口）から順番に選び直してみましょう。";
+        status.style.color = "#b91c1c";
+      }
+    }
+
+    chips.forEach(function (chip) {
+      chipBaseStyle(chip);
+
+      chip.addEventListener("click", function () {
+        if (chip.disabled || picked.length >= 4) return;
+
+        picked.push(chip);
+        chip.disabled = true;
+        chip.style.opacity = ".35";
+        chip.style.cursor = "default";
+        chip.style.transform = "scale(.97)";
+        chip.style.background = "#e2e8f0";
+        chip.style.color = "#64748b";
+
+        checked = false;
+        status.textContent = "";
+        render();
+
+        if (picked.length === 4) check();
+      });
+    });
+
+    if (resetButton) {
+      resetButton.addEventListener("click", function () {
+        picked = [];
+        checked = false;
+        status.textContent = "";
+        chips.forEach(chipBaseStyle);
+        render();
+      });
+    }
+
+    if (hintButton && hintText) {
+      hintButton.addEventListener("click", function () {
+        var shown = hintText.style.display !== "none";
+        hintText.style.display = shown ? "none" : "";
+        hintButton.textContent = shown ? "ヒント" : "ヒントを隠す";
+      });
+    }
+
+    render();
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* 関連記事カード                                                     */
+  /* ------------------------------------------------------------------ */
+
+  (function setupRelatedCards() {
+    var cards = root.querySelectorAll("[data-related-card]");
+    if (!cards.length) return;
+
+    function activate(card) {
+      if (!reduceMotion) {
+        card.style.transform = "translateY(-2px)";
+      }
+      card.style.boxShadow = "0 10px 24px rgba(30,58,138,.16)";
+      card.style.backgroundColor = "#f8fbff";
+    }
+
+    function deactivate(card) {
+      card.style.transform = "";
+      card.style.boxShadow = "";
+      card.style.backgroundColor = "";
+    }
+
+    Array.prototype.forEach.call(cards, function (card) {
+      card.addEventListener("mouseenter", function () {
+        activate(card);
+      });
+      card.addEventListener("mouseleave", function () {
+        deactivate(card);
+      });
+      card.addEventListener("focus", function () {
+        activate(card);
+      });
+      card.addEventListener("blur", function () {
+        deactivate(card);
+      });
+    });
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* キーボードショートカット                                           */
+  /* ------------------------------------------------------------------ */
+
+  document.addEventListener("keydown", function (event) {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+    var target = event.target;
+    if (
+      target &&
+      (target.isContentEditable ||
+        /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))
+    ) {
+      return;
+    }
+
+    var key = event.key.toLowerCase();
+
+    if (key === "q" || key === "Q") {
+      if (total === 0) return;
+      event.preventDefault();
+      setQuiz(!quizOn);
+    } else if (key === "r") {
+      if (!quizOn) return;
+      event.preventDefault();
+      answers.forEach(revealAnswer);
+    } else if (key === "t") {
+      event.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: reduceMotion ? "auto" : "smooth",
+      });
+    } else if (event.key === "?") {
+      event.preventDefault();
+      toast("Q: クイズ切替 / R: 解答を全表示 / T: 先頭へ / 見出しクリック: リンクをコピー");
+    }
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* スクロールイベント                                                 */
+  /* ------------------------------------------------------------------ */
+
+  var ticking = false;
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      updateProgress();
+      updateActiveToc();
+    });
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+})();
+</script>
+
+</main>
+</body>
+</html>

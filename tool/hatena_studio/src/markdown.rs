@@ -54,6 +54,8 @@ const HR: &str = "margin:40px 0;border:0;height:1px;background-color:#e2e8f0;";
 const LINK: &str = "color:#1d4ed8;text-decoration:underline;text-underline-offset:2px;";
 const IMG: &str = "max-width:100%;height:auto;border-radius:8px;";
 
+const MATH_BLOCK: &str = "margin:1.4em 0;padding:2px 0;text-align:center;overflow-x:auto;-webkit-overflow-scrolling:touch;line-height:1.7;";
+
 const TOC: &str = "margin:0 0 32px;padding:18px 22px;border:1px solid #dbeafe;border-radius:10px;background-color:#f8fafc;font-size:14px;line-height:1.75;";
 const TOC_TITLE: &str = "margin:0 0 10px;padding-left:10px;border-left:4px solid #2563eb;font-size:15px;font-weight:700;color:#1e3a8a;letter-spacing:.04em;";
 const TOC_OL: &str = "margin:0;padding-left:1.4em;list-style:decimal;";
@@ -121,6 +123,8 @@ pub struct Fragment {
 enum Inline {
     Text(String),
     Code(String),
+    MathExpr(String),
+    MathDisplay(String),
     Strong(Vec<Inline>),
     Emphasis(Vec<Inline>),
     Strike(Vec<Inline>),
@@ -205,6 +209,9 @@ fn markdown_options() -> Options {
     options.insert(Options::ENABLE_STRIKETHROUGH);
     options.insert(Options::ENABLE_TASKLISTS);
     options.insert(Options::ENABLE_FOOTNOTES);
+    // `$...$` / `$$...$$` を数式として扱う。コードブロックやインラインコード内は
+    // pulldown-cmark 側で数式にならないため、そのままコードとして出力される。
+    options.insert(Options::ENABLE_MATH);
     options
 }
 
@@ -342,6 +349,8 @@ fn parse_blocks(events: &[Event<'_>], pos: &mut usize, stop: Stop) -> Vec<Block>
             }
             Event::Text(_)
             | Event::Code(_)
+            | Event::InlineMath(_)
+            | Event::DisplayMath(_)
             | Event::InlineHtml(_)
             | Event::SoftBreak
             | Event::HardBreak
@@ -384,6 +393,14 @@ fn parse_inlines(events: &[Event<'_>], pos: &mut usize, end: TagEnd) -> Vec<Inli
             }
             Event::Code(code) => {
                 inlines.push(Inline::Code(code.to_string()));
+                *pos += 1;
+            }
+            Event::InlineMath(math) => {
+                inlines.push(Inline::MathExpr(math.to_string()));
+                *pos += 1;
+            }
+            Event::DisplayMath(math) => {
+                inlines.push(Inline::MathDisplay(math.to_string()));
                 *pos += 1;
             }
             Event::Html(html) | Event::InlineHtml(html) => {
@@ -547,6 +564,14 @@ fn parse_bare_inlines(events: &[Event<'_>], pos: &mut usize) -> Vec<Inline> {
                 inlines.push(Inline::Code(code.to_string()));
                 *pos += 1;
             }
+            Event::InlineMath(math) => {
+                inlines.push(Inline::MathExpr(math.to_string()));
+                *pos += 1;
+            }
+            Event::DisplayMath(math) => {
+                inlines.push(Inline::MathDisplay(math.to_string()));
+                *pos += 1;
+            }
             Event::InlineHtml(html) => {
                 inlines.push(Inline::Html(html.to_string()));
                 *pos += 1;
@@ -675,6 +700,7 @@ fn inline_text(inlines: &[Inline]) -> String {
     for inline in inlines {
         match inline {
             Inline::Text(value) | Inline::Code(value) => text.push_str(value),
+            Inline::MathExpr(value) | Inline::MathDisplay(value) => text.push_str(value),
             Inline::Html(_) => {}
             Inline::Strong(children) | Inline::Emphasis(children) | Inline::Strike(children) => {
                 text.push_str(&inline_text(children))
@@ -725,6 +751,27 @@ enum StrongStyle {
     Comment,
 }
 
+/// はてなブログの tex 記法（`[$ ... $]`）でインライン数式を出力する。
+///
+/// 2026-07 に追加されたこの記法は LaTeX をそのまま書けるため、`_` や `[` `]` を
+/// エスケープする必要がない。はてな側が MathJax を読み込んで表示する。
+fn hatena_inline_math(latex: &str) -> String {
+    format!("[$ {} $]", latex.trim())
+}
+
+/// ディスプレイ数式をはてなの tex 記法で出力する。
+///
+/// `[$ ... $]` 自体はインライン扱いなので、`\displaystyle` を付けて
+/// 分数・総和などをディスプレイスタイルで表示する。
+fn hatena_display_math(latex: &str) -> String {
+    let body = latex.trim();
+    if body.starts_with("\\displaystyle") {
+        format!("[$ {body} $]")
+    } else {
+        format!("[$ \\displaystyle {body} $]")
+    }
+}
+
 fn render_inlines(inlines: &[Inline], strong: StrongStyle) -> String {
     let mut html = String::new();
     for inline in inlines {
@@ -736,6 +783,8 @@ fn render_inlines(inlines: &[Inline], strong: StrongStyle) -> String {
                     encode_text(code)
                 ));
             }
+            Inline::MathExpr(latex) => html.push_str(&hatena_inline_math(latex)),
+            Inline::MathDisplay(latex) => html.push_str(&hatena_display_math(latex)),
             Inline::Strong(children) => {
                 let style = match strong {
                     StrongStyle::Default => "font-weight:700;",
@@ -836,6 +885,37 @@ fn render_paragraph(paragraph: &Paragraph, context: ParaContext) -> (String, boo
 enum ParaContext {
     Normal,
     ListItem,
+}
+
+/// 段落がディスプレイ数式だけを含む場合、その LaTeX を返す。
+///
+/// `$$ ... $$` は pulldown-cmark では段落内の `DisplayMath` として現れるため、
+/// `<p>` ではなく中央寄せのブロックとして描画する。
+fn paragraph_display_math(paragraph: &Paragraph) -> Option<&str> {
+    let mut math = None;
+
+    for inline in &paragraph.inlines {
+        match inline {
+            Inline::MathDisplay(value) => {
+                if math.is_some() {
+                    return None;
+                }
+                math = Some(value.as_str());
+            }
+            Inline::Text(text) if text.trim().is_empty() => {}
+            Inline::SoftBreak | Inline::HardBreak => {}
+            _ => return None,
+        }
+    }
+
+    math
+}
+
+fn render_math_block(latex: &str) -> String {
+    format!(
+        "<div data-role=\"math-block\" style=\"{MATH_BLOCK}\">{}</div>",
+        hatena_display_math(latex)
+    )
 }
 
 fn heading_style(level: u8, text: &str) -> &'static str {
@@ -950,6 +1030,10 @@ fn render_blocks(blocks: &[Block], in_list: bool, stats: &mut Stats) -> String {
                 rendered.push(render_heading(heading));
             }
             Block::Paragraph(paragraph) => {
+                if let Some(latex) = paragraph_display_math(paragraph) {
+                    rendered.push(render_math_block(latex));
+                    continue;
+                }
                 if paragraph.bare {
                     rendered.push(render_inlines(&paragraph.inlines, StrongStyle::Default));
                     continue;
@@ -980,6 +1064,11 @@ fn render_blocks(blocks: &[Block], in_list: bool, stats: &mut Stats) -> String {
                 let mut paragraph_index = 0;
                 for child in inner {
                     if let Block::Paragraph(paragraph) = child {
+                        if let Some(latex) = paragraph_display_math(paragraph) {
+                            html.push_str(&render_math_block(latex));
+                            paragraph_index += 1;
+                            continue;
+                        }
                         let margin = if paragraph_index + 1 == paragraphs.len() {
                             "0"
                         } else {
@@ -1150,14 +1239,12 @@ fn assign_heading_ids(blocks: &mut [Block], counter: &mut usize, toc: &mut Vec<T
                     *counter += 1;
                     let id = format!("sec-{counter}");
                     heading.id = Some(id.clone());
-                    if heading.level == 2 || heading.level == 3 {
-                        if !heading.article_title {
-                            toc.push(TocEntry {
-                                id,
-                                level: heading.level,
-                                text: inline_text(&heading.inlines),
-                            });
-                        }
+                    if matches!(heading.level, 2 | 3) && !heading.article_title {
+                        toc.push(TocEntry {
+                            id,
+                            level: heading.level,
+                            text: inline_text(&heading.inlines),
+                        });
                     }
                 }
             }
@@ -1395,10 +1482,11 @@ pub fn build_fragment(md_text: &str, options: RenderOptions<'_>) -> Fragment {
     let mut html =
         format!("{comment}\n<div data-hatena-article=\"1\" style=\"{BASE}\">\n{body}\n</div>\n");
 
-    if let Some(script) = options.interactive_js {
-        if !script.trim().is_empty() {
-            html.push_str(&format!("\n<script>\n{}\n</script>\n", script.trim()));
-        }
+    if let Some(script) = options
+        .interactive_js
+        .filter(|script| !script.trim().is_empty())
+    {
+        html.push_str(&format!("\n<script>\n{}\n</script>\n", script.trim()));
     }
 
     stats.bytes = html.len();
@@ -1456,6 +1544,20 @@ pub fn build_preview(title: &str, fragment: &str, include_title: bool) -> String
 {title_block}
 {fragment}
 </main>
+<script>
+// はてなの tex 記法（[$ ... $]）をローカルプレビューでも表示する。
+// はてなブログ側ではこのスクリプトは不要（はてなが MathJax を読み込む）。
+window.MathJax = {{
+  tex: {{
+    inlineMath: [['[$', '$]']],
+    displayMath: []
+  }},
+  options: {{
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  }}
+}};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>
 "#,
@@ -1513,5 +1615,29 @@ mod tests {
         assert!(html.contains("<table"));
         assert!(html.contains("<td"));
         assert!(html.contains(">1<"));
+    }
+
+    #[test]
+    fn renders_inline_math_with_hatena_tex_syntax() {
+        let html = render("状態 $s$ の方策を $\\pi(a \\mid s)$ とします。");
+        assert!(html.contains("[$ s $]"));
+        assert!(html.contains("[$ \\pi(a \\mid s) $]"));
+        assert!(!html.contains("$s$"));
+    }
+
+    #[test]
+    fn renders_display_math_as_centered_block() {
+        let html = render("$$\n\\sum_{i=1}^n i = \\frac{n(n+1)}{2}\n$$");
+        assert!(html.contains("data-role=\"math-block\""));
+        assert!(html.contains("[$ \\displaystyle \\sum_{i=1}^n i = \\frac{n(n+1)}{2} $]"));
+        assert!(!html.contains("<p style=\"margin:0 0 1.15em"));
+    }
+
+    #[test]
+    fn does_not_treat_math_in_code_as_math() {
+        let html = render("`$x$`\n\n```text\n$$y$$\n```\n");
+        assert!(html.contains("$x$"));
+        assert!(html.contains("$$y$$"));
+        assert!(!html.contains("[$"));
     }
 }

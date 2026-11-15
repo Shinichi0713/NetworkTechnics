@@ -810,9 +810,7 @@ fn load_interactive_js(workspace: &Path, explicit: Option<&Path>) -> Option<Stri
     }
     candidates.push(workspace.join("hatena_interactive.js"));
     if let Ok(exe) = std::env::current_exe() {
-        if let Some(dir) = exe.parent() {
-            candidates.push(dir.join("hatena_interactive.js"));
-        }
+        candidates.extend(exe.parent().map(|dir| dir.join("hatena_interactive.js")));
     }
 
     for candidate in candidates {

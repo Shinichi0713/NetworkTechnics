@@ -143,12 +143,14 @@ fn apply_link_or_category(
         "link" => {
             if entry.url.is_empty() {
                 let rel = attribute(element, "rel");
-                if matches!(rel.as_deref(), None | Some("alternate")) {
-                    if let Some(href) = attribute(element, "href") {
-                        if !href.is_empty() {
-                            entry.url = href;
-                        }
+                match attribute(element, "href") {
+                    Some(href)
+                        if !href.is_empty()
+                            && matches!(rel.as_deref(), None | Some("alternate")) =>
+                    {
+                        entry.url = href;
                     }
+                    _ => {}
                 }
             }
         }
@@ -365,18 +367,18 @@ pub fn get_blog_entries(
     match fetch_related_entries(blog_url, max_pages, &mut logs) {
         Ok(entries) => {
             if entries.is_empty() {
-                if let Some(cached) = cache_entries {
-                    logs.push(
-                        "[WARN] フィードが空だったため、古いキャッシュを使用します".to_string(),
-                    );
+                let Some(cached) = cache_entries else {
                     return BlogEntries {
-                        entries: cached,
+                        entries: Vec::new(),
                         logs,
                         status,
                     };
-                }
+                };
+                logs.push(
+                    "[WARN] フィードが空だったため、古いキャッシュを使用します".to_string(),
+                );
                 return BlogEntries {
-                    entries: Vec::new(),
+                    entries: cached,
                     logs,
                     status,
                 };

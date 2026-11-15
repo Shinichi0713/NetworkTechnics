@@ -268,11 +268,9 @@ pub fn html_to_plain_text(raw: &str, limit: Option<usize>) -> String {
     let without_tags = HTML_TAG_RE.replace_all(&without_styles, " ");
     let decoded = html_escape::decode_html_entities(&without_tags);
     let mut text = WHITESPACE_RE.replace_all(&decoded, " ").trim().to_string();
-    if let Some(limit) = limit {
-        if text.chars().count() > limit {
-            text = text.chars().take(limit).collect::<String>();
-            text = text.trim_end().to_string();
-        }
+    if let Some(limit) = limit.filter(|&limit| text.chars().count() > limit) {
+        text = text.chars().take(limit).collect::<String>();
+        text = text.trim_end().to_string();
     }
     text
 }

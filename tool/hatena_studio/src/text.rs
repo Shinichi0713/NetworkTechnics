@@ -12,9 +12,10 @@ use unicode_normalization::UnicodeNormalization;
 
 pub static ASCII_TOKEN_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"[a-z0-9][a-z0-9+#._/-]*").unwrap());
-static SCRIPT_STYLE_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?is)<(script|style)\b[^>]*>.*?</\1>").unwrap()
-});
+static SCRIPT_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?is)<script\b[^>]*>.*?</script>").unwrap());
+static STYLE_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?is)<style\b[^>]*>.*?</style>").unwrap());
 static HTML_TAG_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(?s)<[^>]+>").unwrap());
 static WHITESPACE_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\s+").unwrap());
 static TOC_PREFIX_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^目次\s*").unwrap());
@@ -260,8 +261,9 @@ fn ascii_keyword_present(haystack: &str, keyword: &str) -> bool {
 
 /// HTML 断片から本文テキストを取り出す。
 pub fn html_to_plain_text(raw: &str, limit: Option<usize>) -> String {
-    let without_scripts = SCRIPT_STYLE_RE.replace_all(raw, " ");
-    let without_tags = HTML_TAG_RE.replace_all(&without_scripts, " ");
+    let without_scripts = SCRIPT_RE.replace_all(raw, " ");
+    let without_styles = STYLE_RE.replace_all(&without_scripts, " ");
+    let without_tags = HTML_TAG_RE.replace_all(&without_styles, " ");
     let decoded = html_escape::decode_html_entities(&without_tags);
     let mut text = WHITESPACE_RE.replace_all(&decoded, " ").trim().to_string();
     if let Some(limit) = limit {

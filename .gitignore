@@ -166,6 +166,10 @@ cython_debug/
 rust_lesson/*.exe
 rust_lesson/**/**/*.exe
 
-# はてなブログ関連記事フィードのキャッシュ（md_to_hatena.py）
+# はてなブログ関連記事フィードのキャッシュ（md_to_hatena.py / hatena_studio）
 .hatena_feed_cache.json
+
+# hatena_studio のローカル設定（APPDATA がない環境向け）
+.hatena_studio_settings.json
+
 

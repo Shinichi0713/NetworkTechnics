@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hatena Studio</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231e3a8a'/%3E%3Ctext x='32' y='44' font-size='34' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">H</span>
+    <span class="brand-text">
+      <strong>Hatena Studio</strong>
+      <small>Markdown → はてなブログ HTML</small>
+    </span>
+  </div>
+  <div class="topbar-right">
+    <div class="cache-pill" id="cachePill" title="関連記事フィードのキャッシュ状態">
+      <span class="cache-dot" id="cacheDot"></span>
+      <span id="cacheText">キャッシュ確認中…</span>
+    </div>
+    <button class="btn btn-ghost" id="refreshCacheBtn" type="button" title="Atom フィードを再取得してキャッシュを更新">
+      <span class="btn-icon" aria-hidden="true">↻</span>
+      <span class="btn-label">キャッシュ更新</span>
+    </button>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="sidebar">
+    <section class="card">
+      <div class="card-head">
+        <h2>記事</h2>
+        <span class="hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
+      </div>
+      <label class="field">
+        <span class="field-label">Markdown ファイル</span>
+        <span class="input-row">
+          <input id="inputPath" type="text" placeholder="記事フォルダ内の .md を選択" spellcheck="false" autocomplete="off">
+          <button class="btn btn-secondary" id="browseBtn" type="button">参照</button>
+        </span>
+      </label>
+      <label class="field">
+        <span class="field-label">記事タイトル <em>任意</em></span>
+        <input id="titleInput" type="text" placeholder="空欄なら先頭の H1 を使用" autocomplete="off">
+      </label>
+      <div class="recent" id="recentWrap" hidden>
+        <div class="recent-head">最近の Markdown</div>
+        <div class="recent-list" id="recentList"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>関連記事</h2>
+        <label class="switch" title="関連記事セクションを挿入する">
+          <input id="relatedEnabled" type="checkbox" checked>
+          <span class="switch-track"><span class="switch-thumb"></span></span>
+        </label>
+      </div>
+      <div id="relatedSettings">
+        <div class="grid-3">
+          <label class="field compact">
+            <span class="field-label">件数</span>
+            <input id="relatedCount" type="number" min="1" max="20" step="1" value="5">
+          </label>
+          <label class="field compact">
+            <span class="field-label">最低スコア</span>
+            <input id="relatedMinScore" type="number" min="0" max="1" step="0.005" value="0.02">
+          </label>
+          <label class="field compact">
+            <span class="field-label">最大ページ</span>
+            <input id="relatedPages" type="number" min="1" max="50" step="1" value="15">
+          </label>
+        </div>
+        <label class="field compact">
+          <span class="field-label">キャッシュ有効期間（時間）</span>
+          <input id="cacheHours" type="number" min="0" step="1" value="12">
+        </label>
+        <label class="field compact">
+          <span class="field-label">ブログ URL</span>
+          <input id="blogUrl" type="url" value="https://yoshishinnze.hatenablog.com/" spellcheck="false" autocomplete="off">
+        </label>
+        <div class="related-list" id="relatedList">
+          <p class="empty-mini">変換すると、選ばれた関連記事がここに表示されます。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>オプション</h2></div>
+      <div class="option-grid">
+        <label class="check"><input id="optToc" type="checkbox" checked><span>目次を生成</span></label>
+        <label class="check"><input id="optJs" type="checkbox" checked><span>インタラクション</span></label>
+        <label class="check"><input id="optWidget" type="checkbox" checked><span>VXLAN クイズ</span></label>
+        <label class="check"><input id="optKeepTitle" type="checkbox"><span>タイトルを本文に残す</span></label>
+      </div>
+    </section>
+
+    <button class="btn btn-primary btn-convert" id="convertBtn" type="button">
+      <span class="spinner" id="convertSpinner" hidden></span>
+      <span id="convertLabel">変換してプレビュー</span>
+    </button>
+
+    <div class="output-paths" id="outputPaths" hidden></div>
+
+    <details class="logs" id="logsPanel">
+      <summary>ログ <span class="log-count" id="logCount"></span></summary>
+      <pre id="logBody"></pre>
+    </details>
+
+    <p class="sidebar-foot">ローカルで動作します。記事ファイルが外部へ送信されることはありません。</p>
+  </aside>
+
+  <section class="viewer">
+    <div class="viewer-toolbar">
+      <div class="tabs" role="tablist" aria-label="表示切替">
+        <button class="tab active" id="tabPreview" data-tab="preview" role="tab" aria-selected="true" type="button">プレビュー</button>
+        <button class="tab" id="tabHtml" data-tab="html" role="tab" aria-selected="false" type="button">HTML ソース</button>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="toolbar-actions">
+        <button class="btn btn-ghost" id="openPreviewBtn" type="button" title="生成したプレビューを別タブで開く">別タブで開く</button>
+        <button class="btn btn-ghost" id="copyHtmlBtn" type="button" title="生成した HTML をクリップボードへコピー">HTML をコピー</button>
+        <button class="btn btn-ghost" id="openFolderBtn" type="button" title="保存先をエクスプローラーで開く">保存先を開く</button>
+      </div>
+    </div>
+    <div class="stage" id="stage">
+      <iframe id="previewFrame" title="記事プレビュー" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" hidden></iframe>
+      <pre id="htmlView" class="html-view" hidden></pre>
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="54" height="54"><rect x="6" y="10" width="52" height="44" rx="8" fill="#e0e7ff"/><path d="M18 24h28M18 33h28M18 42h18" stroke="#3b5bdb" stroke-width="4" stroke-linecap="round"/></svg>
+        </div>
+        <h2>記事を選んで変換</h2>
+        <p>Markdown を選ぶと、はてな用 HTML とプレビューを生成します。<br>関連記事はブログの Atom フィードから自動で選ばれます。</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="fileModal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="fileModalTitle">
+    <div class="modal-head">
+      <h2 id="fileModalTitle">Markdown を選択</h2>
+      <button class="icon-btn" type="button" data-close aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-path">
+      <button class="btn btn-ghost" id="upBtn" type="button">↑ 上へ</button>
+      <code id="currentPath"></code>
+    </div>
+    <div class="modal-list" id="browseList"></div>
+    <div class="modal-foot">
+      <span id="browseStatus"></span>
+      <button class="btn btn-secondary" type="button" data-close>キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="/app.js"></script>
+</body>
+</html>

@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::text::html_to_plain_text;
 
-pub const RELATED_PAGE_SIZE: usize = 30;
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct FeedEntry {
@@ -66,7 +65,6 @@ pub struct BlogEntries {
     pub entries: Vec<FeedEntry>,
     pub logs: Vec<String>,
     pub status: CacheStatus,
-    pub from_cache: bool,
 }
 
 pub fn now_epoch() -> f64 {
@@ -136,7 +134,7 @@ fn attribute(element: &quick_xml::events::BytesStart<'_>, name: &str) -> Option<
         .try_get_attribute(name)
         .ok()
         .flatten()
-        .map(|attr| String::from_utf8_lossy(&attr.value).to_string())
+        .map(|attr| attr.value.trim().to_string())
 }
 
 fn apply_link_or_category(
@@ -147,7 +145,7 @@ fn apply_link_or_category(
         return;
     };
     match element.local_name().as_ref() {
-        b"link" => {
+        "link" => {
             if entry.url.is_empty() {
                 let rel = attribute(element, "rel");
                 if matches!(rel.as_deref(), None | Some("alternate")) {
@@ -159,7 +157,7 @@ fn apply_link_or_category(
                 }
             }
         }
-        b"category" => {
+        "category" => {
             if let Some(term) = attribute(element, "term") {
                 let term = term.trim().to_string();
                 if !term.is_empty() {
@@ -196,18 +194,18 @@ fn parse_atom(xml: &str) -> Result<Vec<FeedEntry>> {
             Event::Start(element) => {
                 let name = element.local_name();
                 match name.as_ref() {
-                    b"entry" => {
+                    "entry" => {
                         current = Some(FeedEntry::default());
                         field = None;
                     }
-                    b"link" | b"category" => {
+                    "link" | "category" => {
                         apply_link_or_category(&element, &mut current);
                     }
-                    b"title" if current.is_some() => field = Some(Field::Title),
-                    b"published" if current.is_some() => field = Some(Field::Published),
-                    b"updated" if current.is_some() => field = Some(Field::Updated),
-                    b"summary" if current.is_some() => field = Some(Field::Summary),
-                    b"content" if current.is_some() => field = Some(Field::Content),
+                    "title" if current.is_some() => field = Some(Field::Title),
+                    "published" if current.is_some() => field = Some(Field::Published),
+                    "updated" if current.is_some() => field = Some(Field::Updated),
+                    "summary" if current.is_some() => field = Some(Field::Summary),
+                    "content" if current.is_some() => field = Some(Field::Content),
                     _ => {}
                 }
             }
@@ -249,7 +247,7 @@ fn parse_atom(xml: &str) -> Result<Vec<FeedEntry>> {
                 }
             }
             Event::End(element) => match element.local_name().as_ref() {
-                b"entry" => {
+                "entry" => {
                     if let Some(mut entry) = current.take() {
                         entry.title = entry.title.trim().to_string();
                         entry.published = entry.published.trim().to_string();
@@ -263,7 +261,7 @@ fn parse_atom(xml: &str) -> Result<Vec<FeedEntry>> {
                     }
                     field = None;
                 }
-                b"title" | b"published" | b"updated" | b"summary" | b"content" => {
+                "title" | "published" | "updated" | "summary" | "content" => {
                     field = None;
                 }
                 _ => {}
@@ -368,7 +366,6 @@ pub fn get_blog_entries(
             entries,
             logs,
             status,
-            from_cache: true,
         };
     }
 
@@ -384,14 +381,12 @@ pub fn get_blog_entries(
                         entries: cached,
                         logs,
                         status,
-                        from_cache: true,
                     };
                 }
                 return BlogEntries {
                     entries: Vec::new(),
                     logs,
                     status,
-                    from_cache: false,
                 };
             }
 
@@ -410,7 +405,6 @@ pub fn get_blog_entries(
                 entries,
                 logs,
                 status,
-                from_cache: false,
             }
         }
         Err(err) => {
@@ -422,7 +416,6 @@ pub fn get_blog_entries(
                     entries: cached,
                     logs,
                     status,
-                    from_cache: true,
                 }
             } else {
                 logs.push(format!(
@@ -432,7 +425,6 @@ pub fn get_blog_entries(
                     entries: Vec::new(),
                     logs,
                     status,
-                    from_cache: false,
                 }
             }
         }

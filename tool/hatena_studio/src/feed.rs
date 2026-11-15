@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::text::html_to_plain_text;
 
-
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct FeedEntry {
     #[serde(default)]
@@ -110,11 +109,7 @@ pub fn save_cache(path: &Path, blog_url: &str, entries: &[FeedEntry]) -> Result<
 }
 
 fn fetch_atom_page(blog_url: &str, page: usize, timeout: Duration) -> Result<Vec<FeedEntry>> {
-    let url = format!(
-        "{}/feed?page={}",
-        blog_url.trim_end_matches('/'),
-        page
-    );
+    let url = format!("{}/feed?page={}", blog_url.trim_end_matches('/'), page);
     let response = ureq::get(&url)
         .set(
             "User-Agent",
@@ -251,10 +246,8 @@ fn parse_atom(xml: &str) -> Result<Vec<FeedEntry>> {
                     if let Some(mut entry) = current.take() {
                         entry.title = entry.title.trim().to_string();
                         entry.published = entry.published.trim().to_string();
-                        entry.summary =
-                            entry.summary.chars().take(1500).collect::<String>();
-                        entry.content_text =
-                            html_to_plain_text(&entry.content_text, Some(3000));
+                        entry.summary = entry.summary.chars().take(1500).collect::<String>();
+                        entry.content_text = html_to_plain_text(&entry.content_text, Some(3000));
                         if !entry.url.trim().is_empty() {
                             entries.push(entry);
                         }
@@ -332,9 +325,7 @@ pub fn get_blog_entries(
     let cache = load_cache(cache_path);
     let now = now_epoch();
 
-    let cache_matches_blog = cache
-        .as_ref()
-        .is_some_and(|c| c.blog_url == blog_url);
+    let cache_matches_blog = cache.as_ref().is_some_and(|c| c.blog_url == blog_url);
     let cache_entries = cache
         .as_ref()
         .filter(|_| cache_matches_blog)
@@ -349,7 +340,9 @@ pub fn get_blog_entries(
     let status = CacheStatus {
         exists: cache.is_some(),
         entries: cache_entries.as_ref().map(Vec::len).unwrap_or(0),
-        age_hours: cache.as_ref().map(|c| ((now - c.fetched_at) / 3600.0).max(0.0)),
+        age_hours: cache
+            .as_ref()
+            .map(|c| ((now - c.fetched_at) / 3600.0).max(0.0)),
         blog_url: cache.as_ref().map(|c| c.blog_url.clone()),
         fresh: cache_fresh,
     };
@@ -374,8 +367,7 @@ pub fn get_blog_entries(
             if entries.is_empty() {
                 if let Some(cached) = cache_entries {
                     logs.push(
-                        "[WARN] フィードが空だったため、古いキャッシュを使用します"
-                            .to_string(),
+                        "[WARN] フィードが空だったため、古いキャッシュを使用します".to_string(),
                     );
                     return BlogEntries {
                         entries: cached,
@@ -393,7 +385,10 @@ pub fn get_blog_entries(
             if let Err(err) = save_cache(cache_path, blog_url, &entries) {
                 logs.push(format!("[WARN] 関連記事キャッシュを保存できません: {err}"));
             }
-            logs.push(format!("[INFO] 関連記事フィードを取得: {} 件", entries.len()));
+            logs.push(format!(
+                "[INFO] 関連記事フィードを取得: {} 件",
+                entries.len()
+            ));
             let status = CacheStatus {
                 exists: true,
                 entries: entries.len(),

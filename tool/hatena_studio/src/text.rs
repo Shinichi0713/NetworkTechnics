@@ -140,7 +140,9 @@ pub fn tokenize_search_text(text: &str) -> Vec<String> {
     let mut tokens = Vec::new();
 
     for found in ASCII_TOKEN_RE.find_iter(&normalized) {
-        let token = found.as_str().trim_matches(|c| c == '.' || c == '_' || c == '/' || c == '-');
+        let token = found
+            .as_str()
+            .trim_matches(|c| c == '.' || c == '_' || c == '/' || c == '-');
         let len = token.chars().count();
         if (2..=32).contains(&len) {
             tokens.push(token.to_string());

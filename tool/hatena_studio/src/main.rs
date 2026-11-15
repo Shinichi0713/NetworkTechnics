@@ -221,10 +221,7 @@ fn resolve_output(input: &Path, requested: &str) -> PathBuf {
     if path.is_absolute() {
         path
     } else {
-        input
-            .parent()
-            .unwrap_or_else(|| Path::new("."))
-            .join(path)
+        input.parent().unwrap_or_else(|| Path::new(".")).join(path)
     }
 }
 
@@ -241,10 +238,7 @@ fn resolve_preview(input: &Path, requested: &str) -> PathBuf {
     if path.is_absolute() {
         path
     } else {
-        input
-            .parent()
-            .unwrap_or_else(|| Path::new("."))
-            .join(path)
+        input.parent().unwrap_or_else(|| Path::new(".")).join(path)
     }
 }
 
@@ -252,8 +246,7 @@ fn write_text(path: &Path, text: &str) -> Result<()> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)?;
     }
-    fs::write(path, text)
-        .with_context(|| format!("ファイルを書き込めません: {}", path.display()))
+    fs::write(path, text).with_context(|| format!("ファイルを書き込めません: {}", path.display()))
 }
 
 fn convert(inner: Arc<Inner>, request: ConvertRequest) -> Result<Value> {
@@ -423,25 +416,21 @@ async fn index() -> Html<&'static str> {
 }
 
 async fn stylesheet() -> impl IntoResponse {
-    (
-        [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
-        APP_CSS,
-    )
+    ([(header::CONTENT_TYPE, "text/css; charset=utf-8")], APP_CSS)
 }
 
 async fn script() -> impl IntoResponse {
     (
-        [(header::CONTENT_TYPE, "application/javascript; charset=utf-8")],
+        [(
+            header::CONTENT_TYPE,
+            "application/javascript; charset=utf-8",
+        )],
         APP_JS,
     )
 }
 
 fn error_response(status: StatusCode, message: impl Into<String>) -> Response {
-    (
-        status,
-        Json(json!({"ok": false, "error": message.into()})),
-    )
-        .into_response()
+    (status, Json(json!({"ok": false, "error": message.into()}))).into_response()
 }
 
 async fn preview(State(state): State<AppState>) -> Response {
@@ -463,10 +452,7 @@ async fn preview(State(state): State<AppState>) -> Response {
 async fn api_latest_html(State(state): State<AppState>) -> Response {
     let latest = state.inner.latest.lock().unwrap();
     if latest.fragment.is_empty() {
-        return error_response(
-            StatusCode::NOT_FOUND,
-            "まだ生成された HTML がありません。",
-        );
+        return error_response(StatusCode::NOT_FOUND, "まだ生成された HTML がありません。");
     }
     Response::builder()
         .status(StatusCode::OK)
@@ -600,10 +586,7 @@ async fn api_browse(State(state): State<AppState>, Query(query): Query<BrowseQue
     let mut files = Vec::new();
     for entry in read_dir.flatten() {
         let entry_path = entry.path();
-        let name = entry
-            .file_name()
-            .to_string_lossy()
-            .to_string();
+        let name = entry.file_name().to_string_lossy().to_string();
         if entry_path.is_dir() {
             dirs.push(json!({
                 "name": name,
@@ -723,10 +706,7 @@ async fn api_refresh_cache(
     }
 }
 
-async fn api_settings(
-    State(state): State<AppState>,
-    Json(settings): Json<Settings>,
-) -> Response {
+async fn api_settings(State(state): State<AppState>, Json(settings): Json<Settings>) -> Response {
     match settings.save(&state.inner.settings_path) {
         Ok(()) => Json(json!({"ok": true})).into_response(),
         Err(err) => error_response(
@@ -842,10 +822,7 @@ fn load_interactive_js(workspace: &Path, explicit: Option<&Path>) -> Option<Stri
                     println!("[JS] 読み込み: {}", candidate.display());
                     return Some(text);
                 }
-                Err(err) => eprintln!(
-                    "[WARN] JS を読めません: {} ({err})",
-                    candidate.display()
-                ),
+                Err(err) => eprintln!("[WARN] JS を読めません: {} ({err})", candidate.display()),
                 _ => {}
             }
         }

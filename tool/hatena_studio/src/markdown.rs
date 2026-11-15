@@ -5,9 +5,7 @@
 //! 目次、関連記事、VXLAN ミニクイズなどを同じ順序で適用している。
 
 use html_escape::{encode_double_quoted_attribute, encode_text};
-use pulldown_cmark::{
-    Alignment, CodeBlockKind, Event, Options, Parser, Tag, TagEnd,
-};
+use pulldown_cmark::{Alignment, CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 
 // ---------------------------------------------------------------------------
 // デザイントークン（インライン CSS）
@@ -22,7 +20,8 @@ const H2: &str = "margin:48px 0 22px;padding:12px 18px;border-radius:8px;backgro
 const H3: &str = "margin:40px 0 16px;padding:0 0 7px;border-bottom:2px solid #bfdbfe;color:#1e3a8a;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;";
 const H3_WARN: &str = "margin:40px 0 16px;padding:11px 15px;border:1px solid #fecaca;border-left:6px solid #ef4444;border-radius:0 8px 8px 0;background-color:#fef2f2;color:#991b1b;font-size:19px;line-height:1.55;font-weight:700;scroll-margin-top:80px;";
 const H4: &str = "margin:28px 0 12px;padding:2px 0 2px 11px;border-left:5px solid #3b82f6;color:#0f172a;font-size:16.5px;line-height:1.6;font-weight:700;scroll-margin-top:80px;";
-const H5: &str = "margin:24px 0 10px;padding:0;color:#334155;font-size:15.5px;line-height:1.6;font-weight:700;";
+const H5: &str =
+    "margin:24px 0 10px;padding:0;color:#334155;font-size:15.5px;line-height:1.6;font-weight:700;";
 
 const P: &str = "margin:0 0 1.15em;font-size:inherit;line-height:inherit;color:inherit;";
 const ANSWER: &str = "margin:16px 0 20px;padding:11px 16px;border:1px solid #a7f3d0;border-left:5px solid #10b981;border-radius:0 8px 8px 0;background-color:#ecfdf5;color:#065f46;font-size:15.5px;line-height:1.8;font-weight:600;";
@@ -31,19 +30,23 @@ const LABEL: &str = "margin:22px 0 10px;padding:7px 12px;border-left:4px solid #
 const NOTE: &str = "margin:20px 0;padding:14px 18px;border-left:4px solid #94a3b8;border-radius:0 8px 8px 0;background-color:#f8fafc;color:#475569;font-size:14.5px;line-height:1.85;";
 const WARN: &str = "margin:20px 0;padding:14px 18px;border-left:4px solid #ef4444;border-radius:0 8px 8px 0;background-color:#fef2f2;color:#991b1b;font-size:14.5px;line-height:1.85;";
 const META: &str = "margin:0 0 20px;padding:12px 16px;border:1px solid #e2e8f0;border-radius:8px;background-color:#f8fafc;font-size:13.5px;line-height:1.75;color:#475569;";
-const META_P: &str = "margin:0;font-size:13.5px;line-height:1.75;color:#475569;white-space:pre-line;";
+const META_P: &str =
+    "margin:0;font-size:13.5px;line-height:1.75;color:#475569;white-space:pre-line;";
 
 const TABLE_WRAP: &str = "margin:18px 0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #e2e8f0;border-radius:8px;";
 const TABLE: &str = "width:100%;border-collapse:collapse;border-spacing:0;background-color:#ffffff;font-size:14px;line-height:1.65;";
 const TH: &str = "padding:10px 12px;border:1px solid #cbd5e1;background-color:#1e3a8a;color:#ffffff;font-weight:700;font-size:13.5px;text-align:left;white-space:nowrap;vertical-align:middle;";
 const TD: &str = "padding:9px 12px;border:1px solid #e2e8f0;color:#1f2937;font-size:inherit;line-height:inherit;vertical-align:top;";
-const TABLE_HINT: &str = "margin:0 0 6px;font-size:12px;line-height:1.5;color:#94a3b8;text-align:right;";
+const TABLE_HINT: &str =
+    "margin:0 0 6px;font-size:12px;line-height:1.5;color:#94a3b8;text-align:right;";
 
 const PRE: &str = "margin:18px 0 24px;padding:16px 18px;border-radius:8px;background-color:#0f172a;color:#e2e8f0;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:13px;line-height:1.7;overflow-x:auto;-webkit-overflow-scrolling:touch;tab-size:4;";
 const CODE: &str = "padding:2px 6px;border-radius:4px;background-color:#eef2ff;color:#3730a3;font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:.88em;";
 
-const LIST: &str = "margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;";
-const LIST_NESTED: &str = "margin:.35em 0 .5em;padding-left:1.3em;font-size:inherit;line-height:inherit;color:inherit;";
+const LIST: &str =
+    "margin:.8em 0 1.1em;padding-left:1.6em;font-size:inherit;line-height:inherit;color:inherit;";
+const LIST_NESTED: &str =
+    "margin:.35em 0 .5em;padding-left:1.3em;font-size:inherit;line-height:inherit;color:inherit;";
 const LI: &str = "margin:.35em 0;font-size:inherit;line-height:inherit;color:inherit;";
 const LI_P: &str = "margin:0;font-size:inherit;line-height:inherit;color:inherit;";
 
@@ -63,8 +66,10 @@ const RELATED_INTRO: &str = "margin:0 0 14px;font-size:13px;line-height:1.8;colo
 const RELATED_CARD: &str = "display:block;margin:0 0 12px;padding:14px 16px;border:1px solid #dbeafe;border-left:5px solid #2563eb;border-radius:0 10px 10px 0;background-color:#ffffff;box-shadow:0 1px 2px rgba(15,23,42,.04);text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease,background-color .15s ease;";
 const RELATED_TOP: &str = "display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;";
 const RELATED_BADGE: &str = "display:inline-block;padding:2px 9px;border-radius:999px;background-color:#eff6ff;color:#1e40af;font-size:10.5px;font-weight:700;line-height:1.6;letter-spacing:.06em;";
-const RELATED_DATE: &str = "font-size:11px;line-height:1.6;color:#64748b;font-weight:600;letter-spacing:.02em;";
-const RELATED_TITLE: &str = "margin:7px 0 0;font-size:15.5px;line-height:1.55;font-weight:700;color:#1e3a8a;";
+const RELATED_DATE: &str =
+    "font-size:11px;line-height:1.6;color:#64748b;font-weight:600;letter-spacing:.02em;";
+const RELATED_TITLE: &str =
+    "margin:7px 0 0;font-size:15.5px;line-height:1.55;font-weight:700;color:#1e3a8a;";
 const RELATED_ARROW: &str = "color:#2563eb;font-weight:700;";
 const RELATED_SUMMARY: &str = "margin:5px 0 0;font-size:12.5px;line-height:1.7;color:#475569;";
 const RELATED_NOTE: &str = "margin:12px 0 0;font-size:11.5px;line-height:1.65;color:#94a3b8;";
@@ -671,9 +676,9 @@ fn inline_text(inlines: &[Inline]) -> String {
         match inline {
             Inline::Text(value) | Inline::Code(value) => text.push_str(value),
             Inline::Html(_) => {}
-            Inline::Strong(children)
-            | Inline::Emphasis(children)
-            | Inline::Strike(children) => text.push_str(&inline_text(children)),
+            Inline::Strong(children) | Inline::Emphasis(children) | Inline::Strike(children) => {
+                text.push_str(&inline_text(children))
+            }
             Inline::Link { children, .. } => text.push_str(&inline_text(children)),
             Inline::Image { alt, .. } => text.push_str(alt),
             Inline::SoftBreak => text.push(' '),
@@ -890,14 +895,10 @@ fn render_list(list: &ListBlock, nested: bool, stats: &mut Stats) -> String {
 
 fn render_table(table: &TableBlock, stats: &mut Stats) -> String {
     stats.tables += 1;
-    let ncols = table.header.len().max(
-        table
-            .rows
-            .iter()
-            .map(Vec::len)
-            .max()
-            .unwrap_or(0),
-    );
+    let ncols = table
+        .header
+        .len()
+        .max(table.rows.iter().map(Vec::len).max().unwrap_or(0));
 
     let mut table_style = TABLE.to_string();
     if ncols >= 8 {
@@ -950,10 +951,7 @@ fn render_blocks(blocks: &[Block], in_list: bool, stats: &mut Stats) -> String {
             }
             Block::Paragraph(paragraph) => {
                 if paragraph.bare {
-                    rendered.push(render_inlines(
-                        &paragraph.inlines,
-                        StrongStyle::Default,
-                    ));
+                    rendered.push(render_inlines(&paragraph.inlines, StrongStyle::Default));
                     continue;
                 }
                 let context = if in_list {
@@ -993,11 +991,7 @@ fn render_blocks(blocks: &[Block], in_list: bool, stats: &mut Stats) -> String {
                         ));
                         paragraph_index += 1;
                     } else {
-                        html.push_str(&render_blocks(
-                            std::slice::from_ref(child),
-                            false,
-                            stats,
-                        ));
+                        html.push_str(&render_blocks(std::slice::from_ref(child), false, stats));
                     }
                 }
                 html.push_str("</blockquote>");
@@ -1097,9 +1091,7 @@ fn normalize_headings(blocks: &mut [Block]) {
             heading.level = (heading.level + 1).min(6);
         }
         let text = inline_text(&heading.inlines);
-        if heading.level == 3
-            && (text.starts_with("付録") || text.starts_with("Appendix"))
-        {
+        if heading.level == 3 && (text.starts_with("付録") || text.starts_with("Appendix")) {
             heading.level = 2;
         }
     });
@@ -1141,9 +1133,7 @@ fn wrap_meta(blocks: &mut Vec<Block>) {
 
 fn insert_widget(blocks: &mut Vec<Block>) {
     let position = blocks.iter().position(|block| match block {
-        Block::Heading(heading) => {
-            inline_text(&heading.inlines).starts_with("図4の対応表")
-        }
+        Block::Heading(heading) => inline_text(&heading.inlines).starts_with("図4の対応表"),
         _ => false,
     });
 
@@ -1242,9 +1232,9 @@ fn insert_toc(blocks: &mut Vec<Block>, toc: &[TocEntry]) -> usize {
     let nav = build_toc(toc);
 
     let Some(first) = blocks.iter().position(|block| match block {
-        Block::Heading(heading) => (2..=3).contains(&heading.level)
-            && !heading.article_title
-            && heading.id.is_some(),
+        Block::Heading(heading) => {
+            (2..=3).contains(&heading.level) && !heading.article_title && heading.id.is_some()
+        }
         _ => false,
     }) else {
         return 0;
@@ -1402,9 +1392,8 @@ pub fn build_fragment(md_text: &str, options: RenderOptions<'_>) -> Fragment {
         options.source_name
     );
 
-    let mut html = format!(
-        "{comment}\n<div data-hatena-article=\"1\" style=\"{BASE}\">\n{body}\n</div>\n"
-    );
+    let mut html =
+        format!("{comment}\n<div data-hatena-article=\"1\" style=\"{BASE}\">\n{body}\n</div>\n");
 
     if let Some(script) = options.interactive_js {
         if !script.trim().is_empty() {
@@ -1422,10 +1411,7 @@ pub fn build_fragment(md_text: &str, options: RenderOptions<'_>) -> Fragment {
 
 pub fn build_preview(title: &str, fragment: &str, include_title: bool) -> String {
     let title_block = if include_title {
-        format!(
-            "<h1 class=\"article-title\">{}</h1>",
-            encode_text(title)
-        )
+        format!("<h1 class=\"article-title\">{}</h1>", encode_text(title))
     } else {
         String::new()
     };
@@ -1514,6 +1500,14 @@ mod tests {
     }
 
     #[test]
+    fn nests_indented_list_items() {
+        let html = render("- 代表的なルートタイプ：\n  - Type 2\n  - Type 3\n- 次の項目\n");
+        assert_eq!(html.matches("<ul").count(), 2);
+        assert!(html.contains("Type 2"));
+        assert_eq!(html.matches("<li").count(), 4);
+    }
+
+    #[test]
     fn renders_table_cells() {
         let html = render("| A | B |\n|---|---|\n| 1 | 2 |\n");
         assert!(html.contains("<table"));
@@ -1521,4 +1515,3 @@ mod tests {
         assert!(html.contains(">1<"));
     }
 }
-

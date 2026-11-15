@@ -11,8 +11,8 @@ use regex::Regex;
 use crate::feed::FeedEntry;
 use crate::markdown::RelatedCard;
 use crate::text::{
-    TITLE_TOPIC_KEYWORDS, cosine_similarity, extract_domain_keywords,
-    merge_token_counters, normalize_search_text, plain_summary_text, weighted_token_counter,
+    TITLE_TOPIC_KEYWORDS, cosine_similarity, extract_domain_keywords, merge_token_counters,
+    normalize_search_text, plain_summary_text, weighted_token_counter,
 };
 
 static HEADING_LINE_RE: LazyLock<Regex> =
@@ -52,8 +52,7 @@ pub fn select_related_articles(
                 return false;
             }
             if !normalized_title.is_empty()
-                && strip_whitespace(&normalize_search_text(entry_title))
-                    == normalized_title
+                && strip_whitespace(&normalize_search_text(entry_title)) == normalized_title
             {
                 return false;
             }
@@ -153,8 +152,7 @@ pub fn select_related_articles(
         })
         .collect();
 
-    let title_keywords: HashSet<&'static str> =
-        TITLE_TOPIC_KEYWORDS.iter().copied().collect();
+    let title_keywords: HashSet<&'static str> = TITLE_TOPIC_KEYWORDS.iter().copied().collect();
 
     let mut scored: Vec<RelatedCard> = Vec::new();
 
@@ -171,10 +169,7 @@ pub fn select_related_articles(
             .intersection(entry_keywords)
             .copied()
             .collect();
-        let union: HashSet<_> = article_keywords
-            .union(entry_keywords)
-            .copied()
-            .collect();
+        let union: HashSet<_> = article_keywords.union(entry_keywords).copied().collect();
         let weighted_union: f64 = union
             .iter()
             .map(|keyword| keyword_idf.get(keyword).copied().unwrap_or(1.0))
@@ -197,7 +192,11 @@ pub fn select_related_articles(
         let title_bonus = 0.10 * title_hits.min(2) as f64;
 
         let mut score = 0.68 * cosine + 0.32 * keyword_score + title_bonus;
-        if entry.categories.iter().any(|category| category == "ネットワーク") {
+        if entry
+            .categories
+            .iter()
+            .any(|category| category == "ネットワーク")
+        {
             score += 0.02;
         }
         if score < options.min_score {

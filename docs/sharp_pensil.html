@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x30b7;&#x30e3;&#x30fc;&#x30da;&#x30f3;&#x306e;&#x6a5f;&#x80fd;&#x3068;&#x306f;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+/* 目次全体のコンテナ */
+nav {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0 40px 0;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* 「目次」というタイトル */
+nav h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0969da;
+    color: #24292f;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* タイトルの前にアイコン（絵文字）を追加 */
+nav h3::before {
+    content: "📖";
+    margin-right: 8px;
+}
+
+/* リストのスタイル調整 */
+#toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* リンクのスタイル */
+#toc a {
+    color: #0969da;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+#toc a:hover {
+    color: #cf222e;
+    transform: translateX(5px); /* ホバー時に少し右に動く */
+}
+
+/* h3（小見出し）がある場合のネスト表現（JSの修正も必要） */
+.toc-h3 {
+    padding-left: 20px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* 記事タイトル (h1) */
+h1 {
+    font-size: 2rem;
+    color: #24292f;
+    line-height: 1.3;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 3px double #e1e4e8; /* 二重線で上品に */
+    text-align: center; /* タイトルを中央に寄せて特別感を出す */
+}
+
+/* セクション見出し (h2) */
+h2 {
+    font-size: 1.5rem;
+    color: #24292f;
+    padding: 0.5rem 1rem;
+    margin: 40px 0 20px 0;
+    background: linear-gradient(transparent 70%, #e8f0fe 70%); /* 下側に薄い色のアクセント */
+    border-left: 6px solid #0969da; /* 目次のテーマカラーと合わせる */
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* 強調文字 (strong) */
+strong {
+    font-weight: bold;
+    color: #cf222e; /* ホバー時の赤色と合わせて統一感を出す */
+    background: linear-gradient(transparent 60%, #fff2cc 60%); /* 黄色のマーカー風 */
+    padding: 0 2px;
+}
+
+/* 引用のコンテナ */
+blockquote {
+    position: relative;
+    padding: 20px 30px;
+    margin: 30px 0;
+    background-color: #f6f8fa; /* 目次の背景より少しだけ濃いグレー */
+    border-left: 5px solid #d0d7de; /* 落ち着いたグレーの境界線 */
+    color: #57606a; /* 文字色は少し薄くして引用らしさを出す */
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 引用符のアイコンを装飾として追加 */
+blockquote::before {
+    content: "“";
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    font-size: 40px;
+    color: #d0d7de;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* 読者になるボタンのデザイン */
+.btn-subscribe {
+    display: inline-block;
+    padding: 12px 35px; /* 横幅を広めにとって存在感を出します */
+    background-color: #383838; /* お好みの色に変更してください */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #555555;
+    text-decoration: none;
+}
+
+/* はてなブログで見えてしまう数式データを非表示にする */
+.katex-html {
+    display: none !important;
+}
+
+.katex-mathml {
+    display: inline !important;
+}
+/* Amazonカード型のオシャレなデザイン */
+.shop-card {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* マウスホップした時の動き */
+.shop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.shop-card-image {
+    width: 150px;
+    min-width: 150px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-card-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.shop-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.shop-card-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Amazonらしいオレンジボタン */
+.shop-card-link a {
+    display: inline-block;
+    background-color: #ff9900;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.shop-card-link a:hover {
+    background-color: #e68a00;
+}
+
+/* スマホ対応：縦並びにする */
+@media (max-width: 480px) {
+    .shop-card {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .shop-card-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+<nav>
+        <h3>目次</h3>
+        <ul id="toc"></ul> 
+</nav>
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>著者はいまだに毎日シャーペンを握ることが多く、朝に文字を書くことで自分の考えを整理することがルーティンです。
+そんなシャーペンに関する拘りをつらつら語っていきたいと思います。</p>
+<button id="bgm-trigger" style="padding: 10px 20px; font-size: 16px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  🎵 BGMを再生する
+</button>
+<h2 id="シャーペンの機能とは">シャーペンの機能とは</h2>
+<p>著者が考えるシャープペンシルの機能をリストアップしていきます。
+機能要件、非機能要件が入り混じりますが、大方次の7つに帰着出来ます。</p>
+<h3 id="1-芯の繰り出し機構">1. 芯の繰り出し機構</h3>
+<p>ノックボタンを押すことで、内部のクラッチ（チャック）が開き、芯を一定量ずつ繰り出す仕組みです。これにより、常に一定の芯の長さを保ちながら書くことができます。</p>
+<h3 id="2-芯の固定保持機構">2. 芯の固定・保持機構</h3>
+<p>クラッチ（チャック）が芯をしっかりと挟み込み、書いている最中に芯が動いたり抜けたりしないように保持します。品質の高いシャープペンシルほど、この保持力が安定しています。</p>
+<h3 id="3-芯先の保護機構">3. 芯先の保護機構</h3>
+<p>書く際に芯にかかる力を調整し、芯が折れにくいようにする機能です。例えば、以下のような仕組みがあります。</p>
+<ul>
+<li>ダブルノック機構：筆圧が強いときに内部スプリングが沈み込み、芯への負荷を軽減します。</li>
+<li>スライドシース機構：金属製の細いパイプ（シース）が芯を包み、側方からの力に強くします。</li>
+</ul>
+<h3 id="4-消しゴム">4. 消しゴム</h3>
+<p>本体後部に内蔵された消しゴムは、間違えたときにすぐに訂正できる便利な機能です。キャップ付きのものが多く、汚れを防ぎます。</p>
+<h3 id="5-芯硬度表示窓インジケーター">5. 芯硬度表示窓（インジケーター）</h3>
+<p>「HB」「2B」「H」など、使用中の芯の硬度を表示する回転式の窓があります。複数の芯硬度を使い分ける場合に、どの芯が入っているか一目で確認できます。</p>
+<h3 id="6-クリップ">6. クリップ</h3>
+<p>ポケットやノートに挟んで持ち運べるクリップは、紛失防止や携帯性向上に役立ちます。金属製のものや、着脱可能なものもあります。</p>
+<h3 id="7-グリップ握りやすさ">7. グリップ（握りやすさ）</h3>
+<p>ゴムやシリコン、金属の凹凸などで指が滑りにくくなるよう設計されたグリップ部分があります。長時間の筆記でも疲れにくく、正しい持ち方を促す形状のものもあります。</p>
+<h2 id="譲れない要件">譲れない要件</h2>
+<p>ここからが重要な点です。
+シャーペンを使う代表的なユースケースを定義の上、そこから著者が特に重要視する要件について整理していきます。</p>
+<h3 id="ユースケース分析と要件抽出">ユースケース分析と要件抽出</h3>
+<p><strong>ユースケース①：試験の記述式問題を多く解くとき</strong></p>
+<p>近年の試験は記述式・論述式の比重が増加し、2〜3時間以上の長時間筆記が求められる傾向にあります。科学的な研究でも、<a href="https://daily-drops.com/articles/pen-pencil-exam-performance-science">筆記速度・疲労・ミス率がパフォーマンスに影響する</a>ことが示されています。</p>
+<p><strong>抽出された重要要件</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">優先度</th>
+<th>要件</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td><strong>疲労軽減（グリップ・重心設計）</strong></td>
+<td>長時間筆記で手や前腕の疲労が後半の集中力を低下させる。筆圧が強い人ほどリスクが高い。低重心設計や適切なグリップ素材（ソフトフィール塗装、アルファゲル等）が有効。<source-chip title="note" url="https://note.com/light_lilac3724/n/nbcfd13a7353b" /></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td><strong>視界の広さ（段テーパー・ロングパイプ）</strong></td>
+<td>ペン先が指で隠れない設計は、正確な筆記位置の確認を容易にし、首や手の無意識な動きを減らして疲労を軽減する。<source-chip title="トンボ鉛筆" url="https://www.tombow.com/products/monograph_fine/" /></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td><strong>ブレのなさ（剛性・一体構造）</strong></td>
+<td>口金とグリップの一体切削加工など、継ぎ目のない構造が微細なガタつきを排除。ブレ補正のための無駄な力を削減し、長時間の負担を軽減する。<source-chip title="トンボ鉛筆" url="https://www.tombow.com/products/monograph_fine/" /></td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td><strong>修正のしやすさ（消しゴム性能）</strong></td>
+<td>記述答案では誤字修正が不可避。消しゴムがブレないロック機構や、極細消しゴム（3.6mm径等）によるピンポイント消字は、修正時間とストレスを大幅に削減する。<source-chip title="note" url="https://note.com/light_lilac3724/n/nbcfd13a7353b" /></td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td><strong>適切な芯径（0.5mm推奨）</strong></td>
+<td>0.3mmは精密だが疲労増、0.7mmは安定するが太字で可読性に影響。0.5mmが速度・疲労・可読性のバランスに優れる。<source-chip title="DailyDrops Info" url="https://daily-drops.com/articles/pen-pencil-exam-performance-science" /></td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td><strong>適度な摩擦感（制御性）</strong></td>
+<td>摩擦が低すぎると字が乱れ、誤字が増加。適度な摩擦が書き位置のコントロールを助け、可読性を維持する。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ユースケース②：会議でサラサラメモを取るとき</strong></p>
+<p>会議でのメモは、速記性と持続性が求められます。「サラサラ書ける」感触は、筆記抵抗が低く、素早い文字起こしを可能にします。</p>
+<p><strong>抽出された重要要件</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">優先度</th>
+<th>要件</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td><strong>サラサラとした低摩擦の書き味</strong></td>
+<td>速記では筆記速度が重要。紙との摩擦が低い設計（芯質との組み合わせも含む）は、滑らかな連続筆記を可能にする。</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td><strong>疲労軽減（軽量・グリップ）</strong></td>
+<td>会議も長時間にわたることが多く、ラバーグリップやゲルグリップなど指の圧力を吸収する素材が快適性に寄与する。<source-chip title="三菱鉛筆" url="https://www.mpuni.co.jp/products/mechanical_pencils/sharp_pen/uni_a-gel/uni_agel.html" /></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td><strong>素早い芯繰り出し</strong></td>
+<td>思考の流れを止めずに書き続けるため、ノック操作や振り出し機構など、意図したタイミングで素早く芯を出せる機能が重要。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td><strong>携帯性・即応性（クリップ・サイズ）</strong></td>
+<td>ポケットやノートに挟み、いつでもすぐに取り出して書けること。金属クリップや適度な軽さが求められる。<source-chip title="トンボ鉛筆" url="https://www.tombow.com/products/monograph_grip/" /></td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td><strong>グリップの滑り止め（ドライな触感）</strong></td>
+<td>ラバー特有のベタつきを抑えた高密度テクスチャーグリップ等は、軽い力でもしっかり握れ、長時間の使用でも不快にならない。<source-chip title="トンボ鉛筆" url="https://www.tombow.com/products/monograph_lite_sh/" /></td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td><strong>消しゴムの使いやすさ</strong></td>
+<td>会議中の修正も頻繁に発生。片手で素早く繰り出せる消しゴムや、十分な長さ（26mm〜30mm）があると安心感が高い。<source-chip title="トンボ鉛筆" url="https://www.tombow.com/products/monograph_grip/" /></td>
+</tr>
+</tbody>
+</table>
+<h3 id="両ユースケース共通の重要要件">両ユースケース共通の重要要件</h3>
+<table>
+<thead>
+<tr>
+<th>要件</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>疲労軽減設計</strong></td>
+<td>長時間使用において最も重要。グリップ素材、重心位置、重量バランスが鍵。</td>
+</tr>
+<tr>
+<td><strong>ブレのなさ・剛性</strong></td>
+<td>微細なガタつきが無意識に力を入れさせ、疲労の原因となる。</td>
+</tr>
+<tr>
+<td><strong>修正のしやすさ</strong></td>
+<td>消しゴムの性能（ブレない・極細・繰り出し式）は、両シーンで時間短縮とストレス軽減に寄与。</td>
+</tr>
+<tr>
+<td><strong>適切な重心設計</strong></td>
+<td>低重心はペン先を自然に紙へ導き、力を入れずに書ける感覚を生む。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="おススメのシャーペンの選定">おススメのシャーペンの選定</h2>
+<p>上記の重要な要件と価格を踏まえて、著者の観点で優良シャーペンを評価していきます。</p>
+<p>ノミネートしたシャーペンは以下です。</p>
+<ul>
+<li>三菱鉛筆 シャーペン クルトガ 0.5 自動芯回転機構 バイオレット</li>
+<li>トンボ鉛筆 シャーペン MONO モノグラフファイン (広い視覚・低重心) 0.5mm グリーン DPA-112D</li>
+<li>ぺんてる シャープペン スマッシュ 0.5mm Q1005-13A メタルレッド</li>
+<li>PILOT シャープペンシル シャープ エストゥエンティ BN ブラウン</li>
+</ul>
+<h3 id="評価対象シャーペン-仕様概要">評価対象シャーペン 仕様概要</h3>
+<table>
+<thead>
+<tr>
+<th>製品名</th>
+<th>芯径</th>
+<th>重量</th>
+<th>主な特徴</th>
+<th>参考価格（税込）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>三菱鉛筆 クルトガ</strong></td>
+<td>0.5mm</td>
+<td>軽量</td>
+<td>自動芯回転機構（クルトガエンジン）。芯が回って常に細い線が書ける。エラストマーグリップ搭載（KSモデル）。</td>
+<td>約495〜605円</td>
+</tr>
+<tr>
+<td><strong>トンボ鉛筆 モノグラフファイン</strong></td>
+<td>0.5mm</td>
+<td>約21.9g</td>
+<td>口金・グリップ一体切削加工、低重心設計、ソフトフィール塗装メタルグリップ、消しゴムユニットロック機構、超スリム段テーパー。</td>
+<td>約1,320円（実売約800〜1,100円）</td>
+</tr>
+<tr>
+<td><strong>ぺんてる スマッシュ</strong></td>
+<td>0.5mm</td>
+<td>約12g</td>
+<td>先金・前軸一体構造、金属チャック、金属×ラバーグリップ、低重心、4mmスリーブ、芯硬度表示窓。</td>
+<td>約1,200円（実売約1,000〜1,200円）</td>
+</tr>
+<tr>
+<td><strong>PILOT エストゥエンティ</strong></td>
+<td>0.5mm</td>
+<td>約18g</td>
+<td>樹脂含浸カバ材の木軸、低重心設計、柔らかな曲線形状、製図用スペック。</td>
+<td>約2,530円（実売約1,500〜1,800円）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="重要要件別-評価比較表5段階評価">重要要件別 評価比較表（5段階評価）</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">評価項目</th>
+<th style="text-align:center">クルトガ</th>
+<th style="text-align:center">モノグラフファイン</th>
+<th style="text-align:center">スマッシュ</th>
+<th style="text-align:center">エストゥエンティ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>① 疲労軽減設計</strong></td>
+<td style="text-align:center">★★★☆☆</td>
+<td style="text-align:center">★★★★★</td>
+<td style="text-align:center">★★★★☆</td>
+<td style="text-align:center">★★★★☆</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>② ブレのなさ・剛性</strong></td>
+<td style="text-align:center">★★★☆☆</td>
+<td style="text-align:center">★★★★★</td>
+<td style="text-align:center">★★★★★</td>
+<td style="text-align:center">★★★★☆</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>③ 修正のしやすさ</strong></td>
+<td style="text-align:center">★★★☆☆</td>
+<td style="text-align:center">★★★★★</td>
+<td style="text-align:center">★★★☆☆</td>
+<td style="text-align:center">★★★☆☆</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>④ 適切な重心設計</strong></td>
+<td style="text-align:center">★★★☆☆</td>
+<td style="text-align:center">★★★★★</td>
+<td style="text-align:center">★★★★☆</td>
+<td style="text-align:center">★★★★☆</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>⑤ コスト（安さ）</strong></td>
+<td style="text-align:center">★★★★★</td>
+<td style="text-align:center">★★★★☆</td>
+<td style="text-align:center">★★★★☆</td>
+<td style="text-align:center">★★☆☆☆</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>総合スコア</strong></td>
+<td style="text-align:center"><strong>14点</strong></td>
+<td style="text-align:center"><strong>24点</strong></td>
+<td style="text-align:center"><strong>21点</strong></td>
+<td style="text-align:center"><strong>17点</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="評価の根拠">評価の根拠</h3>
+<p><strong>① 疲労軽減設計</strong></p>
+<ul>
+<li><strong>モノグラフファイン（★5）</strong>: ソフトフィール塗装メタルグリップが指の圧力を分散し、低重心設計（約21.9g）がペン先を自然に紙へ導く。長時間筆記の負担が最も少ない。<source-chip title="トンボ鉛筆" url="https://www.tombow.com/products/monograph_fine/" /></li>
+<li><strong>スマッシュ（★4）</strong>: 金属×ラバーグリップがしっかり握れ、前軸真鍮製で適度な重さ。ただし重量は約12gと軽めで、筆圧強い人にはやや軽すぎる可能性。<source-chip title="ぺんてる" url="https://www.pentel.co.jp/products/mechanicalpencil/smash/" /></li>
+<li><strong>エストゥエンティ（★4）</strong>: 木軸の温もりと曲線形状が手になじむが、グリップのクッション性はやや劣る。<source-chip title="PILOT" url="https://webcatalog.pilot.co.jp/products/DispDetail.do?itemID=t000100001953&volumeName=00004" /></li>
+<li><strong>クルトガ（★3）</strong>: エラストマーグリップ（KSモデル）はあるが、標準モデルは一般的なグリップ。低重心設計ではない。</li>
+</ul>
+<p><strong>② ブレのなさ・剛性</strong></p>
+<ul>
+<li><strong>モノグラフファイン（★5）</strong>: 口金・グリップ一体切削加工により継ぎ目がなく、ガタつきを完全排除。<source-chip title="トンボ鉛筆" url="https://www.tombow.com/products/monograph_fine/" /></li>
+<li><strong>スマッシュ（★5）</strong>: 先金・前軸一体構造で、シャーペンでは珍しい一体化設計。金属チャックも採用し、プロ仕様の剛性。<source-chip title="ぺんてる" url="https://www.pentel.co.jp/products/mechanicalpencil/smash/" /></li>
+<li><strong>エストゥエンティ（★4）</strong>: 製図用スペックで剛性は高いが、木軸素材の特性上、金属一体構造には及ばない。</li>
+<li><strong>クルトガ（★3）</strong>: クルトガエンジンで芯のトガりは安定するが、ボディの剛性・一体構造は標準的。</li>
+</ul>
+<p><strong>③ 修正のしやすさ</strong></p>
+<ul>
+<li><strong>モノグラフファイン（★5）</strong>: 消しゴムユニットロック機構で消すときにブレない。3.6mm極細消しゴムでピンポイント消字が可能。<source-chip title="トンボ鉛筆" url="https://www.tombow.com/products/monograph_fine/" /></li>
+<li><strong>その他（★3）</strong>: いずれも標準的な消しゴム搭載。特別なロック機構や極細消しゴムはない。</li>
+</ul>
+<p><strong>④ 適切な重心設計</strong></p>
+<ul>
+<li><strong>モノグラフファイン（★5）</strong>: 明確な低重心設計。重量約21.9gがペン先側に配分され、力を入れずに自然に書ける。<source-chip title="トンボ鉛筆" url="https://www.tombow.com/products/monograph_fine/" /></li>
+<li><strong>スマッシュ（★4）</strong>: 前軸真鍮製でペン先側がやや重い低重心。ただし全体的に軽量（12g）なので、安定感はモノグラフファインにやや劣る。<source-chip title="ぺんてる" url="https://www.pentel.co.jp/products/mechanicalpencil/smash/" /></li>
+<li><strong>エストゥエンティ（★4）</strong>: 低重心設計だが、木軸の軽さから極端な低重心ではない。<source-chip title="PILOT" url="https://webcatalog.pilot.co.jp/products/DispDetail.do?itemID=t000100001953&volumeName=00004" /></li>
+<li><strong>クルトガ（★3）</strong>: 標準的な重心。特別な低重心設計はない。</li>
+</ul>
+<p><strong>⑤ コスト（安さ）</strong></p>
+<ul>
+<li><strong>クルトガ（★5）</strong>: 約500円前後と圧倒的に安い。</li>
+<li><strong>モノグラフファイン・スマッシュ（★4）</strong>: 1,000〜1,300円台。実売ではモノグラフファインがやや安め。</li>
+<li><strong>エストゥエンティ（★2）</strong>: 定価2,530円と最も高価。実売でも1,500円前後。</li>
+</ul>
+<h2 id="結論ベストシャーペン選出">結論：ベストシャーペン選出</h2>
+<h3 id="-総合ベストトンボ鉛筆-モノグラフファイン">🏆 総合ベスト：トンボ鉛筆 モノグラフファイン</h3>
+<p><strong>選出理由：</strong></p>
+<ul>
+<li>4つの重要要件すべてで最高クラスの評価（特に疲労軽減・ブレのなさ・重心設計で★5）</li>
+<li>修正のしやすさ（消しゴムロック機構）が他製品と大きく差をつける</li>
+<li>実売価格約800〜1,100円と、定価よりかなり安く購入可能でコスパも良好</li>
+<li>試験の記述式問題・会議メモの両ユースケースで最も要件を満たす</li>
+</ul>
+<h3 id="-コスパ重視ぺんてる-スマッシュ">🥈 コスパ重視：ぺんてる スマッシュ</h3>
+<ul>
+<li>ブレのなさ・剛性でモノグラフファインと同等の★5</li>
+<li>金属×ラバーグリップと低重心で疲労軽減も高水準</li>
+<li>1,000円前後で購入可能</li>
+<li>修正機能が標準的なのが唯一の弱点</li>
+</ul>
+<h3 id="-予算最優先三菱鉛筆-クルトガ">🥉 予算最優先：三菱鉛筆 クルトガ</h3>
+<ul>
+<li>圧倒的な低価格（約500円）</li>
+<li>芯回転機構は細字を書き続ける上で有用</li>
+<li>ただし疲労軽減・重心設計・修正のしやすさは標準的</li>
+</ul>
+<p><strong>最終推奨</strong>: コストをできる限り抑えつつ重要な要件を最大化するなら、<strong>トンボ鉛筆 モノグラフファイン</strong>が最適です。実売価格で800円台から購入でき、4つの要件すべてで高い水準を満たす唯一の製品です。</p>
+
+<div style="width: 1px; height: 1px; overflow: hidden; opacity: 0; position: absolute;">
+  <iframe id="bgm-player" width="100" height="100" 
+  src="https://www.youtube.com/embed/N5NE7KZUldg?enablejsapi=1" 
+  title="BGM Player" frameborder="0" allow="autoplay">
+  </iframe>
+</div>
+
+<script>
+const toc = document.getElementById('toc');
+// h2 と h3 の両方を取得
+const headings = document.querySelectorAll('h2, h3');
+
+headings.forEach((heading, i) => {
+    if (!heading.id) heading.id = `heading-${i}`;
+    
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    
+    // h3 の場合はクラスを付与して字下げする
+    if (heading.tagName === 'H3') {
+        li.classList.add('toc-h3');
+    }
+    
+    li.appendChild(link);
+    toc.appendChild(li);
+});
+
+// スムーズスクロールを有効にする
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+  document.getElementById('bgm-trigger').addEventListener('click', function() {
+    var iframe = document.getElementById('bgm-player');
+    
+    // すでに再生中の場合は一時停止、停止中の場合は再生するトグル処理
+    if (this.innerText.includes('再生')) {
+      // JavaScript API経由で再生コマンドを送信
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = '⏸ BGMを停止する';
+      this.style.backgroundColor = '#f44336'; // ボタンの色を赤系に
+    } else {
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      this.innerText = '🎵 BGMを再生する';
+      this.style.backgroundColor = '#008cba'; // ボタンの色を青系に
+    }
+  });
+</script>
+            
+        </body>
+        </html>

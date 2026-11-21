@@ -6,6 +6,7 @@
 
 use html_escape::{encode_double_quoted_attribute, encode_text};
 use pulldown_cmark::{Alignment, CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
+use regex::{Captures, Regex};
 
 // ---------------------------------------------------------------------------
 // デザイントークン（インライン CSS）
@@ -751,20 +752,25 @@ enum StrongStyle {
     Comment,
 }
 
-/// はてなブログの tex 記法（`[$ ... $]`）でインライン数式を出力する。
+/// インライン数式をはてなの tex 記法 `[$ ... $]` で出力する。
 ///
-/// 2026-07 に追加されたこの記法は LaTeX をそのまま書けるため、`_` や `[` `]` を
-/// エスケープする必要がない。はてな側が MathJax を読み込んで表示する。
+/// HTML 編集モードに貼り付けた場合、ブログの MathJax（`$` / `$$`）は走らない。
+/// はてな公式が「すべての編集モードで使える」と明言している tex 記法を使う。
 fn hatena_inline_math(latex: &str) -> String {
     format!("[$ {} $]", latex.trim())
 }
 
-/// ディスプレイ数式をはてなの tex 記法で出力する。
+/// ディスプレイ数式をはてなの tex 記法 `[$ ... $]` で出力する。
 ///
-/// `[$ ... $]` 自体はインライン扱いなので、`\displaystyle` を付けて
-/// 分数・総和などをディスプレイスタイルで表示する。
+/// はてな公式が「すべての編集モードで使える」と明言しているのはこの新記法。
+/// `\displaystyle` を付けて分数・総和などを大きく描画する。
 fn hatena_display_math(latex: &str) -> String {
-    let body = latex.trim();
+    // 改行を含む数式（複数行の `$$ ... $$`）も 1 行にまとめる。
+    let body = latex
+        .trim()
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ");
     if body.starts_with("\\displaystyle") {
         format!("[$ {body} $]")
     } else {
@@ -1497,7 +1503,25 @@ pub fn build_fragment(md_text: &str, options: RenderOptions<'_>) -> Fragment {
 // プレビュー HTML
 // ---------------------------------------------------------------------------
 
+/// はてなの tex 記法をローカルプレビュー用の MathJax 記法に置き換える。
+fn preview_math(fragment: &str) -> String {
+    let inline =
+        Regex::new(r"(?s)\[\$ (.*?) \$\]").expect("inline math regex must compile");
+
+    inline
+        .replace_all(fragment, |caps: &Captures<'_>| {
+            let body = caps[1].trim();
+            if let Some(rest) = body.strip_prefix("\\displaystyle") {
+                format!("$${}$$", rest.trim())
+            } else {
+                format!("${body}$")
+            }
+        })
+        .into_owned()
+}
+
 pub fn build_preview(title: &str, fragment: &str, include_title: bool) -> String {
+    let fragment = preview_math(fragment);
     let title_block = if include_title {
         format!("<h1 class=\"article-title\">{}</h1>", encode_text(title))
     } else {
@@ -1506,6 +1530,7 @@ pub fn build_preview(title: &str, fragment: &str, include_title: bool) -> String
 
     format!(
         r#"<!DOCTYPE html>
+<!-- ローカルプレビュー専用。はてなブログへ貼り付ける場合は *_hatena.html を使ってください。 -->
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -1545,12 +1570,12 @@ pub fn build_preview(title: &str, fragment: &str, include_title: bool) -> String
 {fragment}
 </main>
 <script>
-// はてなの tex 記法（[$ ... $]）をローカルプレビューでも表示する。
-// はてなブログ側ではこのスクリプトは不要（はてなが MathJax を読み込む）。
+// ローカルプレビューでは、はてなの tex 記法を MathJax の `$` / `$$` に
+// 置き換えて表示する（はてなブログ側では変換不要）。
 window.MathJax = {{
   tex: {{
-    inlineMath: [['[$', '$]']],
-    displayMath: []
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
   }},
   options: {{
     skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
@@ -1623,6 +1648,7 @@ mod tests {
         assert!(html.contains("[$ s $]"));
         assert!(html.contains("[$ \\pi(a \\mid s) $]"));
         assert!(!html.contains("$s$"));
+        assert!(!html.contains("$$"));
     }
 
     #[test]
@@ -1630,6 +1656,7 @@ mod tests {
         let html = render("$$\n\\sum_{i=1}^n i = \\frac{n(n+1)}{2}\n$$");
         assert!(html.contains("data-role=\"math-block\""));
         assert!(html.contains("[$ \\displaystyle \\sum_{i=1}^n i = \\frac{n(n+1)}{2} $]"));
+        assert!(!html.contains("$$"));
         assert!(!html.contains("<p style=\"margin:0 0 1.15em"));
     }
 
@@ -1639,5 +1666,19 @@ mod tests {
         assert!(html.contains("$x$"));
         assert!(html.contains("$$y$$"));
         assert!(!html.contains("[$"));
+        assert!(!html.contains("data-role=\"math-block\""));
+    }
+
+    #[test]
+    fn preview_converts_hatena_math_to_mathjax() {
+        let html = build_preview(
+            "数式",
+            "<p>[$ s $]</p><div>[$ \\displaystyle x^2 $]</div>",
+            false,
+        );
+        assert!(html.contains("<p>$s$</p>"));
+        assert!(html.contains("<div>$$x^2$$</div>"));
+        assert!(!html.contains("[$ s $]"));
+        assert!(!html.contains("\\displaystyle"));
     }
 }

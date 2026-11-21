@@ -148,11 +148,23 @@
       <h2 id="fileModalTitle">Markdown を選択</h2>
       <button class="icon-btn" type="button" data-close aria-label="閉じる">×</button>
     </div>
-    <div class="modal-path">
-      <button class="btn btn-ghost" id="upBtn" type="button">↑ 上へ</button>
-      <code id="currentPath"></code>
+    <div class="modal-nav">
+      <div class="modal-crumbs" id="browseCrumbs" aria-label="現在のフォルダ"></div>
+      <div class="modal-tools">
+        <button class="btn btn-ghost btn-sm" id="rootBtn" type="button" title="記事フォルダへ (Alt+Home)">⌂ ルート</button>
+        <button class="btn btn-ghost btn-sm" id="upBtn" type="button" title="上のフォルダへ (Alt+↑)">↑ 上へ</button>
+      </div>
     </div>
-    <div class="modal-list" id="browseList"></div>
+    <div class="modal-jump">
+      <input id="browsePathInput" type="text" placeholder="パスを入力して移動（相対 / 絶対）" spellcheck="false" autocomplete="off">
+      <button class="btn btn-ghost btn-sm" id="jumpBtn" type="button">移動</button>
+    </div>
+    <div class="modal-search">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input id="browseSearch" type="text" placeholder="ファイル名で再帰検索（現在のフォルダ以下）" spellcheck="false" autocomplete="off">
+      <button class="icon-btn" id="searchClearBtn" type="button" title="検索をクリア" aria-label="検索をクリア">×</button>
+    </div>
+    <div class="modal-list" id="browseList" tabindex="0"></div>
     <div class="modal-foot">
       <span id="browseStatus"></span>
       <button class="btn btn-secondary" type="button" data-close>キャンセル</button>

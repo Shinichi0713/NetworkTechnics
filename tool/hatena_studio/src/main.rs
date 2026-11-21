@@ -170,6 +170,12 @@ struct BrowseQuery {
     path: Option<String>,
 }
 
+#[derive(Debug, Deserialize)]
+struct SearchQuery {
+    q: String,
+    path: Option<String>,
+}
+
 #[derive(Debug, Default, Deserialize)]
 #[serde(default)]
 struct RefreshRequest {
@@ -636,8 +642,125 @@ async fn api_browse(State(state): State<AppState>, Query(query): Query<BrowseQue
         "ok": true,
         "path": path.to_string_lossy(),
         "parent": parent,
+        "root": state.inner.workspace.to_string_lossy(),
         "dirs": dirs,
         "files": files,
+    }))
+    .into_response()
+}
+
+/// 指定ディレクトリ以下を再帰的にたどり、名前に needle を含む Markdown を集める。
+/// 隠しフォルダやビルド成果物は除外し、結果は limit 件で打ち切る。
+fn collect_markdown(base: &Path, dir: &Path, needle: &str, results: &mut Vec<Value>, limit: usize) {
+    if results.len() >= limit {
+        return;
+    }
+    let Ok(read_dir) = fs::read_dir(dir) else {
+        return;
+    };
+    let mut entries: Vec<_> = read_dir.flatten().collect();
+    entries.sort_by_key(|entry| entry.file_name());
+
+    for entry in entries {
+        if results.len() >= limit {
+            return;
+        }
+        let path = entry.path();
+        let name = entry.file_name().to_string_lossy().to_string();
+        if path.is_dir() {
+            let lower = name.to_lowercase();
+            if lower.starts_with('.')
+                || matches!(
+                    lower.as_str(),
+                    "target" | "node_modules" | "__pycache__" | "venv" | "dist" | "build"
+                )
+            {
+                continue;
+            }
+            collect_markdown(base, &path, needle, results, limit);
+        } else if path.is_file() {
+            let ext = path
+                .extension()
+                .map(|ext| ext.to_string_lossy().to_ascii_lowercase())
+                .unwrap_or_default();
+            if ext != "md" && ext != "markdown" {
+                continue;
+            }
+            let relative = path
+                .strip_prefix(base)
+                .unwrap_or(&path)
+                .to_string_lossy()
+                .to_string();
+            let haystack = format!("{} {}", name, relative).to_lowercase();
+            if !haystack.contains(needle) {
+                continue;
+            }
+            let metadata = entry.metadata().ok();
+            results.push(json!({
+                "name": name,
+                "path": path.to_string_lossy(),
+                "relative": relative,
+                "size": metadata.as_ref().map(|m| m.len()).unwrap_or(0),
+                "modified": metadata
+                    .as_ref()
+                    .and_then(|m| m.modified().ok())
+                    .and_then(|t| t.duration_since(UNIX_EPOCH).ok())
+                    .map(|d| d.as_secs()),
+            }));
+        }
+    }
+}
+
+async fn api_search(State(state): State<AppState>, Query(query): Query<SearchQuery>) -> Response {
+    let needle = query.q.trim().to_lowercase();
+    if needle.is_empty() {
+        return Json(json!({
+            "ok": true,
+            "query": "",
+            "base": "",
+            "files": [],
+            "truncated": false,
+        }))
+        .into_response();
+    }
+
+    let workspace = &state.inner.workspace;
+    let requested = query
+        .path
+        .as_deref()
+        .map(str::trim)
+        .filter(|path| !path.is_empty())
+        .map(PathBuf::from)
+        .unwrap_or_else(|| workspace.clone());
+    let base = if requested.is_absolute() {
+        requested
+    } else {
+        workspace.join(requested)
+    };
+    let base = if base.is_file() {
+        base.parent().unwrap_or(&base).to_path_buf()
+    } else {
+        base
+    };
+    if !base.is_dir() {
+        return error_response(
+            StatusCode::BAD_REQUEST,
+            format!("フォルダを開けません: {}", base.display()),
+        );
+    }
+
+    const LIMIT: usize = 300;
+    let mut files = Vec::new();
+    collect_markdown(&base, &base, &needle, &mut files, LIMIT);
+    let truncated = files.len() >= LIMIT;
+
+    Json(json!({
+        "ok": true,
+        "query": query.q.trim(),
+        "base": base.to_string_lossy(),
+        "root": workspace.to_string_lossy(),
+        "files": files,
+        "truncated": truncated,
     }))
     .into_response()
 }
@@ -1084,6 +1207,7 @@ async fn main() -> Result<()> {
         .route("/preview", get(preview))
         .route("/api/state", get(api_state))
         .route("/api/browse", get(api_browse))
+        .route("/api/search", get(api_search))
         .route("/api/convert", post(api_convert))
         .route("/api/refresh-cache", post(api_refresh_cache))
         .route("/api/settings", post(api_settings))
@@ -1124,4 +1248,54 @@ async fn main() -> Result<()> {
 
     axum::serve(listener, app).await?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn collect_markdown_recurses_and_filters() {
+        let root = std::env::temp_dir().join(format!(
+            "hatena_studio_search_test_{}_{}",
+            std::process::id(),
+            SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        let sub = root.join("sub");
+        let hidden = root.join(".hidden");
+        let ignored = root.join("node_modules");
+        fs::create_dir_all(&sub).unwrap();
+        fs::create_dir_all(&hidden).unwrap();
+        fs::create_dir_all(&ignored).unwrap();
+        fs::write(root.join("alpha.md"), "").unwrap();
+        fs::write(sub.join("beta.markdown"), "").unwrap();
+        fs::write(hidden.join("hidden.md"), "").unwrap();
+        fs::write(ignored.join("vendor.md"), "").unwrap();
+        fs::write(root.join("notes.txt"), "").unwrap();
+
+        let mut results = Vec::new();
+        collect_markdown(&root, &root, "a", &mut results, 50);
+
+        let names: Vec<&str> = results
+            .iter()
+            .map(|item| item["name"].as_str().unwrap())
+            .collect();
+        assert!(names.contains(&"alpha.md"));
+        assert!(names.contains(&"beta.markdown"));
+        assert!(!names.iter().any(|name| name.contains("hidden")));
+        assert!(!names.iter().any(|name| name.contains("vendor")));
+        assert_eq!(names.len(), 2);
+        assert!(results.iter().any(|item| {
+            item["relative"]
+                .as_str()
+                .unwrap()
+                .replace('\\', "/")
+                == "sub/beta.markdown"
+        }));
+
+        fs::remove_dir_all(&root).ok();
+    }
 }

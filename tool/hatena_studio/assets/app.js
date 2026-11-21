@@ -41,8 +41,13 @@
     cachePill: $("cachePill"),
     cacheText: $("cacheText"),
     fileModal: $("fileModal"),
-    currentPath: $("currentPath"),
+    browseCrumbs: $("browseCrumbs"),
+    rootBtn: $("rootBtn"),
     upBtn: $("upBtn"),
+    browsePathInput: $("browsePathInput"),
+    jumpBtn: $("jumpBtn"),
+    browseSearch: $("browseSearch"),
+    searchClearBtn: $("searchClearBtn"),
     browseList: $("browseList"),
     browseStatus: $("browseStatus"),
     toasts: $("toasts"),
@@ -59,6 +64,16 @@
     refreshing: false,
     browsePath: "",
     browseParent: null,
+    browseRoot: "",
+    browseCrumbs: [],
+    browseCache: new Map(),
+    browseScroll: new Map(),
+    browseRows: [],
+    browseRowEls: [],
+    browseActive: -1,
+    browseMode: "browse",
+    lastBrowseData: null,
+    searchTimer: null,
     saveTimer: null,
     activeTab: "preview",
   };
@@ -610,103 +625,361 @@
   /* ファイルブラウザ                                                   */
   /* ---------------------------------------------------------------- */
 
-  async function openBrowse() {
-    els.fileModal.hidden = false;
-    await loadDir(els.inputPath.value.trim());
+  // Windows の "\\" と POSIX の "/" を比較用に統一する。
+  function normPath(path) {
+    return String(path || "")
+      .replace(/\//g, "\\")
+      .replace(/\\+$/, "")
+      .toLowerCase();
   }
 
-  async function loadDir(path) {
-    els.browseStatus.textContent = "読み込み中…";
-    try {
-      const query = path ? "?path=" + encodeURIComponent(path) : "";
-      const data = await api("/api/browse" + query);
-      state.browsePath = data.path;
-      state.browseParent = data.parent;
-      els.currentPath.textContent = data.path;
-      els.currentPath.title = data.path;
-      els.upBtn.disabled = !data.parent;
-      renderBrowse(data);
-      els.browseStatus.textContent =
-        (data.dirs || []).length +
-        " フォルダ / " +
-        (data.files || []).length +
-        " Markdown";
-    } catch (err) {
-      els.browseStatus.textContent = "";
-      els.browseList.replaceChildren();
-      const message = document.createElement("div");
-      message.className = "browse-empty";
-      message.textContent = "フォルダを開けませんでした: " + err.message;
-      els.browseList.appendChild(message);
-    }
+  // 絶対パスをルートから現在フォルダまでのパンくずに分解する。
+  function buildCrumbs(path, root) {
+    if (!path) return [];
+    const sep = path.includes("\\") ? "\\" : "/";
+    const parts = path.split(sep).filter(Boolean);
+    const crumbs = [];
+    let acc = "";
+    parts.forEach((part, index) => {
+      acc =
+        index === 0
+          ? path.startsWith(sep)
+            ? sep + part
+            : part
+          : acc + sep + part;
+      crumbs.push({
+        label: part,
+        path: acc,
+        isRoot: !!root && normPath(acc) === normPath(root),
+      });
+    });
+    return crumbs;
+  }
+
+  function renderCrumbs() {
+    const box = els.browseCrumbs;
+    box.replaceChildren();
+    state.browseCrumbs.forEach((crumb, index) => {
+      if (index > 0) {
+        const sep = document.createElement("span");
+        sep.className = "crumb-sep";
+        sep.textContent = "›";
+        box.appendChild(sep);
+      }
+      const node = document.createElement("button");
+      const isLast = index === state.browseCrumbs.length - 1;
+      node.type = "button";
+      node.className =
+        "crumb" + (isLast ? " is-current" : "") + (crumb.isRoot ? " is-root" : "");
+      node.textContent = crumb.isRoot ? "⌂ " + crumb.label : crumb.label;
+      node.title = crumb.path;
+      node.addEventListener("click", () => loadDir(crumb.path));
+      box.appendChild(node);
+    });
+    box.scrollLeft = box.scrollWidth;
   }
 
   function browseIcon(kind) {
     const span = document.createElement("span");
     span.className = "browse-icon";
-    if (kind === "dir") {
-      span.textContent = "DIR";
-    } else {
-      span.textContent = "MD";
-    }
+    span.textContent = kind === "dir" ? "DIR" : "MD";
     return span;
   }
 
-  function renderBrowse(data) {
-    els.browseList.replaceChildren();
-    const dirs = data.dirs || [];
-    const files = data.files || [];
+  function setActiveRow(index) {
+    const rows = state.browseRowEls;
+    if (!rows.length) return;
+    if (state.browseActive >= 0 && rows[state.browseActive]) {
+      rows[state.browseActive].classList.remove("is-active");
+    }
+    const next = Math.max(0, Math.min(index, rows.length - 1));
+    state.browseActive = next;
+    rows[next].classList.add("is-active");
+    rows[next].scrollIntoView({ block: "nearest" });
+  }
 
-    if (!dirs.length && !files.length) {
+  function renderRows(descriptors) {
+    els.browseList.replaceChildren();
+    state.browseRows = descriptors;
+    state.browseRowEls = [];
+    state.browseActive = -1;
+
+    if (!descriptors.length) {
       const empty = document.createElement("div");
       empty.className = "browse-empty";
-      empty.textContent = "このフォルダには Markdown がありません。";
+      empty.textContent =
+        state.browseMode === "search"
+          ? "一致する Markdown がありません。"
+          : "このフォルダには Markdown がありません。";
       els.browseList.appendChild(empty);
       return;
     }
 
-    dirs.forEach((dir) => {
+    descriptors.forEach((item, index) => {
       const row = document.createElement("button");
       row.type = "button";
-      row.className = "browse-row is-dir";
-      const name = document.createElement("span");
-      name.className = "browse-name";
-      name.textContent = dir.name;
-      const meta = document.createElement("span");
-      meta.className = "browse-meta";
-      meta.textContent = "フォルダ";
-      row.append(browseIcon("dir"), name, meta);
-      row.addEventListener("click", () => loadDir(dir.path));
-      els.browseList.appendChild(row);
-    });
+      row.className = "browse-row is-" + item.kind;
 
-    files.forEach((file) => {
-      const row = document.createElement("button");
-      row.type = "button";
-      row.className = "browse-row is-file";
+      const nameBox = document.createElement("span");
+      nameBox.className = "browse-name-box";
       const name = document.createElement("span");
       name.className = "browse-name";
-      name.textContent = file.name;
+      name.textContent = item.name;
+      nameBox.appendChild(name);
+      if (item.relative) {
+        const rel = document.createElement("small");
+        rel.className = "browse-rel";
+        rel.textContent = item.relative;
+        nameBox.appendChild(rel);
+      }
+
       const meta = document.createElement("span");
       meta.className = "browse-meta";
-      meta.textContent = [formatBytes(file.size), formatDate(file.modified)]
-        .filter(Boolean)
-        .join(" ・ ");
-      row.append(browseIcon("file"), name, meta);
+      meta.textContent = item.meta;
+      row.append(browseIcon(item.kind), nameBox, meta);
+
       row.addEventListener("click", () => {
-        els.inputPath.value = file.path;
-        state.excluded.clear();
-        els.fileModal.hidden = true;
-        saveSettings();
-        updateButtons();
-        toast("選択: " + file.name);
+        state.browseActive = index;
+        item.activate();
       });
+      row.addEventListener("mouseenter", () => {
+        if (state.browseActive !== index) setActiveRow(index);
+      });
+
+      state.browseRowEls.push(row);
       els.browseList.appendChild(row);
     });
   }
 
+  function selectFile(file) {
+    els.inputPath.value = file.path;
+    state.excluded.clear();
+    els.fileModal.hidden = true;
+    saveSettings();
+    updateButtons();
+    toast("選択: " + file.name);
+  }
+
+  function fileMeta(file) {
+    return [formatBytes(file.size), formatDate(file.modified)]
+      .filter(Boolean)
+      .join(" ・ ");
+  }
+
+  function renderBrowse(data) {
+    const dirs = (data.dirs || []).map((dir) => ({
+      kind: "dir",
+      name: dir.name,
+      meta: "フォルダ",
+      activate: () => loadDir(dir.path),
+    }));
+    const files = (data.files || []).map((file) => ({
+      kind: "file",
+      name: file.name,
+      meta: fileMeta(file),
+      activate: () => selectFile(file),
+    }));
+    renderRows(dirs.concat(files));
+    els.browseStatus.textContent =
+      dirs.length + " フォルダ / " + files.length + " Markdown";
+  }
+
+  function applyBrowseData(data) {
+    state.browsePath = data.path;
+    state.browseParent = data.parent;
+    if (data.root) state.browseRoot = data.root;
+    state.lastBrowseData = data;
+    state.browseMode = "browse";
+    state.browseCrumbs = buildCrumbs(data.path, state.browseRoot);
+    renderCrumbs();
+    els.upBtn.disabled = !data.parent;
+    els.rootBtn.disabled =
+      !state.browseRoot || normPath(data.path) === normPath(state.browseRoot);
+    els.browsePathInput.value = data.path;
+    renderBrowse(data);
+    els.browseList.scrollTop = state.browseScroll.get(normPath(data.path)) || 0;
+  }
+
+  function cancelSearch() {
+    if (state.searchTimer) {
+      clearTimeout(state.searchTimer);
+      state.searchTimer = null;
+    }
+    if (els.browseSearch.value) els.browseSearch.value = "";
+  }
+
+  function showBrowseError(err) {
+    els.browseStatus.textContent = "";
+    state.browseMode = "browse";
+    state.browseRows = [];
+    state.browseRowEls = [];
+    state.browseActive = -1;
+    els.browseList.replaceChildren();
+    const message = document.createElement("div");
+    message.className = "browse-empty is-error";
+    message.textContent = "フォルダを開けませんでした: " + err.message;
+    els.browseList.appendChild(message);
+  }
+
+  async function loadDir(path) {
+    // 別のフォルダへ移動する前に、現在のスクロール位置を覚えておく。
+    if (state.browseMode === "browse" && state.browsePath) {
+      state.browseScroll.set(normPath(state.browsePath), els.browseList.scrollTop);
+    }
+    cancelSearch();
+
+    const requested = path || state.browseRoot || "";
+    const key = normPath(requested);
+    let data = state.browseCache.get(key);
+    if (!data) {
+      els.browseStatus.textContent = "読み込み中…";
+      try {
+        const query = requested ? "?path=" + encodeURIComponent(requested) : "";
+        data = await api("/api/browse" + query);
+        state.browseCache.set(normPath(data.path), data);
+        state.browseCache.set(key, data);
+      } catch (err) {
+        showBrowseError(err);
+        return;
+      }
+    }
+    applyBrowseData(data);
+  }
+
+  async function runSearch() {
+    const query = els.browseSearch.value.trim();
+    if (!query) {
+      cancelSearch();
+      if (state.lastBrowseData) applyBrowseData(state.lastBrowseData);
+      return;
+    }
+    const base = state.browsePath || state.browseRoot || "";
+    try {
+      const params = new URLSearchParams({ q: query });
+      if (base) params.set("path", base);
+      const data = await api("/api/search?" + params.toString());
+      // 入力が変わっていたら古い応答は捨てる。
+      if (els.browseSearch.value.trim() !== query) return;
+      state.browseMode = "search";
+      const files = (data.files || []).map((file) => ({
+        kind: "file",
+        name: file.name,
+        relative: file.relative,
+        meta: fileMeta(file),
+        activate: () => selectFile(file),
+      }));
+      renderRows(files);
+      els.browseStatus.textContent =
+        files.length +
+        " 件" +
+        (data.truncated ? "（表示上限あり）" : "") +
+        " — " +
+        query;
+    } catch (err) {
+      els.browseStatus.textContent = "検索に失敗しました: " + err.message;
+    }
+  }
+
+  function scheduleSearch() {
+    if (state.searchTimer) clearTimeout(state.searchTimer);
+    state.searchTimer = setTimeout(() => {
+      state.searchTimer = null;
+      runSearch();
+    }, 180);
+  }
+
+  function jumpToPath() {
+    const value = els.browsePathInput.value.trim();
+    if (value) loadDir(value);
+  }
+
+  function goParent() {
+    if (state.browseParent) loadDir(state.browseParent);
+  }
+
+  function goRoot() {
+    if (state.browseRoot) loadDir(state.browseRoot);
+  }
+
+  function moveActive(delta) {
+    const total = state.browseRows.length;
+    if (!total) return;
+    const from = state.browseActive < 0 ? (delta > 0 ? -1 : 0) : state.browseActive;
+    let next = from + delta;
+    if (next < 0) next = total - 1;
+    if (next >= total) next = 0;
+    setActiveRow(next);
+  }
+
+  function activateActive() {
+    const item = state.browseRows[state.browseActive];
+    if (item) item.activate();
+  }
+
+  function handleBrowseKey(event) {
+    if (event.ctrlKey || event.metaKey) return false;
+    const inPath = event.target === els.browsePathInput;
+    const inSearch = event.target === els.browseSearch;
+
+    if (event.altKey && event.key === "ArrowUp") {
+      event.preventDefault();
+      goParent();
+      return true;
+    }
+    if (event.altKey && event.key === "Home") {
+      event.preventDefault();
+      goRoot();
+      return true;
+    }
+    if (event.key === "/" && !inPath && !inSearch) {
+      event.preventDefault();
+      els.browseSearch.focus();
+      return true;
+    }
+    if (inPath) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        jumpToPath();
+        return true;
+      }
+      return false;
+    }
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      moveActive(event.key === "ArrowDown" ? 1 : -1);
+      return true;
+    }
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (state.browseActive >= 0) {
+        activateActive();
+      } else if (inSearch) {
+        if (state.searchTimer) {
+          clearTimeout(state.searchTimer);
+          state.searchTimer = null;
+        }
+        runSearch();
+      }
+      return true;
+    }
+    return false;
+  }
+
+  async function openBrowse() {
+    state.browseCache.clear();
+    state.browseScroll.clear();
+    els.fileModal.hidden = false;
+    els.browseSearch.value = "";
+    await loadDir(els.inputPath.value.trim() || state.browseRoot);
+    els.browseSearch.focus();
+  }
+
   function closeBrowse() {
     els.fileModal.hidden = true;
+    if (state.searchTimer) {
+      clearTimeout(state.searchTimer);
+      state.searchTimer = null;
+    }
   }
 
   /* ---------------------------------------------------------------- */
@@ -725,8 +998,13 @@
   els.openFolderBtn.addEventListener("click", openFolder);
   els.tabPreview.addEventListener("click", () => setTab("preview"));
   els.tabHtml.addEventListener("click", () => setTab("html"));
-  els.upBtn.addEventListener("click", () => {
-    if (state.browseParent) loadDir(state.browseParent);
+  els.upBtn.addEventListener("click", goParent);
+  els.rootBtn.addEventListener("click", goRoot);
+  els.jumpBtn.addEventListener("click", jumpToPath);
+  els.browseSearch.addEventListener("input", scheduleSearch);
+  els.searchClearBtn.addEventListener("click", () => {
+    cancelSearch();
+    if (state.lastBrowseData) applyBrowseData(state.lastBrowseData);
   });
 
   els.fileModal.querySelectorAll("[data-close]").forEach((node) => {
@@ -754,8 +1032,17 @@
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !els.fileModal.hidden) {
-      closeBrowse();
+    if (!els.fileModal.hidden) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeBrowse();
+        return;
+      }
+      if (handleBrowseKey(event)) return;
+      // モーダル表示中は Ctrl+Enter で変換しない。
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault();
+      }
       return;
     }
     if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
